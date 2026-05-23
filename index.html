@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beach Tennis · Generatore Giornate</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean:#1A6B8A; --ocean-deep:#0D4A63; --coral:#E85D3A; --coral-light:#FF7A5C;
+  --sun:#F5C842; --sand:#F5E6C8; --sand-dark:#E0CFA0;
+  --green:#27AE60; --yellow:#D68910; --red:#C0392B;
+  --text:#1A1A2E; --muted:#5A6A7A; --white:#FEFDF8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--ocean-deep);min-height:100vh;color:var(--text);overflow-x:hidden;}
+
+.bg{position:fixed;inset:0;z-index:0;background:linear-gradient(155deg,#0D3D55 0%,#0D4A63 35%,#1A6B8A 70%,#1E7A9C 100%);}
+.bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 0%,rgba(245,200,66,.13) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 85% 95%,rgba(232,93,58,.10) 0%,transparent 55%);}
+.wave{position:fixed;bottom:0;left:0;right:0;height:80px;z-index:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='%23F5E6C8' fill-opacity='0.07' d='M0,40 C240,70 480,10 720,40 C960,70 1200,15 1440,40 L1440,80 L0,80Z'/%3E%3C/svg%3E") bottom/cover;}
+
+.app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:44px 20px 100px;}
+
+header{text-align:center;margin-bottom:44px;}
+.badge{display:inline-block;background:var(--coral);color:white;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;padding:4px 16px;border-radius:20px;margin-bottom:14px;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,11vw,92px);line-height:.9;color:white;letter-spacing:2px;text-shadow:0 6px 30px rgba(0,0,0,.3);}
+h1 span{color:var(--sun);}
+.subtitle{margin-top:14px;color:rgba(255,255,255,.6);font-size:14px;font-weight:300;}
+
+.card{background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-radius:22px;padding:28px 30px;margin-bottom:18px;border:1px solid rgba(255,255,255,.65);box-shadow:0 10px 40px rgba(13,74,99,.18);}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--ocean-deep);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.icon-b{width:32px;height:32px;background:var(--ocean);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:15px;flex-shrink:0;}
+
+/* LOADING */
+.loading{text-align:center;padding:40px 20px;}
+.spinner{width:44px;height:44px;border:3px solid rgba(26,107,138,.2);border-top-color:var(--ocean);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{color:var(--muted);font-size:14px;font-weight:500;}
+
+/* CLASSIFICA PREVIEW */
+.ranking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:4px;}
+.rank-chip{display:flex;align-items:center;gap:10px;background:rgba(26,107,138,.06);border:1px solid rgba(26,107,138,.15);border-radius:12px;padding:9px 13px;}
+.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--ocean);width:20px;text-align:center;flex-shrink:0;}
+.rank-name{flex:1;font-size:14px;font-weight:600;color:var(--text);}
+.rank-pts{font-size:11px;font-weight:700;background:rgba(26,107,138,.1);color:var(--ocean-deep);padding:2px 8px;border-radius:20px;}
+
+/* CONFIG URL */
+.url-box{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin-bottom:10px;}
+.url-box input{flex:1;min-width:200px;border:1.5px solid rgba(26,107,138,.25);border-radius:12px;background:white;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);padding:10px 14px;outline:none;transition:border-color .2s;}
+.url-box input:focus{border-color:var(--ocean);}
+.url-hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
+.url-hint a{color:var(--ocean);text-decoration:none;}
+.url-hint a:hover{text-decoration:underline;}
+
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;padding:13px 28px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;}
+.btn-primary{background:var(--coral);color:white;box-shadow:0 4px 20px rgba(232,93,58,.4);}
+.btn-primary:hover{background:var(--coral-light);transform:translateY(-2px);box-shadow:0 8px 28px rgba(232,93,58,.5);}
+.btn-secondary{background:rgba(26,107,138,.1);color:var(--ocean-deep);border:1.5px solid rgba(26,107,138,.28);}
+.btn-secondary:hover{background:rgba(26,107,138,.18);}
+.btn-sm{font-size:14px;padding:9px 18px;}
+
+.err{background:rgba(232,93,58,.1);border:1.5px solid rgba(232,93,58,.35);color:var(--coral);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:500;margin-top:14px;display:none;}
+.ok-msg{background:rgba(39,174,96,.1);border:1.5px solid rgba(39,174,96,.35);color:var(--green);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:500;margin-top:14px;display:none;}
+
+/* OUTPUT */
+#output{display:none;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.tab{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;padding:7px 18px;border-radius:10px;cursor:pointer;border:2px solid transparent;background:rgba(26,107,138,.08);color:var(--ocean-deep);transition:all .2s;user-select:none;}
+.tab.active{background:var(--ocean);color:white;border-color:var(--ocean);box-shadow:0 4px 16px rgba(26,107,138,.3);}
+.tab:hover:not(.active){background:rgba(26,107,138,.16);}
+
+.matches-list{display:flex;flex-direction:column;gap:14px;}
+.match-card{background:white;border-radius:18px;padding:18px 20px 14px;border:1.5px solid rgba(26,107,138,.1);box-shadow:0 2px 16px rgba(13,74,99,.07);animation:up .35s ease both;}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.match-header{font-size:11px;font-weight:700;color:var(--ocean);letter-spacing:.8px;margin-bottom:12px;}
+.match-inner{display:grid;grid-template-columns:1fr 52px 1fr;align-items:center;gap:10px;}
+.team{display:flex;flex-direction:column;gap:7px;}
+.team.r{align-items:flex-end;text-align:right;}
+.pchip{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--text);}
+.team.r .pchip{flex-direction:row-reverse;}
+.ppill{background:rgba(26,107,138,.1);color:var(--ocean-deep);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.2px;flex-shrink:0;}
+.tstr{font-size:12px;font-weight:500;color:var(--muted);margin-top:1px;}
+.vs-col{text-align:center;}
+.vs-txt{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--coral);line-height:1;}
+.court{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-top:2px;}
+.bal-row{display:flex;align-items:center;gap:9px;margin-top:12px;}
+.bal-n{font-size:11px;font-weight:700;color:var(--ocean-deep);width:34px;}
+.bal-n.r{text-align:right;}
+.bal-track{flex:1;height:5px;border-radius:3px;background:var(--sand-dark);overflow:hidden;position:relative;}
+.bal-fill{position:absolute;top:0;bottom:0;left:0;border-radius:3px;background:var(--ocean);}
+.bal-tag{font-size:10px;font-weight:700;letter-spacing:.3px;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.g{background:rgba(39,174,96,.15);color:var(--green);}
+.y{background:rgba(214,136,16,.15);color:var(--yellow);}
+.rr{background:rgba(192,57,43,.15);color:var(--red);}
+
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:14px;background:rgba(26,107,138,.06);border:1.5px solid rgba(26,107,138,.12);border-radius:16px;padding:18px 20px;margin-bottom:18px;}
+.st{text-align:center;}
+.st-v{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ocean);line-height:1;}
+.st-l{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-top:3px;}
+
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:12px;color:var(--muted);font-weight:500;}
+.ld{display:flex;align-items:center;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+
+@media(max-width:600px){
+  .match-inner{grid-template-columns:1fr 40px 1fr;gap:7px;}
+  .pchip{font-size:13px;}
+  .card{padding:18px 14px;}
+  .vs-txt{font-size:20px;}
+}
+@media print{
+  body{background:white;}
+  .bg,.wave,.actions,header .subtitle,#setup-section{display:none;}
+  .card{box-shadow:none;border:1.5px solid #ddd;backdrop-filter:none;}
+  .tabs{display:none;}
+  .matches-list{display:flex!important;}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="wave"></div>
+<div class="app">
+
+<header>
+  <div class="badge">🏖 CAMPIONATO BEACH TENNIS</div>
+  <h1>GENERA<br><span>GIORNATA</span></h1>
+  <p class="subtitle">12 giocatori · 12 partite · 4 round · ogni giocatore gioca 4 volte · nessuna coppia si ripete</p>
+</header>
+
+<!-- SETUP -->
+<div id="setup-section">
+
+  <!-- URL config -->
+  <div class="card" id="url-card">
+    <div class="card-title"><div class="icon-b">⚙️</div>COLLEGA IL TUO GOOGLE SHEETS</div>
+    <div class="url-box">
+      <input type="text" id="sheets-url" placeholder="Incolla qui l'URL CSV del tuo Google Sheets…">
+      <button class="btn btn-secondary btn-sm" onclick="loadFromSheets()">📥 CARICA</button>
+    </div>
+    <div class="url-hint">
+      Come ottenere l'URL: <strong>File → Condividi → Pubblica sul Web → Foglio1 → CSV → Pubblica</strong><br>
+      L'URL è già salvato in questo browser: la prossima volta la classifica si carica da sola.
+    </div>
+    <div class="err" id="url-err"></div>
+    <div class="ok-msg" id="url-ok"></div>
+  </div>
+
+  <!-- Ranking preview -->
+  <div class="card" id="ranking-card" style="display:none">
+    <div class="card-title"><div class="icon-b">🏅</div>CLASSIFICA CARICATA</div>
+    <div class="ranking-grid" id="ranking-grid"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-secondary btn-sm" onclick="reloadSheets()">🔄 RICARICA DAL FOGLIO</button>
+      <button class="btn btn-secondary btn-sm" onclick="changeUrl()">✏️ CAMBIA URL</button>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div class="card" id="loading-card" style="display:none">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Caricamento classifica dal foglio…</p>
+    </div>
+  </div>
+
+  <div class="actions" id="generate-actions" style="display:none">
+    <button class="btn btn-primary" onclick="generate()">⚡ GENERA GIORNATA</button>
+  </div>
+</div>
+
+<!-- OUTPUT -->
+<div id="output">
+  <div class="card">
+    <div class="card-title"><div class="icon-b">🎾</div>GIORNATA — 12 PARTITE · 4 ROUND</div>
+    <div class="stats-strip" id="stats"></div>
+    <div class="legend">
+      <div class="ld"><div class="dot" style="background:var(--green)"></div>Equilibrata (&lt;100 pt)</div>
+      <div class="ld"><div class="dot" style="background:var(--yellow)"></div>Quasi bilanciata (100–250)</div>
+      <div class="ld"><div class="dot" style="background:var(--red)"></div>Sbilanciata (&gt;250)</div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="matches-list" id="mlist"></div>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" onclick="regenerate()">🔄 RIGENERA</button>
+    <button class="btn btn-secondary" onclick="backToSetup()">📋 TORNA ALLA CLASSIFICA</button>
+    <button class="btn btn-secondary" onclick="printAll()">🖨 STAMPA</button>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTS ──
+const N = 12, ROUNDS = 4, MPR = 3;
+const STORAGE_KEY = 'beachtennis_sheets_url';
+
+// ── STATE ──
+let players = [];
+
+// ── GOOGLE SHEETS ──
+function getSavedUrl() { return localStorage.getItem(STORAGE_KEY) || ''; }
+function saveUrl(url)  { localStorage.setItem(STORAGE_KEY, url); }
+
+function init() {
+  const saved = getSavedUrl();
+  if (saved) {
+    document.getElementById('sheets-url').value = saved;
+    loadFromSheets(true); // silent load on startup
+  }
+}
+
+async function loadFromSheets(silent = false) {
+  const input = document.getElementById('sheets-url');
+  const url = input.value.trim();
+  if (!url) { showUrlErr('Incolla prima l\'URL del tuo Google Sheets.'); return; }
+
+  // Show loading
+  document.getElementById('url-card').style.display = silent ? 'none' : 'block';
+  document.getElementById('ranking-card').style.display = 'none';
+  document.getElementById('loading-card').style.display = 'block';
+  document.getElementById('generate-actions').style.display = 'none';
+  hideUrlMessages();
+
+  try {
+    // Use a CORS proxy to fetch the CSV
+    // Google Sheets CSV URLs support direct fetch when published
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    const parsed = parseCSV(text);
+
+    if (parsed.length < N) {
+      throw new Error(`Trovati solo ${parsed.length} giocatori. Il foglio deve averne esattamente ${N}.`);
+    }
+    if (parsed.length > N) {
+      throw new Error(`Trovati ${parsed.length} giocatori. Il foglio deve averne esattamente ${N}.`);
+    }
+
+    players = parsed;
+    saveUrl(url);
+
+    document.getElementById('loading-card').style.display = 'none';
+    document.getElementById('url-card').style.display = silent ? 'none' : 'block';
+    renderRanking(players);
+    document.getElementById('ranking-card').style.display = 'block';
+    document.getElementById('generate-actions').style.display = 'flex';
+
+    if (!silent) {
+      document.getElementById('url-ok').textContent = `✓ Classifica caricata correttamente — ${players.length} giocatori trovati.`;
+      document.getElementById('url-ok').style.display = 'block';
+    }
+
+  } catch (e) {
+    document.getElementById('loading-card').style.display = 'none';
+    document.getElementById('url-card').style.display = 'block';
+    showUrlErr('Errore nel caricamento: ' + e.message + '. Controlla che l\'URL sia corretto e che il foglio sia pubblicato come CSV.');
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l);
+  // Skip header row if first cell is not a number
+  const start = isNaN(parseInt(lines[0].split(',')[1])) ? 1 : 0;
+  const result = [];
+  for (let i = start; i < lines.length; i++) {
+    const parts = lines[i].split(',');
+    if (parts.length < 2) continue;
+    const name = parts[0].trim().replace(/^"|"$/g,'');
+    const pts  = parseInt(parts[1].trim().replace(/^"|"$/g,''));
+    if (name && !isNaN(pts)) result.push({ id: i, name, pts });
+  }
+  return result;
+}
+
+function reloadSheets() { loadFromSheets(false); }
+
+function changeUrl() {
+  document.getElementById('url-card').style.display = 'block';
+  document.getElementById('ranking-card').style.display = 'none';
+  document.getElementById('generate-actions').style.display = 'none';
+  hideUrlMessages();
+}
+
+function showUrlErr(msg) {
+  const e = document.getElementById('url-err');
+  e.textContent = msg; e.style.display = 'block';
+}
+function hideUrlMessages() {
+  document.getElementById('url-err').style.display = 'none';
+  document.getElementById('url-ok').style.display = 'none';
+}
+
+function renderRanking(players) {
+  const sorted = [...players].sort((a,b) => b.pts - a.pts);
+  const grid = document.getElementById('ranking-grid');
+  grid.innerHTML = sorted.map((p,i) => `
+    <div class="rank-chip">
+      <span class="rank-pos">${i+1}</span>
+      <span class="rank-name">${p.name}</span>
+      <span class="rank-pts">${p.pts} pt</span>
+    </div>`).join('');
+}
+
+// ── ALGORITHM ──
+function pairKey(a, b) { return a < b ? `${a}-${b}` : `${b}-${a}`; }
+
+function findBestRound(usedPairs, pts) {
+  const quads = [];
+  for (let a = 0; a < 9; a++)
+  for (let b = a+1; b < 10; b++)
+  for (let c = b+1; c < 11; c++)
+  for (let d = c+1; d < 12; d++) {
+    const p1 = pairKey(a,d), p2 = pairKey(b,c);
+    if (!usedPairs.has(p1) && !usedPairs.has(p2)) {
+      const diff = Math.abs((pts[a]+pts[d]) - (pts[b]+pts[c]));
+      quads.push({ pl:[a,b,c,d], p1, p2, diff });
+    }
+  }
+  quads.sort((a,b) => a.diff - b.diff);
+  const limit = Math.min(quads.length, 300);
+  let best = null;
+  for (let i = 0; i < limit; i++) {
+    const qi = quads[i];
+    const setI = new Set(qi.pl);
+    for (let j = i+1; j < limit; j++) {
+      const qj = quads[j];
+      if (qj.pl.some(p => setI.has(p))) continue;
+      if (qi.p1===qj.p1||qi.p1===qj.p2||qi.p2===qj.p1||qi.p2===qj.p2) continue;
+      const setIJ = new Set([...qi.pl,...qj.pl]);
+      const rem = [0,1,2,3,4,5,6,7,8,9,10,11].filter(x => !setIJ.has(x)).sort((a,b)=>a-b);
+      const [ra,rb,rc,rd] = rem;
+      const rp1 = pairKey(ra,rd), rp2 = pairKey(rb,rc);
+      if (usedPairs.has(rp1)||usedPairs.has(rp2)) continue;
+      if ([rp1,rp2].some(p=>[qi.p1,qi.p2,qj.p1,qj.p2].includes(p))) continue;
+      const rdiff = Math.abs((pts[ra]+pts[rd])-(pts[rb]+pts[rc]));
+      const total = qi.diff + qj.diff + rdiff;
+      if (!best || total < best.total) {
+        best = { quads:[qi, qj, {pl:rem,p1:rp1,p2:rp2,diff:rdiff}], total };
+        if (total === 0) return best;
+      }
+    }
+  }
+  return best;
+}
+
+function generateSchedule(players) {
+  const sorted = [...players].sort((a,b) => b.pts - a.pts);
+  const pts = sorted.map(p => p.pts);
+  const used = new Set();
+  const rounds = [];
+  for (let r = 0; r < ROUNDS; r++) {
+    const round = findBestRound(used, pts);
+    if (!round) break;
+    rounds.push(round.quads.map(q => {
+      const [a,b,c,d] = q.pl;
+      return { teamA:[sorted[a],sorted[d]], teamB:[sorted[b],sorted[c]],
+               strA:pts[a]+pts[d], strB:pts[b]+pts[c], diff:q.diff };
+    }));
+    round.quads.forEach(q => { used.add(q.p1); used.add(q.p2); });
+  }
+  return rounds;
+}
+
+// ── RENDER ──
+let schedule = null;
+
+function renderSchedule(rounds) {
+  schedule = rounds;
+  const allDiffs = rounds.flatMap(r => r.map(m => m.diff));
+  const avg = Math.round(allDiffs.reduce((a,b)=>a+b,0)/allDiffs.length);
+  const good = allDiffs.filter(d=>d<100).length;
+  const perf = allDiffs.filter(d=>d===0).length;
+  document.getElementById('stats').innerHTML = `
+    <div class="st"><div class="st-v">${rounds.length*MPR}</div><div class="st-l">PARTITE</div></div>
+    <div class="st"><div class="st-v">${ROUNDS}</div><div class="st-l">ROUND</div></div>
+    <div class="st"><div class="st-v">${avg}</div><div class="st-l">DIFF. MEDIA</div></div>
+    <div class="st"><div class="st-v">${good}/${rounds.length*MPR}</div><div class="st-l">EQUILIBRATE</div></div>
+    <div class="st"><div class="st-v">${perf}</div><div class="st-l">PERFETTE</div></div>`;
+
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = rounds.map((_,i)=>`<div class="tab${i===0?' active':''}" onclick="showRound(${i})">ROUND ${i+1}</div>`).join('')
+    + `<div class="tab" onclick="showRound(-1)">TUTTI ▾</div>`;
+  showRound(0);
+}
+
+function showRound(r) {
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active', r===-1 ? i===ROUNDS : i===r);
+  });
+  const list = document.getElementById('mlist');
+  list.innerHTML = '';
+  const toShow = r===-1
+    ? schedule.flatMap((rnd,ri)=>rnd.map((m,mi)=>({...m,ri,mi})))
+    : schedule[r].map((m,mi)=>({...m,ri:r,mi}));
+  toShow.forEach((m,idx)=>{
+    const pct = Math.round(m.strA/(m.strA+m.strB)*100);
+    const cls = m.diff<100?'g':m.diff<=250?'y':'rr';
+    const lbl = m.diff<100?'🟢 Equilibrata':m.diff<=250?'🟡 Quasi bilanciata':'🔴 Sbilanciata';
+    const c = document.createElement('div');
+    c.className='match-card'; c.style.animationDelay=`${idx*55}ms`;
+    c.innerHTML=`
+      <div class="match-header">ROUND ${m.ri+1} &nbsp;·&nbsp; CAMPO ${m.mi+1}</div>
+      <div class="match-inner">
+        <div class="team">
+          ${m.teamA.map(p=>`<div class="pchip"><span class="ppill">${p.pts}</span>${p.name}</div>`).join('')}
+          <div class="tstr">Coppia: ${m.strA} pt</div>
+        </div>
+        <div class="vs-col"><div class="vs-txt">VS</div><div class="court">CAMPO ${m.mi+1}</div></div>
+        <div class="team r">
+          ${m.teamB.map(p=>`<div class="pchip">${p.name}<span class="ppill">${p.pts}</span></div>`).join('')}
+          <div class="tstr">Coppia: ${m.strB} pt</div>
+        </div>
+      </div>
+      <div class="bal-row">
+        <span class="bal-n">${m.strA}</span>
+        <div class="bal-track"><div class="bal-fill" style="width:${pct}%"></div></div>
+        <span class="bal-n r">${m.strB}</span>
+        <span class="bal-tag ${cls}">${lbl}</span>
+      </div>`;
+    list.appendChild(c);
+  });
+}
+
+// ── ACTIONS ──
+function generate() {
+  if (!players.length) { showUrlErr('Carica prima la classifica.'); return; }
+  const rounds = generateSchedule(players);
+  document.getElementById('setup-section').style.display = 'none';
+  document.getElementById('output').style.display = 'block';
+  renderSchedule(rounds);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function regenerate() {
+  const rounds = generateSchedule(players);
+  renderSchedule(rounds);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function backToSetup() {
+  document.getElementById('setup-section').style.display = 'block';
+  document.getElementById('output').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function printAll() { showRound(-1); setTimeout(()=>window.print(),150); }
+
+// ── INIT ──
+init();
+</script>
+</body>
+</html>
