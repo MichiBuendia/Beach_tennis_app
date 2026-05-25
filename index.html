@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beach Tennis · Generatore Giornate</title>
+<title>Beach Tennis · Campionato</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -11,6 +11,7 @@
   --sun:#F5C842; --sand:#F5E6C8; --sand-dark:#E0CFA0;
   --green:#27AE60; --yellow:#D68910; --red:#C0392B;
   --text:#1A1A2E; --muted:#5A6A7A; --white:#FEFDF8;
+  --fascia-a:#1A6B8A; --fascia-b:#7B2D8B; --fascia-ex:#9E9E9E;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--ocean-deep);min-height:100vh;color:var(--text);overflow-x:hidden;}
@@ -19,14 +20,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--ocean-deep);min-height:10
 .bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 0%,rgba(245,200,66,.13) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 85% 95%,rgba(232,93,58,.10) 0%,transparent 55%);}
 .wave{position:fixed;bottom:0;left:0;right:0;height:80px;z-index:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='%23F5E6C8' fill-opacity='0.07' d='M0,40 C240,70 480,10 720,40 C960,70 1200,15 1440,40 L1440,80 L0,80Z'/%3E%3C/svg%3E") bottom/cover;}
 
-.app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:44px 20px 100px;}
+.app{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:44px 20px 100px;}
 
+/* HEADER */
 header{text-align:center;margin-bottom:44px;}
 .badge{display:inline-block;background:var(--coral);color:white;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;padding:4px 16px;border-radius:20px;margin-bottom:14px;}
 h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,11vw,92px);line-height:.9;color:white;letter-spacing:2px;text-shadow:0 6px 30px rgba(0,0,0,.3);}
 h1 span{color:var(--sun);}
 .subtitle{margin-top:14px;color:rgba(255,255,255,.6);font-size:14px;font-weight:300;}
 
+/* NAV TABS */
+.nav{display:flex;gap:4px;background:rgba(0,0,0,.2);border-radius:16px;padding:5px;margin-bottom:28px;}
+.nav-tab{flex:1;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;padding:10px;border-radius:12px;cursor:pointer;color:rgba(255,255,255,.6);transition:all .2s;user-select:none;}
+.nav-tab.active{background:white;color:var(--ocean-deep);box-shadow:0 2px 12px rgba(0,0,0,.15);}
+.nav-tab:hover:not(.active){color:white;}
+
+/* CARD */
 .card{background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-radius:22px;padding:28px 30px;margin-bottom:18px;border:1px solid rgba(255,255,255,.65);box-shadow:0 10px 40px rgba(13,74,99,.18);}
 .card-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--ocean-deep);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
 .icon-b{width:32px;height:32px;background:var(--ocean);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:15px;flex-shrink:0;}
@@ -37,43 +46,81 @@ h1 span{color:var(--sun);}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading p{color:var(--muted);font-size:14px;font-weight:500;}
 
-/* CLASSIFICA PREVIEW */
-.ranking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:4px;}
-.rank-chip{display:flex;align-items:center;gap:10px;background:rgba(26,107,138,.06);border:1px solid rgba(26,107,138,.15);border-radius:12px;padding:9px 13px;}
-.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--ocean);width:20px;text-align:center;flex-shrink:0;}
-.rank-name{flex:1;font-size:14px;font-weight:600;color:var(--text);}
-.rank-pts{font-size:11px;font-weight:700;background:rgba(26,107,138,.1);color:var(--ocean-deep);padding:2px 8px;border-radius:20px;}
-
-/* CONFIG URL */
+/* URL CONFIG */
 .url-box{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin-bottom:10px;}
 .url-box input{flex:1;min-width:200px;border:1.5px solid rgba(26,107,138,.25);border-radius:12px;background:white;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);padding:10px 14px;outline:none;transition:border-color .2s;}
 .url-box input:focus{border-color:var(--ocean);}
-.url-hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
-.url-hint a{color:var(--ocean);text-decoration:none;}
-.url-hint a:hover{text-decoration:underline;}
-
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;}
-.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;padding:13px 28px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;}
-.btn-primary{background:var(--coral);color:white;box-shadow:0 4px 20px rgba(232,93,58,.4);}
-.btn-primary:hover{background:var(--coral-light);transform:translateY(-2px);box-shadow:0 8px 28px rgba(232,93,58,.5);}
-.btn-secondary{background:rgba(26,107,138,.1);color:var(--ocean-deep);border:1.5px solid rgba(26,107,138,.28);}
-.btn-secondary:hover{background:rgba(26,107,138,.18);}
-.btn-sm{font-size:14px;padding:9px 18px;}
-
+.url-hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;}
 .err{background:rgba(232,93,58,.1);border:1.5px solid rgba(232,93,58,.35);color:var(--coral);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:500;margin-top:14px;display:none;}
 .ok-msg{background:rgba(39,174,96,.1);border:1.5px solid rgba(39,174,96,.35);color:var(--green);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:500;margin-top:14px;display:none;}
 
-/* OUTPUT */
-#output{display:none;}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+/* ACTIONS */
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;padding:13px 28px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;}
+.btn-primary{background:var(--coral);color:white;box-shadow:0 4px 20px rgba(232,93,58,.4);}
+.btn-primary:hover{background:var(--coral-light);transform:translateY(-2px);}
+.btn-secondary{background:rgba(26,107,138,.1);color:var(--ocean-deep);border:1.5px solid rgba(26,107,138,.28);}
+.btn-secondary:hover{background:rgba(26,107,138,.18);}
+.btn-purple{background:#7B2D8B;color:white;box-shadow:0 4px 20px rgba(123,45,139,.4);}
+.btn-purple:hover{background:#9B3DAB;transform:translateY(-2px);}
+.btn-sm{font-size:14px;padding:9px 18px;}
+
+/* FASCIA BADGE */
+.fascia-badge{display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;padding:3px 10px;border-radius:20px;}
+.fa{background:rgba(26,107,138,.15);color:var(--fascia-a);}
+.fb{background:rgba(123,45,139,.15);color:var(--fascia-b);}
+.fex{background:rgba(158,158,158,.15);color:var(--fascia-ex);}
+
+/* CLASSIFICA */
+.classifica-section{margin-bottom:24px;}
+.fascia-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;margin-top:8px;}
+.fascia-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
+.fascia-title.a{color:var(--fascia-a);}
+.fascia-title.b{color:var(--fascia-b);}
+.fascia-title.ex{color:var(--fascia-ex);}
+.fascia-line{flex:1;height:2px;border-radius:1px;}
+.fascia-line.a{background:linear-gradient(to right,var(--fascia-a),transparent);}
+.fascia-line.b{background:linear-gradient(to right,var(--fascia-b),transparent);}
+.fascia-line.ex{background:linear-gradient(to right,var(--fascia-ex),transparent);}
+
+.player-table{width:100%;border-collapse:separate;border-spacing:0 6px;}
+.player-table th{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-align:left;padding:0 10px 6px;text-transform:uppercase;}
+.player-table th.num{text-align:center;}
+.player-row-tr{background:white;border-radius:12px;transition:transform .15s,box-shadow .15s;}
+.player-row-tr:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(13,74,99,.1);}
+.player-row-tr td{padding:11px 10px;font-size:13px;vertical-align:middle;}
+.player-row-tr td:first-child{border-radius:12px 0 0 12px;padding-left:14px;}
+.player-row-tr td:last-child{border-radius:0 12px 12px 0;padding-right:14px;}
+.pos-cell{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ocean);text-align:center;width:36px;}
+.pos-cell.ex{color:var(--fascia-ex);}
+.pos-medal{font-size:18px;}
+.name-cell{font-weight:600;font-size:14px;color:var(--text);}
+.avatar-wrap{display:flex;align-items:center;gap:10px;}
+.avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(26,107,138,.15);}
+.avatar-placeholder{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;border:2px solid rgba(255,255,255,.3);}
+.pts-cell{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ocean-deep);}
+.stat-cell{text-align:center;color:var(--muted);font-weight:500;}
+.stat-cell span{display:inline-block;min-width:24px;text-align:center;}
+.win-pct{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.jolly-cell{text-align:center;}
+.jolly-pip{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 1px;}
+.jolly-used{background:var(--coral);}
+.jolly-free{background:rgba(26,107,138,.2);}
+
+/* MATCH OUTPUT */
+.match-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
 .tab{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;padding:7px 18px;border-radius:10px;cursor:pointer;border:2px solid transparent;background:rgba(26,107,138,.08);color:var(--ocean-deep);transition:all .2s;user-select:none;}
 .tab.active{background:var(--ocean);color:white;border-color:var(--ocean);box-shadow:0 4px 16px rgba(26,107,138,.3);}
+.tab.active.purple{background:#7B2D8B;border-color:#7B2D8B;box-shadow:0 4px 16px rgba(123,45,139,.3);}
 .tab:hover:not(.active){background:rgba(26,107,138,.16);}
 
 .matches-list{display:flex;flex-direction:column;gap:14px;}
 .match-card{background:white;border-radius:18px;padding:18px 20px 14px;border:1.5px solid rgba(26,107,138,.1);box-shadow:0 2px 16px rgba(13,74,99,.07);animation:up .35s ease both;}
+.match-card.purple-border{border-color:rgba(123,45,139,.15);}
 @keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.match-header{font-size:11px;font-weight:700;color:var(--ocean);letter-spacing:.8px;margin-bottom:12px;}
+.match-header{font-size:11px;font-weight:700;letter-spacing:.8px;margin-bottom:12px;}
+.match-header.a{color:var(--ocean);}
+.match-header.b{color:#7B2D8B;}
 .match-inner{display:grid;grid-template-columns:1fr 52px 1fr;align-items:center;gap:10px;}
 .team{display:flex;flex-direction:column;gap:7px;}
 .team.r{align-items:flex-end;text-align:right;}
@@ -95,25 +142,35 @@ h1 span{color:var(--sun);}
 .rr{background:rgba(192,57,43,.15);color:var(--red);}
 
 .stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:14px;background:rgba(26,107,138,.06);border:1.5px solid rgba(26,107,138,.12);border-radius:16px;padding:18px 20px;margin-bottom:18px;}
+.stats-strip.purple{background:rgba(123,45,139,.06);border-color:rgba(123,45,139,.15);}
 .st{text-align:center;}
 .st-v{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ocean);line-height:1;}
+.st-v.purple{color:#7B2D8B;}
 .st-l{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-top:3px;}
 
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:12px;color:var(--muted);font-weight:500;}
 .ld{display:flex;align-items:center;gap:5px;}
 .dot{width:8px;height:8px;border-radius:50%;}
 
-@media(max-width:600px){
+.fascia-selector{display:flex;gap:10px;margin-bottom:20px;}
+.fs-btn{flex:1;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;padding:14px;border-radius:14px;cursor:pointer;border:2px solid transparent;transition:all .2s;user-select:none;}
+.fs-btn.a{background:rgba(26,107,138,.08);color:var(--fascia-a);border-color:rgba(26,107,138,.2);}
+.fs-btn.a.sel{background:var(--fascia-a);color:white;border-color:var(--fascia-a);}
+.fs-btn.b{background:rgba(123,45,139,.08);color:var(--fascia-b);border-color:rgba(123,45,139,.2);}
+.fs-btn.b.sel{background:var(--fascia-b);color:white;border-color:var(--fascia-b);}
+
+@media(max-width:700px){
   .match-inner{grid-template-columns:1fr 40px 1fr;gap:7px;}
   .pchip{font-size:13px;}
   .card{padding:18px 14px;}
   .vs-txt{font-size:20px;}
+  .player-table th:nth-child(n+5),.player-row-tr td:nth-child(n+5){display:none;}
 }
 @media print{
   body{background:white;}
-  .bg,.wave,.actions,header .subtitle,#setup-section{display:none;}
+  .bg,.wave,.actions,header .subtitle,.nav,#settings-section{display:none;}
   .card{box-shadow:none;border:1.5px solid #ddd;backdrop-filter:none;}
-  .tabs{display:none;}
+  .match-tabs{display:none;}
   .matches-list{display:flex!important;}
 }
 </style>
@@ -124,78 +181,192 @@ h1 span{color:var(--sun);}
 
 <header>
   <div class="badge">🏖 CAMPIONATO BEACH TENNIS</div>
-  <h1>GENERA<br><span>GIORNATA</span></h1>
-  <p class="subtitle">12 giocatori · 12 partite · 4 round · ogni giocatore gioca 4 volte · nessuna coppia si ripete</p>
+  <h1>BEACH<br><span>TENNIS</span></h1>
+  <p class="subtitle">30 giocatori · Fascia A e Fascia B · 12 partite per fascia · nessuna coppia si ripete</p>
 </header>
 
-<!-- SETUP -->
-<div id="setup-section">
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-tab active" onclick="showPage('classifica')">🏅 CLASSIFICA</div>
+  <div class="nav-tab" onclick="showPage('giornata')">🎾 GIORNATA</div>
+  <div class="nav-tab" onclick="showPage('settings')">⚙️ IMPOSTAZIONI</div>
+</div>
 
-  <!-- URL config -->
-  <div class="card" id="url-card">
-    <div class="card-title"><div class="icon-b">⚙️</div>COLLEGA IL TUO GOOGLE SHEETS</div>
+<!-- PAGE: CLASSIFICA -->
+<div id="page-classifica">
+  <div class="card" id="loading-card-cl">
+    <div class="loading"><div class="spinner"></div><p>Caricamento classifica…</p></div>
+  </div>
+  <div id="classifica-content" style="display:none">
+    <!-- Fascia A -->
+    <div class="classifica-section">
+      <div class="fascia-header">
+        <div class="fascia-title a">FASCIA A</div>
+        <div class="fascia-line a"></div>
+        <span class="fascia-badge fa">1° — 12°</span>
+      </div>
+      <table class="player-table">
+        <thead><tr>
+          <th class="num">#</th>
+          <th>Giocatore</th>
+          <th>Punti</th>
+          <th class="num">PG</th>
+          <th class="num">PV</th>
+          <th class="num">PP</th>
+          <th class="num">TV</th>
+          <th class="num">TP</th>
+          <th class="num">Jolly</th>
+        </tr></thead>
+        <tbody id="tbody-a"></tbody>
+      </table>
+    </div>
+    <!-- Fascia B -->
+    <div class="classifica-section">
+      <div class="fascia-header">
+        <div class="fascia-title b">FASCIA B</div>
+        <div class="fascia-line b"></div>
+        <span class="fascia-badge fb">13° — 24°</span>
+      </div>
+      <table class="player-table">
+        <thead><tr>
+          <th class="num">#</th>
+          <th>Giocatore</th>
+          <th>Punti</th>
+          <th class="num">PG</th>
+          <th class="num">PV</th>
+          <th class="num">PP</th>
+          <th class="num">TV</th>
+          <th class="num">TP</th>
+          <th class="num">Jolly</th>
+        </tr></thead>
+        <tbody id="tbody-b"></tbody>
+      </table>
+    </div>
+    <!-- Esclusi -->
+    <div class="classifica-section">
+      <div class="fascia-header">
+        <div class="fascia-title ex">ESCLUSI</div>
+        <div class="fascia-line ex"></div>
+        <span class="fascia-badge fex">25° — 30°</span>
+      </div>
+      <table class="player-table">
+        <thead><tr>
+          <th class="num">#</th>
+          <th>Giocatore</th>
+          <th>Punti</th>
+          <th class="num">PG</th>
+          <th class="num">PV</th>
+          <th class="num">PP</th>
+          <th class="num">TV</th>
+          <th class="num">TP</th>
+          <th class="num">Jolly</th>
+        </tr></thead>
+        <tbody id="tbody-ex"></tbody>
+      </table>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary btn-sm" onclick="reloadSheets()">🔄 RICARICA DAL FOGLIO</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: GIORNATA -->
+<div id="page-giornata" style="display:none">
+  <div class="card" id="no-data-card" style="display:none">
+    <div style="text-align:center;padding:30px 20px;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:16px">📋</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--ocean-deep);margin-bottom:8px">Nessuna classifica caricata</div>
+      <div style="font-size:14px">Vai in Impostazioni e incolla l'URL del tuo Google Sheets</div>
+    </div>
+  </div>
+
+  <div id="giornata-content" style="display:none">
+    <!-- Fascia selector -->
+    <div class="fascia-selector">
+      <div class="fs-btn a sel" id="fs-a" onclick="selectFascia('a')">🔵 FASCIA A<br><small style="font-size:12px;letter-spacing:0;font-family:'DM Sans',sans-serif">1° — 12°</small></div>
+      <div class="fs-btn b" id="fs-b" onclick="selectFascia('b')">🟣 FASCIA B<br><small style="font-size:12px;letter-spacing:0;font-family:'DM Sans',sans-serif">13° — 24°</small></div>
+    </div>
+
+    <!-- Fascia A output -->
+    <div id="output-a">
+      <div class="card">
+        <div class="card-title"><div class="icon-b" style="background:var(--fascia-a)">🎾</div>FASCIA A — 12 PARTITE · 4 ROUND</div>
+        <div class="stats-strip" id="stats-a"></div>
+        <div class="legend">
+          <div class="ld"><div class="dot" style="background:var(--green)"></div>Equilibrata (&lt;100 pt)</div>
+          <div class="ld"><div class="dot" style="background:var(--yellow)"></div>Quasi bilanciata (100–250)</div>
+          <div class="ld"><div class="dot" style="background:var(--red)"></div>Sbilanciata (&gt;250)</div>
+        </div>
+        <div class="match-tabs" id="tabs-a"></div>
+        <div class="matches-list" id="mlist-a"></div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary btn-sm" onclick="regenerate('a')">🔄 RIGENERA FASCIA A</button>
+        <button class="btn btn-secondary btn-sm" onclick="printFascia('a')">🖨 STAMPA</button>
+      </div>
+    </div>
+
+    <!-- Fascia B output -->
+    <div id="output-b" style="display:none">
+      <div class="card">
+        <div class="card-title"><div class="icon-b" style="background:#7B2D8B">🎾</div>FASCIA B — 12 PARTITE · 4 ROUND</div>
+        <div class="stats-strip purple" id="stats-b"></div>
+        <div class="legend">
+          <div class="ld"><div class="dot" style="background:var(--green)"></div>Equilibrata (&lt;100 pt)</div>
+          <div class="ld"><div class="dot" style="background:var(--yellow)"></div>Quasi bilanciata (100–250)</div>
+          <div class="ld"><div class="dot" style="background:var(--red)"></div>Sbilanciata (&gt;250)</div>
+        </div>
+        <div class="match-tabs" id="tabs-b"></div>
+        <div class="matches-list" id="mlist-b"></div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-purple btn-sm" onclick="regenerate('b')">🔄 RIGENERA FASCIA B</button>
+        <button class="btn btn-secondary btn-sm" onclick="printFascia('b')">🖨 STAMPA</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: SETTINGS -->
+<div id="page-settings" style="display:none">
+  <div class="card">
+    <div class="card-title"><div class="icon-b">⚙️</div>COLLEGA GOOGLE SHEETS</div>
     <div class="url-box">
       <input type="text" id="sheets-url" placeholder="Incolla qui l'URL CSV del tuo Google Sheets…">
       <button class="btn btn-secondary btn-sm" onclick="loadFromSheets()">📥 CARICA</button>
     </div>
     <div class="url-hint">
-      Come ottenere l'URL: <strong>File → Condividi → Pubblica sul Web → Foglio1 → CSV → Pubblica</strong><br>
-      L'URL è già salvato in questo browser: la prossima volta la classifica si carica da sola.
+      Come ottenere l'URL: nel foglio vai su <strong>File → Condividi → Pubblica sul Web</strong>,
+      scegli <strong>Foglio1</strong> e formato <strong>CSV</strong>, poi copia l'URL.<br><br>
+      Il foglio deve avere esattamente <strong>30 righe</strong> di dati (più la riga di intestazione) con queste colonne nell'ordine:<br>
+      <strong>Nome · Punti · Partite Giocate · Partite Vinte · Partite Perse · Tiebreak Vinti · Tiebreak Persi · Jolly · Foto (URL, opzionale)</strong>
     </div>
     <div class="err" id="url-err"></div>
     <div class="ok-msg" id="url-ok"></div>
-  </div>
-
-  <!-- Ranking preview -->
-  <div class="card" id="ranking-card" style="display:none">
-    <div class="card-title"><div class="icon-b">🏅</div>CLASSIFICA CARICATA</div>
-    <div class="ranking-grid" id="ranking-grid"></div>
-    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
-      <button class="btn btn-secondary btn-sm" onclick="reloadSheets()">🔄 RICARICA DAL FOGLIO</button>
-      <button class="btn btn-secondary btn-sm" onclick="changeUrl()">✏️ CAMBIA URL</button>
-    </div>
-  </div>
-
-  <!-- Loading state -->
-  <div class="card" id="loading-card" style="display:none">
-    <div class="loading">
-      <div class="spinner"></div>
-      <p>Caricamento classifica dal foglio…</p>
-    </div>
-  </div>
-
-  <div class="actions" id="generate-actions" style="display:none">
-    <button class="btn btn-primary" onclick="generate()">⚡ GENERA GIORNATA</button>
-  </div>
-</div>
-
-<!-- OUTPUT -->
-<div id="output">
-  <div class="card">
-    <div class="card-title"><div class="icon-b">🎾</div>GIORNATA — 12 PARTITE · 4 ROUND</div>
-    <div class="stats-strip" id="stats"></div>
-    <div class="legend">
-      <div class="ld"><div class="dot" style="background:var(--green)"></div>Equilibrata (&lt;100 pt)</div>
-      <div class="ld"><div class="dot" style="background:var(--yellow)"></div>Quasi bilanciata (100–250)</div>
-      <div class="ld"><div class="dot" style="background:var(--red)"></div>Sbilanciata (&gt;250)</div>
-    </div>
-    <div class="tabs" id="tabs"></div>
-    <div class="matches-list" id="mlist"></div>
-  </div>
-  <div class="actions">
-    <button class="btn btn-primary" onclick="regenerate()">🔄 RIGENERA</button>
-    <button class="btn btn-secondary" onclick="backToSetup()">📋 TORNA ALLA CLASSIFICA</button>
-    <button class="btn btn-secondary" onclick="printAll()">🖨 STAMPA</button>
   </div>
 </div>
 
 <script>
 // ── CONSTANTS ──
 const N = 12, ROUNDS = 4, MPR = 3;
-const STORAGE_KEY = 'beachtennis_sheets_url';
+const STORAGE_KEY = 'beachtennis_sheets_url_v2';
+const TOTAL_JOLLY = 4;
 
 // ── STATE ──
-let players = [];
+let allPlayers = [];
+let scheduleA = null, scheduleB = null;
+let currentFascia = 'a';
+
+// ── NAVIGATION ──
+function showPage(page) {
+  ['classifica','giornata','settings'].forEach(p => {
+    document.getElementById(`page-${p}`).style.display = p===page ? 'block' : 'none';
+  });
+  document.querySelectorAll('.nav-tab').forEach((t,i) => {
+    t.classList.toggle('active', ['classifica','giornata','settings'][i] === page);
+  });
+  if (page === 'giornata') initGiornata();
+}
 
 // ── GOOGLE SHEETS ──
 function getSavedUrl() { return localStorage.getItem(STORAGE_KEY) || ''; }
@@ -205,7 +376,9 @@ function init() {
   const saved = getSavedUrl();
   if (saved) {
     document.getElementById('sheets-url').value = saved;
-    loadFromSheets(true); // silent load on startup
+    loadFromSheets(true);
+  } else {
+    document.getElementById('loading-card-cl').style.display = 'none';
   }
 }
 
@@ -214,129 +387,169 @@ async function loadFromSheets(silent = false) {
   const url = input.value.trim();
   if (!url) { showUrlErr('Incolla prima l\'URL del tuo Google Sheets.'); return; }
 
-  // Show loading
-  document.getElementById('url-card').style.display = silent ? 'none' : 'block';
-  document.getElementById('ranking-card').style.display = 'none';
-  document.getElementById('loading-card').style.display = 'block';
-  document.getElementById('generate-actions').style.display = 'none';
+  document.getElementById('loading-card-cl').style.display = 'block';
+  document.getElementById('classifica-content').style.display = 'none';
   hideUrlMessages();
 
   try {
-    // Use a CORS proxy to fetch the CSV
-    // Google Sheets CSV URLs support direct fetch when published
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const text = await res.text();
     const parsed = parseCSV(text);
 
-    if (parsed.length < N) {
-      throw new Error(`Trovati solo ${parsed.length} giocatori. Il foglio deve averne esattamente ${N}.`);
-    }
-    if (parsed.length > N) {
-      throw new Error(`Trovati ${parsed.length} giocatori. Il foglio deve averne esattamente ${N}.`);
+    if (parsed.length !== 30) {
+      throw new Error(`Trovati ${parsed.length} giocatori. Il foglio deve averne esattamente 30.`);
     }
 
-    players = parsed;
+    allPlayers = parsed;
     saveUrl(url);
 
-    document.getElementById('loading-card').style.display = 'none';
-    document.getElementById('url-card').style.display = silent ? 'none' : 'block';
-    renderRanking(players);
-    document.getElementById('ranking-card').style.display = 'block';
-    document.getElementById('generate-actions').style.display = 'flex';
+    // Assign fascia
+    allPlayers.forEach((p, i) => {
+      p.fascia = i < 12 ? 'A' : i < 24 ? 'B' : 'EX';
+      p.globalRank = i + 1;
+    });
+
+    renderClassifica();
+    generateBothFasce();
+
+    document.getElementById('loading-card-cl').style.display = 'none';
+    document.getElementById('classifica-content').style.display = 'block';
 
     if (!silent) {
-      document.getElementById('url-ok').textContent = `✓ Classifica caricata correttamente — ${players.length} giocatori trovati.`;
+      document.getElementById('url-ok').textContent = `✓ Classifica caricata — 30 giocatori trovati.`;
       document.getElementById('url-ok').style.display = 'block';
     }
-
-  } catch (e) {
-    document.getElementById('loading-card').style.display = 'none';
-    document.getElementById('url-card').style.display = 'block';
-    showUrlErr('Errore nel caricamento: ' + e.message + '. Controlla che l\'URL sia corretto e che il foglio sia pubblicato come CSV.');
+  } catch(e) {
+    document.getElementById('loading-card-cl').style.display = 'none';
+    showUrlErr('Errore: ' + e.message);
   }
 }
 
 function parseCSV(text) {
   const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l);
-  // Skip header row if first cell is not a number
   const start = isNaN(parseInt(lines[0].split(',')[1])) ? 1 : 0;
   const result = [];
   for (let i = start; i < lines.length; i++) {
-    const parts = lines[i].split(',');
-    if (parts.length < 2) continue;
-    const name = parts[0].trim().replace(/^"|"$/g,'');
-    const pts  = parseInt(parts[1].trim().replace(/^"|"$/g,''));
-    if (name && !isNaN(pts)) result.push({ id: i, name, pts });
+    // Handle quoted fields
+    const parts = lines[i].match(/(".*?"|[^,]+)(?=,|$)/g) || lines[i].split(',');
+    const clean = parts.map(p => p.replace(/^"|"$/g,'').trim());
+    if (clean.length < 2) continue;
+    result.push({
+      id: i,
+      name:   clean[0] || `Giocatore ${i}`,
+      pts:    parseInt(clean[1]) || 0,
+      pg:     parseInt(clean[2]) || 0,
+      pv:     parseInt(clean[3]) || 0,
+      pp:     parseInt(clean[4]) || 0,
+      tv:     parseInt(clean[5]) || 0,
+      tp:     parseInt(clean[6]) || 0,
+      jolly:  parseInt(clean[7]) || 0,
+      photo:  clean[8] || '',
+    });
   }
+  // Sort by pts desc
+  result.sort((a,b) => b.pts - a.pts);
   return result;
 }
 
 function reloadSheets() { loadFromSheets(false); }
+function showUrlErr(msg) { const e=document.getElementById('url-err'); e.textContent=msg; e.style.display='block'; }
+function hideUrlMessages() { document.getElementById('url-err').style.display='none'; document.getElementById('url-ok').style.display='none'; }
 
-function changeUrl() {
-  document.getElementById('url-card').style.display = 'block';
-  document.getElementById('ranking-card').style.display = 'none';
-  document.getElementById('generate-actions').style.display = 'none';
-  hideUrlMessages();
+// ── CLASSIFICA RENDER ──
+function renderClassifica() {
+  const fasciaA  = allPlayers.filter(p => p.fascia==='A');
+  const fasciaB  = allPlayers.filter(p => p.fascia==='B');
+  const fasciaEx = allPlayers.filter(p => p.fascia==='EX');
+  renderTbody('tbody-a',  fasciaA,  'a');
+  renderTbody('tbody-b',  fasciaB,  'b');
+  renderTbody('tbody-ex', fasciaEx, 'ex');
 }
 
-function showUrlErr(msg) {
-  const e = document.getElementById('url-err');
-  e.textContent = msg; e.style.display = 'block';
-}
-function hideUrlMessages() {
-  document.getElementById('url-err').style.display = 'none';
-  document.getElementById('url-ok').style.display = 'none';
+// Avatar colors — one per player, consistent across reloads
+const AVATAR_COLORS = [
+  '#E85D3A','#1A6B8A','#7B2D8B','#27AE60','#D68910','#2980B9',
+  '#8E44AD','#16A085','#C0392B','#2C3E50','#E67E22','#1ABC9C',
+  '#6C3483','#1F618D','#B7950B','#196F3D','#7D3C98','#117A65',
+  '#CB4335','#1A5276','#D4AC0D','#145A32','#6E2F8C','#0E6655',
+  '#A93226','#154360','#B7770D','#0B5345','#633974','#0A3D62'
+];
+
+function getInitials(name) {
+  const parts = name.trim().split(' ').filter(Boolean);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+  return name.slice(0,2).toUpperCase();
 }
 
-function renderRanking(players) {
-  const sorted = [...players].sort((a,b) => b.pts - a.pts);
-  const grid = document.getElementById('ranking-grid');
-  grid.innerHTML = sorted.map((p,i) => `
-    <div class="rank-chip">
-      <span class="rank-pos">${i+1}</span>
-      <span class="rank-name">${p.name}</span>
-      <span class="rank-pts">${p.pts} pt</span>
-    </div>`).join('');
+function avatarHtml(player) {
+  const color = AVATAR_COLORS[player.globalRank - 1] || '#1A6B8A';
+  if (player.photo) {
+    return `<img class="avatar" src="${player.photo}" alt="${player.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+            <div class="avatar-placeholder" style="background:${color};display:none">${getInitials(player.name)}</div>`;
+  }
+  return `<div class="avatar-placeholder" style="background:${color}">${getInitials(player.name)}</div>`;
+}
+
+function renderTbody(id, players, type) {
+  const tbody = document.getElementById(id);
+  tbody.innerHTML = players.map((p, i) => {
+    const rank = p.globalRank;
+    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+    const pct = p.pg > 0 ? Math.round(p.pv/p.pg*100) : 0;
+    const pctColor = pct>=60?'var(--green)':pct>=40?'var(--yellow)':'var(--red)';
+    const jollyUsed = Math.min(p.jolly, TOTAL_JOLLY);
+    const jollyPips = Array.from({length:TOTAL_JOLLY}, (_,j) =>
+      `<span class="jolly-pip ${j < jollyUsed ? 'jolly-used':'jolly-free'}"></span>`
+    ).join('');
+    const posClass = type==='ex' ? 'pos-cell ex' : 'pos-cell';
+
+    return `<tr class="player-row-tr">
+      <td><span class="${posClass}">${medal || rank}</span></td>
+      <td><div class="avatar-wrap">${avatarHtml(p)}<span class="name-cell">${p.name}</span></div></td>
+      <td><span class="pts-cell">${p.pts}</span></td>
+      <td class="stat-cell"><span>${p.pg}</span></td>
+      <td class="stat-cell" style="color:var(--green);font-weight:700"><span>${p.pv}</span></td>
+      <td class="stat-cell" style="color:var(--red);font-weight:700"><span>${p.pp}</span></td>
+      <td class="stat-cell"><span>${p.tv}</span></td>
+      <td class="stat-cell"><span>${p.tp}</span></td>
+      <td class="jolly-cell">${jollyPips}<br><span style="font-size:10px;color:var(--muted)">${TOTAL_JOLLY-jollyUsed} rim.</span></td>
+    </tr>`;
+  }).join('');
 }
 
 // ── ALGORITHM ──
-function pairKey(a, b) { return a < b ? `${a}-${b}` : `${b}-${a}`; }
+function pairKey(a,b){ return a<b?`${a}-${b}`:`${b}-${a}`; }
 
 function findBestRound(usedPairs, pts) {
-  const quads = [];
-  for (let a = 0; a < 9; a++)
-  for (let b = a+1; b < 10; b++)
-  for (let c = b+1; c < 11; c++)
-  for (let d = c+1; d < 12; d++) {
-    const p1 = pairKey(a,d), p2 = pairKey(b,c);
-    if (!usedPairs.has(p1) && !usedPairs.has(p2)) {
-      const diff = Math.abs((pts[a]+pts[d]) - (pts[b]+pts[c]));
-      quads.push({ pl:[a,b,c,d], p1, p2, diff });
+  const quads=[];
+  for(let a=0;a<9;a++) for(let b=a+1;b<10;b++) for(let c=b+1;c<11;c++) for(let d=c+1;d<12;d++){
+    const p1=pairKey(a,d),p2=pairKey(b,c);
+    if(!usedPairs.has(p1)&&!usedPairs.has(p2)){
+      const diff=Math.abs((pts[a]+pts[d])-(pts[b]+pts[c]));
+      quads.push({pl:[a,b,c,d],p1,p2,diff});
     }
   }
-  quads.sort((a,b) => a.diff - b.diff);
-  const limit = Math.min(quads.length, 300);
-  let best = null;
-  for (let i = 0; i < limit; i++) {
-    const qi = quads[i];
-    const setI = new Set(qi.pl);
-    for (let j = i+1; j < limit; j++) {
-      const qj = quads[j];
-      if (qj.pl.some(p => setI.has(p))) continue;
-      if (qi.p1===qj.p1||qi.p1===qj.p2||qi.p2===qj.p1||qi.p2===qj.p2) continue;
-      const setIJ = new Set([...qi.pl,...qj.pl]);
-      const rem = [0,1,2,3,4,5,6,7,8,9,10,11].filter(x => !setIJ.has(x)).sort((a,b)=>a-b);
-      const [ra,rb,rc,rd] = rem;
-      const rp1 = pairKey(ra,rd), rp2 = pairKey(rb,rc);
-      if (usedPairs.has(rp1)||usedPairs.has(rp2)) continue;
-      if ([rp1,rp2].some(p=>[qi.p1,qi.p2,qj.p1,qj.p2].includes(p))) continue;
-      const rdiff = Math.abs((pts[ra]+pts[rd])-(pts[rb]+pts[rc]));
-      const total = qi.diff + qj.diff + rdiff;
-      if (!best || total < best.total) {
-        best = { quads:[qi, qj, {pl:rem,p1:rp1,p2:rp2,diff:rdiff}], total };
-        if (total === 0) return best;
+  quads.sort((a,b)=>a.diff-b.diff);
+  const limit=Math.min(quads.length,300);
+  let best=null;
+  for(let i=0;i<limit;i++){
+    const qi=quads[i]; const setI=new Set(qi.pl);
+    for(let j=i+1;j<limit;j++){
+      const qj=quads[j];
+      if(qj.pl.some(p=>setI.has(p))) continue;
+      if(qi.p1===qj.p1||qi.p1===qj.p2||qi.p2===qj.p1||qi.p2===qj.p2) continue;
+      const setIJ=new Set([...qi.pl,...qj.pl]);
+      const rem=[0,1,2,3,4,5,6,7,8,9,10,11].filter(x=>!setIJ.has(x)).sort((a,b)=>a-b);
+      const [ra,rb,rc,rd]=rem;
+      const rp1=pairKey(ra,rd),rp2=pairKey(rb,rc);
+      if(usedPairs.has(rp1)||usedPairs.has(rp2)) continue;
+      if([rp1,rp2].some(p=>[qi.p1,qi.p2,qj.p1,qj.p2].includes(p))) continue;
+      const rdiff=Math.abs((pts[ra]+pts[rd])-(pts[rb]+pts[rc]));
+      const total=qi.diff+qj.diff+rdiff;
+      if(!best||total<best.total){
+        best={quads:[qi,qj,{pl:rem,p1:rp1,p2:rp2,diff:rdiff}],total};
+        if(total===0) return best;
       }
     }
   }
@@ -344,62 +557,104 @@ function findBestRound(usedPairs, pts) {
 }
 
 function generateSchedule(players) {
-  const sorted = [...players].sort((a,b) => b.pts - a.pts);
-  const pts = sorted.map(p => p.pts);
-  const used = new Set();
-  const rounds = [];
-  for (let r = 0; r < ROUNDS; r++) {
-    const round = findBestRound(used, pts);
-    if (!round) break;
-    rounds.push(round.quads.map(q => {
-      const [a,b,c,d] = q.pl;
-      return { teamA:[sorted[a],sorted[d]], teamB:[sorted[b],sorted[c]],
-               strA:pts[a]+pts[d], strB:pts[b]+pts[c], diff:q.diff };
+  const sorted=[...players].sort((a,b)=>b.pts-a.pts);
+  const pts=sorted.map(p=>p.pts);
+  const used=new Set(); const rounds=[];
+  for(let r=0;r<ROUNDS;r++){
+    const round=findBestRound(used,pts);
+    if(!round) break;
+    rounds.push(round.quads.map(q=>{
+      const[a,b,c,d]=q.pl;
+      return{teamA:[sorted[a],sorted[d]],teamB:[sorted[b],sorted[c]],
+             strA:pts[a]+pts[d],strB:pts[b]+pts[c],diff:q.diff};
     }));
-    round.quads.forEach(q => { used.add(q.p1); used.add(q.p2); });
+    round.quads.forEach(q=>{used.add(q.p1);used.add(q.p2);});
   }
   return rounds;
 }
 
-// ── RENDER ──
-let schedule = null;
-
-function renderSchedule(rounds) {
-  schedule = rounds;
-  const allDiffs = rounds.flatMap(r => r.map(m => m.diff));
-  const avg = Math.round(allDiffs.reduce((a,b)=>a+b,0)/allDiffs.length);
-  const good = allDiffs.filter(d=>d<100).length;
-  const perf = allDiffs.filter(d=>d===0).length;
-  document.getElementById('stats').innerHTML = `
-    <div class="st"><div class="st-v">${rounds.length*MPR}</div><div class="st-l">PARTITE</div></div>
-    <div class="st"><div class="st-v">${ROUNDS}</div><div class="st-l">ROUND</div></div>
-    <div class="st"><div class="st-v">${avg}</div><div class="st-l">DIFF. MEDIA</div></div>
-    <div class="st"><div class="st-v">${good}/${rounds.length*MPR}</div><div class="st-l">EQUILIBRATE</div></div>
-    <div class="st"><div class="st-v">${perf}</div><div class="st-l">PERFETTE</div></div>`;
-
-  const tabs = document.getElementById('tabs');
-  tabs.innerHTML = rounds.map((_,i)=>`<div class="tab${i===0?' active':''}" onclick="showRound(${i})">ROUND ${i+1}</div>`).join('')
-    + `<div class="tab" onclick="showRound(-1)">TUTTI ▾</div>`;
-  showRound(0);
+function generateBothFasce() {
+  const fasciaA = allPlayers.filter(p=>p.fascia==='A');
+  const fasciaB = allPlayers.filter(p=>p.fascia==='B');
+  scheduleA = generateSchedule(fasciaA);
+  scheduleB = generateSchedule(fasciaB);
 }
 
-function showRound(r) {
-  document.querySelectorAll('.tab').forEach((t,i)=>{
+// ── GIORNATA PAGE ──
+function initGiornata() {
+  if (!allPlayers.length) {
+    document.getElementById('no-data-card').style.display = 'block';
+    document.getElementById('giornata-content').style.display = 'none';
+    return;
+  }
+  document.getElementById('no-data-card').style.display = 'none';
+  document.getElementById('giornata-content').style.display = 'block';
+  if (scheduleA) renderSchedule(scheduleA, 'a');
+  if (scheduleB) renderSchedule(scheduleB, 'b');
+  selectFascia('a');
+}
+
+function selectFascia(f) {
+  currentFascia = f;
+  document.getElementById('fs-a').classList.toggle('sel', f==='a');
+  document.getElementById('fs-b').classList.toggle('sel', f==='b');
+  document.getElementById('output-a').style.display = f==='a' ? 'block' : 'none';
+  document.getElementById('output-b').style.display = f==='b' ? 'block' : 'none';
+}
+
+function regenerate(f) {
+  const players = allPlayers.filter(p=>p.fascia===(f==='a'?'A':'B'));
+  if(f==='a'){ scheduleA=generateSchedule(players); renderSchedule(scheduleA,'a'); }
+  else        { scheduleB=generateSchedule(players); renderSchedule(scheduleB,'b'); }
+}
+
+function renderSchedule(rounds, f) {
+  const isB = f==='b';
+  const allDiffs=rounds.flatMap(r=>r.map(m=>m.diff));
+  const avg=Math.round(allDiffs.reduce((a,b)=>a+b,0)/allDiffs.length);
+  const good=allDiffs.filter(d=>d<100).length;
+  const perf=allDiffs.filter(d=>d===0).length;
+  const stEl=document.getElementById(`stats-${f}`);
+  const vClass=isB?'st-v purple':'st-v';
+  stEl.innerHTML=`
+    <div class="st"><div class="${vClass}">${rounds.length*MPR}</div><div class="st-l">PARTITE</div></div>
+    <div class="st"><div class="${vClass}">${ROUNDS}</div><div class="st-l">ROUND</div></div>
+    <div class="st"><div class="${vClass}">${avg}</div><div class="st-l">DIFF. MEDIA</div></div>
+    <div class="st"><div class="${vClass}">${good}/${rounds.length*MPR}</div><div class="st-l">EQUILIBRATE</div></div>
+    <div class="st"><div class="${vClass}">${perf}</div><div class="st-l">PERFETTE</div></div>`;
+
+  const tabsEl=document.getElementById(`tabs-${f}`);
+  tabsEl.innerHTML=rounds.map((_,i)=>`<div class="tab" onclick="showRound('${f}',${i})">ROUND ${i+1}</div>`).join('')
+    +`<div class="tab" onclick="showRound('${f}',-1)">TUTTI ▾</div>`;
+
+  showRound(f, 0);
+}
+
+function showRound(f, r) {
+  const rounds = f==='a' ? scheduleA : scheduleB;
+  const isB = f==='b';
+  const tabsEl = document.getElementById(`tabs-${f}`);
+  tabsEl.querySelectorAll('.tab').forEach((t,i)=>{
     t.classList.toggle('active', r===-1 ? i===ROUNDS : i===r);
+    if(isB) t.classList.toggle('purple', t.classList.contains('active'));
   });
-  const list = document.getElementById('mlist');
-  list.innerHTML = '';
-  const toShow = r===-1
-    ? schedule.flatMap((rnd,ri)=>rnd.map((m,mi)=>({...m,ri,mi})))
-    : schedule[r].map((m,mi)=>({...m,ri:r,mi}));
+
+  const list=document.getElementById(`mlist-${f}`);
+  list.innerHTML='';
+  const toShow=r===-1
+    ? rounds.flatMap((rnd,ri)=>rnd.map((m,mi)=>({...m,ri,mi})))
+    : rounds[r].map((m,mi)=>({...m,ri:r,mi}));
+
   toShow.forEach((m,idx)=>{
-    const pct = Math.round(m.strA/(m.strA+m.strB)*100);
-    const cls = m.diff<100?'g':m.diff<=250?'y':'rr';
-    const lbl = m.diff<100?'🟢 Equilibrata':m.diff<=250?'🟡 Quasi bilanciata':'🔴 Sbilanciata';
-    const c = document.createElement('div');
-    c.className='match-card'; c.style.animationDelay=`${idx*55}ms`;
+    const pct=Math.round(m.strA/(m.strA+m.strB)*100);
+    const cls=m.diff<100?'g':m.diff<=250?'y':'rr';
+    const lbl=m.diff<100?'🟢 Equilibrata':m.diff<=250?'🟡 Quasi bilanciata':'🔴 Sbilanciata';
+    const hClass=isB?'match-header b':'match-header a';
+    const cardClass=isB?'match-card purple-border':'match-card';
+    const c=document.createElement('div');
+    c.className=cardClass; c.style.animationDelay=`${idx*55}ms`;
     c.innerHTML=`
-      <div class="match-header">ROUND ${m.ri+1} &nbsp;·&nbsp; CAMPO ${m.mi+1}</div>
+      <div class="${hClass}">ROUND ${m.ri+1} &nbsp;·&nbsp; CAMPO ${m.mi+1}</div>
       <div class="match-inner">
         <div class="team">
           ${m.teamA.map(p=>`<div class="pchip"><span class="ppill">${p.pts}</span>${p.name}</div>`).join('')}
@@ -421,29 +676,7 @@ function showRound(r) {
   });
 }
 
-// ── ACTIONS ──
-function generate() {
-  if (!players.length) { showUrlErr('Carica prima la classifica.'); return; }
-  const rounds = generateSchedule(players);
-  document.getElementById('setup-section').style.display = 'none';
-  document.getElementById('output').style.display = 'block';
-  renderSchedule(rounds);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function regenerate() {
-  const rounds = generateSchedule(players);
-  renderSchedule(rounds);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function backToSetup() {
-  document.getElementById('setup-section').style.display = 'block';
-  document.getElementById('output').style.display = 'none';
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function printAll() { showRound(-1); setTimeout(()=>window.print(),150); }
+function printFascia(f) { showRound(f,-1); setTimeout(()=>window.print(),150); }
 
 // ── INIT ──
 init();
