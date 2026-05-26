@@ -526,13 +526,23 @@ const TOTAL_JOLLY = 4;
 
 // Global error handler - catches uncaught promise rejections on iOS Safari
 window.addEventListener('unhandledrejection', e => {
-  console.error('Unhandled rejection:', e.reason);
+  showDebug('UnhandledRejection: ' + (e.reason?.message || e.reason));
   e.preventDefault();
 });
 window.onerror = (msg, src, line, col, err) => {
-  console.error('Global error:', msg, 'line:', line, err);
+  showDebug('Error: ' + msg + ' (line ' + line + ')');
   return true;
 };
+function showDebug(msg) {
+  let el = document.getElementById('debug-panel');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'debug-panel';
+    el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);color:#ff6b6b;font-size:12px;font-family:monospace;padding:10px;z-index:9999;max-height:40vh;overflow-y:auto;';
+    document.body.appendChild(el);
+  }
+  el.innerHTML += '<div>' + new Date().toLocaleTimeString() + ' — ' + msg + '</div>';
+}
 
 // ── STATE ──
 let allPlayers = [];
@@ -557,14 +567,17 @@ function getSavedUrl() { return localStorage.getItem(STORAGE_KEY) || ''; }
 function saveUrl(url)  { localStorage.setItem(STORAGE_KEY, url); }
 
 function init() {
+  showDebug('init() started');
   const saved = getSavedUrl();
+  showDebug('saved URL: ' + (saved ? saved.slice(0,40)+'…' : 'none'));
   if (saved) {
     document.getElementById('sheets-url').value = saved;
     loadFromSheets(true).catch(e => {
-      console.warn('Auto-load failed:', e);
+      showDebug('Auto-load failed: ' + e.message);
       document.getElementById('loading-card-cl').style.display = 'none';
     });
   } else {
+    showDebug('No saved URL, showing empty state');
     document.getElementById('loading-card-cl').style.display = 'none';
   }
 }
