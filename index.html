@@ -6,233 +6,377 @@
 <title>6-0 6-0 · Campionato Estivo Silver</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ocean:#1A6B8A; --ocean-deep:#0D4A63; --coral:#E85D3A; --coral-light:#FF7A5C;
-  --sun:#F5C842; --sand:#F5E6C8; --sand-dark:#E0CFA0;
-  --green:#27AE60; --yellow:#D68910; --red:#C0392B;
-  --text:#1A1A2E; --muted:#5A6A7A; --white:#FEFDF8;
-  --fascia-a:#1A6B8A; --fascia-b:#7B2D8B; --fascia-ex:#9E9E9E;
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0D4A63;
+  min-height: 100vh;
+  color: #1A1A2E;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--ocean-deep);min-height:100vh;color:var(--text);overflow-x:hidden;}
 
-.bg{position:fixed;inset:0;z-index:-1;background:linear-gradient(155deg,#0D3D55 0%,#0D4A63 35%,#1A6B8A 70%,#1E7A9C 100%);}
-.bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 0%,rgba(245,200,66,.13) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 85% 95%,rgba(232,93,58,.10) 0%,transparent 55%);}
-.wave{position:fixed;bottom:0;left:0;right:0;height:80px;z-index:-1;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='%23F5E6C8' fill-opacity='0.07' d='M0,40 C240,70 480,10 720,40 C960,70 1200,15 1440,40 L1440,80 L0,80Z'/%3E%3C/svg%3E") bottom/cover;}
-
-.app{position:relative;max-width:1100px;margin:0 auto;padding:44px 20px 100px;}
+.page-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
 
 /* HEADER */
-header{text-align:center;margin-bottom:44px;}
-.badge{display:inline-block;background:var(--coral);color:white;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;padding:4px 16px;border-radius:20px;margin-bottom:14px;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,11vw,92px);line-height:.9;color:white;letter-spacing:2px;text-shadow:0 6px 30px rgba(0,0,0,.3);}
-h1 span{color:var(--sun);}
-.subtitle{margin-top:14px;color:rgba(255,255,255,.6);font-size:14px;font-weight:300;}
+header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.badge {
+  display: inline-block;
+  background: #E85D3A;
+  color: white;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  padding: 4px 16px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 10vw, 88px);
+  line-height: 0.92;
+  color: white;
+  letter-spacing: 2px;
+}
+h1 span { color: #F5C842; }
+.subtitle {
+  margin-top: 10px;
+  color: rgba(255,255,255,0.65);
+  font-size: 13px;
+}
 
-/* NAV TABS */
-.nav{display:flex;gap:4px;background:#0a3347;border-radius:16px;padding:5px;margin-bottom:28px;}
-.nav-tab{flex:1;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;padding:10px;border-radius:12px;cursor:pointer;color:rgba(255,255,255,.7);transition:all .2s;user-select:none;}
-.nav-tab.active{background:white;color:var(--ocean-deep);box-shadow:0 2px 12px rgba(0,0,0,.15);}
-.nav-tab:hover:not(.active){color:white;}
+/* NAV */
+.nav {
+  display: flex;
+  gap: 6px;
+  background: #093850;
+  border-radius: 14px;
+  padding: 5px;
+  margin-bottom: 24px;
+}
+.nav-tab {
+  flex: 1;
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 10px 4px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.65);
+  transition: all 0.2s;
+  user-select: none;
+}
+.nav-tab.active {
+  background: white;
+  color: #0D4A63;
+}
 
 /* CARD */
-.card{background:#ffffff;border-radius:22px;padding:28px 30px;margin-bottom:18px;border:1px solid #e0e8ed;box-shadow:0 10px 40px rgba(13,74,99,.18);}
-.card-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--ocean-deep);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
-.icon-b{width:32px;height:32px;background:var(--ocean);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:15px;flex-shrink:0;}
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #0D4A63;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.icon-b {
+  width: 32px; height: 32px;
+  background: #1A6B8A;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 15px; flex-shrink: 0;
+}
 
 /* LOADING */
-.loading{text-align:center;padding:40px 20px;}
-.spinner{width:44px;height:44px;border:3px solid rgba(26,107,138,.2);border-top-color:var(--ocean);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading p{color:var(--muted);font-size:14px;font-weight:500;}
+.loading { text-align: center; padding: 40px 20px; }
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #ddd;
+  border-top-color: #1A6B8A;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading p { color: #5A6A7A; font-size: 14px; }
 
-/* URL CONFIG */
-.url-box{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin-bottom:10px;}
-.url-box input{flex:1;min-width:200px;border:1.5px solid rgba(26,107,138,.25);border-radius:12px;background:white;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);padding:10px 14px;outline:none;transition:border-color .2s;}
-.url-box input:focus{border-color:var(--ocean);}
-.url-hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;}
-.err{background:rgba(232,93,58,.1);border:1.5px solid rgba(232,93,58,.35);color:var(--coral);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:500;margin-top:14px;display:none;}
-.ok-msg{background:rgba(39,174,96,.1);border:1.5px solid rgba(39,174,96,.35);color:var(--green);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:500;margin-top:14px;display:none;}
+/* BUTTONS */
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px; letter-spacing: 1.5px;
+  padding: 12px 24px; border-radius: 12px;
+  border: none; cursor: pointer; transition: all 0.2s;
+}
+.btn-primary { background: #E85D3A; color: white; }
+.btn-primary:hover { background: #FF7A5C; }
+.btn-secondary { background: #e8f0f4; color: #0D4A63; border: 1.5px solid #c5d8e2; }
+.btn-secondary:hover { background: #d0e4ed; }
+.btn-purple { background: #7B2D8B; color: white; }
+.btn-sm { font-size: 13px; padding: 8px 16px; }
 
-/* ACTIONS */
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;}
-.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;padding:13px 28px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;}
-.btn-primary{background:var(--coral);color:white;box-shadow:0 4px 20px rgba(232,93,58,.4);}
-.btn-primary:hover{background:var(--coral-light);transform:translateY(-2px);}
-.btn-secondary{background:rgba(26,107,138,.1);color:var(--ocean-deep);border:1.5px solid rgba(26,107,138,.28);}
-.btn-secondary:hover{background:rgba(26,107,138,.18);}
-.btn-purple{background:#7B2D8B;color:white;box-shadow:0 4px 20px rgba(123,45,139,.4);}
-.btn-purple:hover{background:#9B3DAB;transform:translateY(-2px);}
-.btn-sm{font-size:14px;padding:9px 18px;}
+/* MESSAGES */
+.msg-err {
+  background: #fdecea; border: 1.5px solid #f5c6c2;
+  color: #C0392B; border-radius: 10px;
+  padding: 10px 14px; font-size: 13px; font-weight: 500;
+  margin-top: 12px; display: none;
+}
+.msg-ok {
+  background: #eafaf1; border: 1.5px solid #a9dfbf;
+  color: #27AE60; border-radius: 10px;
+  padding: 10px 14px; font-size: 13px; font-weight: 500;
+  margin-top: 12px; display: none;
+}
 
-/* FASCIA BADGE */
-.fascia-badge{display:inline-block;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;padding:3px 10px;border-radius:20px;}
-.fa{background:rgba(26,107,138,.15);color:var(--fascia-a);}
-.fb{background:rgba(123,45,139,.15);color:var(--fascia-b);}
-.fex{background:rgba(158,158,158,.15);color:var(--fascia-ex);}
+/* URL INPUT */
+.url-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.url-row input {
+  flex: 1; min-width: 200px;
+  border: 1.5px solid #c5d8e2; border-radius: 10px;
+  background: white; font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: #1A1A2E;
+  padding: 10px 12px; outline: none;
+}
+.url-row input:focus { border-color: #1A6B8A; }
+.url-hint { font-size: 12px; color: #5A6A7A; line-height: 1.6; margin-top: 6px; }
 
 /* CLASSIFICA */
-.classifica-section{margin-bottom:24px;}
-.fascia-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;margin-top:8px;}
-.fascia-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
-.fascia-title.a{color:var(--fascia-a);}
-.fascia-title.b{color:var(--fascia-b);}
-.fascia-title.ex{color:var(--fascia-ex);}
-.fascia-line{flex:1;height:2px;border-radius:1px;}
-.fascia-line.a{background:linear-gradient(to right,var(--fascia-a),transparent);}
-.fascia-line.b{background:linear-gradient(to right,var(--fascia-b),transparent);}
-.fascia-line.ex{background:linear-gradient(to right,var(--fascia-ex),transparent);}
-
-.player-table{width:100%;border-collapse:separate;border-spacing:0 6px;}
-.player-table th{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-align:left;padding:0 10px 6px;text-transform:uppercase;}
-.player-table th.num{text-align:center;}
-.player-row-tr{background:white;border-radius:12px;transition:transform .15s,box-shadow .15s;}
-.player-row-tr:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(13,74,99,.1);}
-.player-row-tr td{padding:11px 10px;font-size:13px;vertical-align:middle;}
-.player-row-tr td:first-child{border-radius:12px 0 0 12px;padding-left:14px;}
-.player-row-tr td:last-child{border-radius:0 12px 12px 0;padding-right:14px;}
-.pos-cell{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ocean);text-align:center;width:36px;}
-.pos-cell.ex{color:var(--fascia-ex);}
-.pos-medal{font-size:18px;}
-.name-cell{font-weight:600;font-size:14px;color:var(--text);}
-.avatar-wrap{display:flex;align-items:center;gap:10px;}
-.avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(26,107,138,.15);}
-.avatar-placeholder{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;border:2px solid rgba(255,255,255,.3);}
-.pts-cell{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ocean-deep);}
-.stat-cell{text-align:center;color:var(--muted);font-weight:500;}
-.stat-cell span{display:inline-block;min-width:24px;text-align:center;}
-.win-pct{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
-.jolly-cell{text-align:center;}
-.jolly-pip{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 1px;}
-.jolly-used{background:var(--coral);}
-.jolly-free{background:rgba(26,107,138,.2);}
-
-/* ASSEGNAZIONE MANUALE */
-.assign-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
-.assign-col.ex{background:rgba(158,158,158,.07);border:2px solid rgba(158,158,158,.2);}
-.assign-col-title.ex{color:var(--fascia-ex);}
-@media(max-width:640px){.assign-grid{grid-template-columns:1fr!important;}}
-.assign-col{border-radius:16px;padding:16px;min-height:200px;}
-.assign-col.a{background:rgba(26,107,138,.07);border:2px solid rgba(26,107,138,.2);}
-.assign-col.b{background:rgba(123,45,139,.07);border:2px solid rgba(123,45,139,.2);}
-.assign-col-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
-.assign-col-title.a{color:var(--fascia-a);}
-.assign-col-title.b{color:var(--fascia-b);}
-.assign-count{font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;}
-.assign-count.ok{background:rgba(39,174,96,.15);color:var(--green);}
-.assign-count.warn{background:rgba(232,93,58,.15);color:var(--coral);}
-.assign-player{display:flex;align-items:center;gap:9px;background:white;border-radius:10px;padding:8px 12px;margin-bottom:7px;box-shadow:0 1px 6px rgba(13,74,99,.07);cursor:pointer;transition:all .15s;border:1.5px solid transparent;user-select:none;}
-.assign-player:hover{transform:translateX(2px);box-shadow:0 3px 12px rgba(13,74,99,.12);}
-.assign-player.a:hover{border-color:rgba(123,45,139,.3);}
-.assign-player.ex-chip:hover{border-color:rgba(26,107,138,.3);}
-.assign-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
-.assign-name{flex:1;font-size:13px;font-weight:600;color:var(--text);}
-.assign-pts{font-size:11px;font-weight:700;color:var(--muted);}
-.assign-rank{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);width:20px;text-align:center;flex-shrink:0;}
-.assign-arrow{font-size:14px;opacity:.5;}
-.assign-player:hover .assign-arrow{opacity:1;}
-.assign-warning{background:rgba(232,93,58,.1);border:1.5px solid rgba(232,93,58,.3);color:var(--coral);border-radius:12px;padding:10px 16px;font-size:13px;font-weight:500;margin-bottom:14px;display:none;}
-.assign-info{font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
-.assign-info strong{color:var(--ocean-deep);}
-
-.match-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
-.tab{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;padding:7px 18px;border-radius:10px;cursor:pointer;border:2px solid transparent;background:rgba(26,107,138,.08);color:var(--ocean-deep);transition:all .2s;user-select:none;}
-.tab.active{background:var(--ocean);color:white;border-color:var(--ocean);box-shadow:0 4px 16px rgba(26,107,138,.3);}
-.tab.active.purple{background:#7B2D8B;border-color:#7B2D8B;box-shadow:0 4px 16px rgba(123,45,139,.3);}
-.tab:hover:not(.active){background:rgba(26,107,138,.16);}
-
-.matches-list{display:flex;flex-direction:column;gap:14px;}
-.match-card{background:white;border-radius:18px;padding:18px 20px 14px;border:1.5px solid rgba(26,107,138,.1);box-shadow:0 2px 16px rgba(13,74,99,.07);animation:up .35s ease both;}
-.match-card.purple-border{border-color:rgba(123,45,139,.15);}
-@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.match-header{font-size:11px;font-weight:700;letter-spacing:.8px;margin-bottom:12px;}
-.match-header.a{color:var(--ocean);}
-.match-header.b{color:#7B2D8B;}
-.match-inner{display:grid;grid-template-columns:1fr 52px 1fr;align-items:center;gap:10px;}
-.team{display:flex;flex-direction:column;gap:7px;}
-.team.r{align-items:flex-end;text-align:right;}
-.pchip{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--text);}
-.team.r .pchip{flex-direction:row-reverse;}
-.ppill{background:rgba(26,107,138,.1);color:var(--ocean-deep);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.2px;flex-shrink:0;}
-.tstr{font-size:12px;font-weight:500;color:var(--muted);margin-top:1px;}
-.vs-col{text-align:center;}
-.vs-txt{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--coral);line-height:1;}
-.court{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-top:2px;}
-.bal-row{display:flex;align-items:center;gap:9px;margin-top:12px;}
-.bal-n{font-size:11px;font-weight:700;color:var(--ocean-deep);width:34px;}
-.bal-n.r{text-align:right;}
-.bal-track{flex:1;height:5px;border-radius:3px;background:var(--sand-dark);overflow:hidden;position:relative;}
-.bal-fill{position:absolute;top:0;bottom:0;left:0;border-radius:3px;background:var(--ocean);}
-.bal-tag{font-size:10px;font-weight:700;letter-spacing:.3px;padding:2px 8px;border-radius:10px;white-space:nowrap;}
-.g{background:rgba(39,174,96,.15);color:var(--green);}
-.y{background:rgba(214,136,16,.15);color:var(--yellow);}
-.rr{background:rgba(192,57,43,.15);color:var(--red);}
-
-.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:14px;background:rgba(26,107,138,.06);border:1.5px solid rgba(26,107,138,.12);border-radius:16px;padding:18px 20px;margin-bottom:18px;}
-.stats-strip.purple{background:rgba(123,45,139,.06);border-color:rgba(123,45,139,.15);}
-.st{text-align:center;}
-.st-v{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ocean);line-height:1;}
-.st-v.purple{color:#7B2D8B;}
-.st-l{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;margin-top:3px;}
-
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:12px;color:var(--muted);font-weight:500;}
-.ld{display:flex;align-items:center;gap:5px;}
-.dot{width:8px;height:8px;border-radius:50%;}
-
-.fascia-selector{display:flex;gap:10px;margin-bottom:20px;}
-.fs-btn{flex:1;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;padding:14px;border-radius:14px;cursor:pointer;border:2px solid transparent;transition:all .2s;user-select:none;}
-.fs-btn.a{background:rgba(26,107,138,.08);color:var(--fascia-a);border-color:rgba(26,107,138,.2);}
-.fs-btn.a.sel{background:var(--fascia-a);color:white;border-color:var(--fascia-a);}
-.fs-btn.b{background:rgba(123,45,139,.08);color:var(--fascia-b);border-color:rgba(123,45,139,.2);}
-.fs-btn.b.sel{background:var(--fascia-b);color:white;border-color:var(--fascia-b);}
-
-@media(max-width:700px){
-  .match-inner{grid-template-columns:1fr 40px 1fr;gap:7px;}
-  .pchip{font-size:13px;}
-  .card{padding:18px 14px;}
-  .vs-txt{font-size:20px;}
-  .player-table th:nth-child(n+5),.player-row-tr td:nth-child(n+5){display:none;}
+.fascia-block { margin-bottom: 28px; }
+.fascia-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 12px;
 }
+.fascia-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 1px;
+}
+.fascia-label.a { color: #1A6B8A; }
+.fascia-label.b { color: #7B2D8B; }
+.fascia-label.ex { color: #999; }
+.fascia-line { flex: 1; height: 2px; border-radius: 1px; }
+.fascia-line.a { background: linear-gradient(to right, #1A6B8A, transparent); }
+.fascia-line.b { background: linear-gradient(to right, #7B2D8B, transparent); }
+.fascia-line.ex { background: linear-gradient(to right, #999, transparent); }
+
+.player-table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
+.player-table th {
+  font-size: 11px; font-weight: 700; color: #5A6A7A;
+  letter-spacing: 0.8px; text-align: left;
+  padding: 0 8px 4px; text-transform: uppercase;
+}
+.player-table th.c { text-align: center; }
+.ptr { background: white; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,0.07); }
+.ptr td { padding: 10px 8px; font-size: 13px; vertical-align: middle; }
+.ptr td:first-child { border-radius: 10px 0 0 10px; padding-left: 12px; }
+.ptr td:last-child { border-radius: 0 10px 10px 0; padding-right: 12px; }
+.pos { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #1A6B8A; text-align: center; width: 32px; }
+.pos.ex { color: #999; }
+.nm { font-weight: 600; font-size: 14px; }
+.av-wrap { display: flex; align-items: center; gap: 8px; }
+.av {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: white; flex-shrink: 0;
+}
+.av img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.pts-big { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #0D4A63; }
+.sc { text-align: center; color: #5A6A7A; font-weight: 500; font-size: 13px; }
+.jc { text-align: center; }
+.jp { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin: 0 1px; }
+.ju { background: #E85D3A; }
+.jf { background: #c5d8e2; }
+
+/* ASSIGN */
+.assign-info { font-size: 13px; color: #5A6A7A; margin-bottom: 14px; line-height: 1.5; }
+.assign-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+@media (max-width: 640px) { .assign-cols { grid-template-columns: 1fr; } }
+.assign-col { border-radius: 14px; padding: 14px; min-height: 120px; }
+.assign-col.a { background: #eaf3f7; border: 2px solid #b8d8e6; }
+.assign-col.b { background: #f3eaf7; border: 2px solid #d4b8e6; }
+.assign-col.ex { background: #f5f5f5; border: 2px solid #ddd; }
+.assign-col-hd {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px; letter-spacing: 1px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.assign-col-hd.a { color: #1A6B8A; }
+.assign-col-hd.b { color: #7B2D8B; }
+.assign-col-hd.ex { color: #888; }
+.cnt { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.cnt.ok { background: #d5f5e3; color: #27AE60; }
+.cnt.warn { background: #fdecea; color: #C0392B; }
+.ap {
+  display: flex; align-items: center; gap: 8px;
+  background: white; border-radius: 9px;
+  padding: 7px 10px; margin-bottom: 6px;
+  cursor: pointer; border: 1.5px solid transparent;
+  transition: all 0.15s; user-select: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.ap:hover { border-color: #1A6B8A; }
+.ap-rank { font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: #999; width: 18px; }
+.ap-av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white; flex-shrink: 0; }
+.ap-name { flex: 1; font-size: 12px; font-weight: 600; color: #1A1A2E; }
+.ap-pts { font-size: 11px; color: #5A6A7A; }
+.ap-arr { font-size: 12px; color: #aaa; }
+.assign-warn { background: #fdecea; border: 1.5px solid #f5c6c2; color: #C0392B; border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 12px; display: none; }
+
+/* FASCIA SELECTOR */
+.fascia-sel { display: flex; gap: 10px; margin-bottom: 20px; }
+.fs-btn {
+  flex: 1; text-align: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px;
+  padding: 14px; border-radius: 12px; cursor: pointer;
+  border: 2px solid transparent; transition: all 0.2s; user-select: none;
+}
+.fs-btn.a { background: #eaf3f7; color: #1A6B8A; border-color: #b8d8e6; }
+.fs-btn.a.sel { background: #1A6B8A; color: white; border-color: #1A6B8A; }
+.fs-btn.b { background: #f3eaf7; color: #7B2D8B; border-color: #d4b8e6; }
+.fs-btn.b.sel { background: #7B2D8B; color: white; border-color: #7B2D8B; }
+
+/* MATCH CARDS */
+.matches-list { display: flex; flex-direction: column; gap: 12px; }
+.match-card {
+  background: white; border-radius: 16px;
+  padding: 16px 18px 12px;
+  border: 1.5px solid #e0eaf0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  animation: slideup 0.3s ease both;
+}
+.match-card.pb { border-color: #d4b8e6; }
+@keyframes slideup { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.mhd { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 10px; }
+.mhd.a { color: #1A6B8A; } .mhd.b { color: #7B2D8B; }
+.mi { display: grid; grid-template-columns: 1fr 48px 1fr; align-items: center; gap: 8px; }
+.team { display: flex; flex-direction: column; gap: 6px; }
+.team.r { align-items: flex-end; text-align: right; }
+.pchip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+.team.r .pchip { flex-direction: row-reverse; }
+.ppill { background: #e8f0f4; color: #0D4A63; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+.tstr { font-size: 11px; color: #5A6A7A; margin-top: 1px; }
+.vs-col { text-align: center; }
+.vs-txt { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #E85D3A; line-height: 1; }
+.ct { font-size: 10px; color: #5A6A7A; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }
+.bal-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.bal-n { font-size: 11px; font-weight: 700; color: #0D4A63; width: 32px; }
+.bal-n.r { text-align: right; }
+.bal-track { flex: 1; height: 4px; border-radius: 2px; background: #e0eaf0; overflow: hidden; position: relative; }
+.bal-fill { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 2px; background: #1A6B8A; }
+.btag { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+.btag.g { background: #d5f5e3; color: #27AE60; }
+.btag.y { background: #fef9e7; color: #D68910; }
+.btag.rr { background: #fdecea; color: #C0392B; }
+
+/* TABS */
+.match-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.tab {
+  font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px;
+  padding: 6px 16px; border-radius: 9px; cursor: pointer;
+  background: #e8f0f4; color: #0D4A63; border: 2px solid transparent;
+  transition: all 0.2s; user-select: none;
+}
+.tab.active { background: #1A6B8A; color: white; border-color: #1A6B8A; }
+.tab.active.purple { background: #7B2D8B; border-color: #7B2D8B; }
+
+/* STATS */
+.stats-row {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 12px; background: #eaf3f7; border-radius: 14px;
+  padding: 16px; margin-bottom: 16px;
+}
+.stats-row.purple { background: #f3eaf7; }
+.st { text-align: center; }
+.st-v { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: #1A6B8A; line-height: 1; }
+.st-v.purple { color: #7B2D8B; }
+.st-l { font-size: 10px; color: #5A6A7A; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }
+
+.legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; font-size: 11px; color: #5A6A7A; font-weight: 500; }
+.ld { display: flex; align-items: center; gap: 4px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; }
+
 /* ADMIN */
-.result-row{background:white;border-radius:14px;padding:14px 16px;margin-bottom:10px;border:1.5px solid rgba(26,107,138,.1);box-shadow:0 2px 8px rgba(13,74,99,.06);}
-.result-row.done{border-color:rgba(39,174,96,.3);background:rgba(39,174,96,.03);}
-.result-match-header{font-size:11px;font-weight:700;color:var(--ocean);letter-spacing:.8px;margin-bottom:10px;}
-.result-match-header.b{color:#7B2D8B;}
-.result-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-bottom:12px;}
-.result-team-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;}
-.result-team-name.r{text-align:right;}
-.result-vs{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--coral);text-align:center;}
-.score-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.score-label{font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;}
-.score-input{width:52px;border:1.5px solid rgba(26,107,138,.25);border-radius:8px;background:white;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ocean-deep);text-align:center;padding:6px 4px;outline:none;transition:border-color .2s;}
-.score-input:focus{border-color:var(--ocean);}
-.score-sep{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--muted);}
-.tiebreak-note{font-size:11px;color:var(--muted);margin-left:4px;}
-.winner-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:6px;}
-.winner-a{background:rgba(39,174,96,.15);color:var(--green);}
-.winner-b{background:rgba(39,174,96,.15);color:var(--green);}
-.result-pts{font-size:12px;color:var(--muted);margin-top:6px;}
+.result-row { background: white; border-radius: 12px; padding: 14px; margin-bottom: 10px; border: 1.5px solid #e0eaf0; }
+.result-row.done { border-color: #a9dfbf; background: #eafaf1; }
+.rmhd { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; margin-bottom: 10px; }
+.rmhd.a { color: #1A6B8A; } .rmhd.b { color: #7B2D8B; }
+.rteams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-bottom: 10px; }
+.rtn { font-size: 13px; font-weight: 600; line-height: 1.4; }
+.rtn.r { text-align: right; }
+.rvs { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #E85D3A; text-align: center; }
+.score-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.score-lbl { font-size: 12px; font-weight: 600; color: #5A6A7A; }
+.si {
+  width: 50px; border: 1.5px solid #c5d8e2; border-radius: 8px;
+  background: white; font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; color: #0D4A63; text-align: center; padding: 5px 4px; outline: none;
+}
+.si:focus { border-color: #1A6B8A; }
+.ssep { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #aaa; }
+.sn { font-size: 11px; color: #aaa; }
+.wbadge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #d5f5e3; color: #27AE60; margin-top: 6px; }
+.tbbadge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #fef9e7; color: #D68910; margin-top: 6px; margin-left: 4px; }
 
-.jolly-chip{display:flex;align-items:center;gap:8px;background:white;border:1.5px solid rgba(214,136,16,.2);border-radius:10px;padding:8px 12px;cursor:pointer;transition:all .15s;user-select:none;}
-.jolly-chip.selected{background:rgba(214,136,16,.1);border-color:var(--yellow);}
-.jolly-chip:hover{border-color:var(--yellow);}
-.jolly-chip-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
-.jolly-chip-name{flex:1;font-size:13px;font-weight:600;color:var(--text);}
-.jolly-chip-rem{font-size:11px;color:var(--muted);}
-.jolly-check{font-size:16px;opacity:0;transition:opacity .15s;}
-.jolly-chip.selected .jolly-check{opacity:1;}
+.jolly-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.jchip {
+  display: flex; align-items: center; gap: 8px;
+  background: white; border: 1.5px solid #e0d5c0;
+  border-radius: 10px; padding: 8px 12px; cursor: pointer;
+  transition: all 0.15s; user-select: none;
+}
+.jchip.sel { background: #fef9e7; border-color: #D68910; }
+.jchip:hover { border-color: #D68910; }
+.jav { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; flex-shrink: 0; }
+.jname { flex: 1; font-size: 13px; font-weight: 600; }
+.jrem { font-size: 11px; color: #5A6A7A; }
+.jcheck { font-size: 15px; opacity: 0; transition: opacity 0.15s; }
+.jchip.sel .jcheck { opacity: 1; }
 
-@media print{#page-admin{display:none!important;}}
-  .bg,.wave,.actions,header .subtitle,.nav,#settings-section{display:none;}
-  .card{box-shadow:none;border:1.5px solid #ddd;backdrop-filter:none;}
-  .match-tabs{display:none;}
-  .matches-list{display:flex!important;}
+/* NO DATA */
+.no-data { text-align: center; padding: 32px 20px; color: #5A6A7A; }
+.no-data .icon { font-size: 44px; margin-bottom: 12px; }
+.no-data .title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #0D4A63; margin-bottom: 6px; }
+
+@media (max-width: 600px) {
+  .mi { grid-template-columns: 1fr 40px 1fr; gap: 5px; }
+  .pchip { font-size: 12px; }
+  .card { padding: 16px; }
+  .assign-cols { grid-template-columns: 1fr; }
+}
+@media print {
+  body { background: white; }
+  header, .nav, .actions, #page-admin, #page-settings { display: none !important; }
+  .card { box-shadow: none; border: 1px solid #ddd; }
+  .match-tabs { display: none; }
 }
 </style>
 </head>
 <body>
-<div class="bg"></div><div class="wave"></div>
-<div class="app">
+<div class="page-wrap">
 
 <header>
   <div class="badge">🏖 BEACH TENNIS</div>
@@ -245,79 +389,34 @@ h1 span{color:var(--sun);}
   <div class="nav-tab active" onclick="showPage('classifica')">🏅 CLASSIFICA</div>
   <div class="nav-tab" onclick="showPage('giornata')">🎾 GIORNATA</div>
   <div class="nav-tab" onclick="showPage('admin')">🔐 ADMIN</div>
-  <div class="nav-tab" onclick="showPage('settings')">⚙️ IMPOSTAZIONI</div>
+  <div class="nav-tab" onclick="showPage('settings')">⚙️ CONFIG</div>
 </div>
 
 <!-- PAGE: CLASSIFICA -->
 <div id="page-classifica">
-  <div class="card" id="loading-card-cl">
+  <div class="card" id="cl-loading">
     <div class="loading"><div class="spinner"></div><p>Caricamento classifica…</p></div>
   </div>
-  <div id="classifica-content" style="display:none">
-    <!-- Fascia A -->
-    <div class="classifica-section">
-      <div class="fascia-header">
-        <div class="fascia-title a">FASCIA A</div>
-        <div class="fascia-line a"></div>
-        <span class="fascia-badge fa">1° — 12°</span>
-      </div>
+  <div id="cl-content" style="display:none">
+    <div class="fascia-block">
+      <div class="fascia-header"><div class="fascia-label a">FASCIA A</div><div class="fascia-line a"></div><span style="font-size:11px;font-weight:700;color:#1A6B8A;padding:3px 10px;background:#eaf3f7;border-radius:20px">1°–12°</span></div>
       <table class="player-table">
-        <thead><tr>
-          <th class="num">#</th>
-          <th>Giocatore</th>
-          <th>Punti</th>
-          <th class="num">PG</th>
-          <th class="num">PV</th>
-          <th class="num">PP</th>
-          <th class="num">TV</th>
-          <th class="num">TP</th>
-          <th class="num">Jolly</th>
-        </tr></thead>
-        <tbody id="tbody-a"></tbody>
+        <thead><tr><th class="c">#</th><th>Giocatore</th><th>Punti</th><th class="c">PG</th><th class="c">PV</th><th class="c">PP</th><th class="c">TV</th><th class="c">TP</th><th class="c">Jolly</th></tr></thead>
+        <tbody id="tb-a"></tbody>
       </table>
     </div>
-    <!-- Fascia B -->
-    <div class="classifica-section">
-      <div class="fascia-header">
-        <div class="fascia-title b">FASCIA B</div>
-        <div class="fascia-line b"></div>
-        <span class="fascia-badge fb">13° — 24°</span>
-      </div>
+    <div class="fascia-block">
+      <div class="fascia-header"><div class="fascia-label b">FASCIA B</div><div class="fascia-line b"></div><span style="font-size:11px;font-weight:700;color:#7B2D8B;padding:3px 10px;background:#f3eaf7;border-radius:20px">13°–24°</span></div>
       <table class="player-table">
-        <thead><tr>
-          <th class="num">#</th>
-          <th>Giocatore</th>
-          <th>Punti</th>
-          <th class="num">PG</th>
-          <th class="num">PV</th>
-          <th class="num">PP</th>
-          <th class="num">TV</th>
-          <th class="num">TP</th>
-          <th class="num">Jolly</th>
-        </tr></thead>
-        <tbody id="tbody-b"></tbody>
+        <thead><tr><th class="c">#</th><th>Giocatore</th><th>Punti</th><th class="c">PG</th><th class="c">PV</th><th class="c">PP</th><th class="c">TV</th><th class="c">TP</th><th class="c">Jolly</th></tr></thead>
+        <tbody id="tb-b"></tbody>
       </table>
     </div>
-    <!-- Esclusi -->
-    <div class="classifica-section">
-      <div class="fascia-header">
-        <div class="fascia-title ex">ESCLUSI</div>
-        <div class="fascia-line ex"></div>
-        <span class="fascia-badge fex">25° — 30°</span>
-      </div>
+    <div class="fascia-block">
+      <div class="fascia-header"><div class="fascia-label ex">ESCLUSI</div><div class="fascia-line ex"></div><span style="font-size:11px;font-weight:700;color:#999;padding:3px 10px;background:#f5f5f5;border-radius:20px">25°–30°</span></div>
       <table class="player-table">
-        <thead><tr>
-          <th class="num">#</th>
-          <th>Giocatore</th>
-          <th>Punti</th>
-          <th class="num">PG</th>
-          <th class="num">PV</th>
-          <th class="num">PP</th>
-          <th class="num">TV</th>
-          <th class="num">TP</th>
-          <th class="num">Jolly</th>
-        </tr></thead>
-        <tbody id="tbody-ex"></tbody>
+        <thead><tr><th class="c">#</th><th>Giocatore</th><th>Punti</th><th class="c">PG</th><th class="c">PV</th><th class="c">PP</th><th class="c">TV</th><th class="c">TP</th><th class="c">Jolly</th></tr></thead>
+        <tbody id="tb-ex"></tbody>
       </table>
     </div>
     <div class="actions">
@@ -328,886 +427,560 @@ h1 span{color:var(--sun);}
 
 <!-- PAGE: GIORNATA -->
 <div id="page-giornata" style="display:none">
-  <div class="card" id="no-data-card" style="display:none">
-    <div style="text-align:center;padding:30px 20px;color:var(--muted)">
-      <div style="font-size:48px;margin-bottom:16px">📋</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--ocean-deep);margin-bottom:8px">Nessuna classifica caricata</div>
-      <div style="font-size:14px">Vai in Impostazioni e incolla l'URL del tuo Google Sheets</div>
-    </div>
+  <div class="card" id="gior-nodata" style="display:none">
+    <div class="no-data"><div class="icon">📋</div><div class="title">Nessuna classifica caricata</div><div>Vai in Config e inserisci l'URL del foglio</div></div>
   </div>
-
-  <div id="giornata-content" style="display:none">
-
-    <!-- STEP 1: Assegnazione -->
+  <div id="gior-content" style="display:none">
+    <!-- Step 1: assegnazione -->
     <div id="step-assign">
       <div class="card">
-        <div class="card-title"><div class="icon-b">↕️</div>ASSEGNA I GIOCATORI ALLE FASCE</div>
-        <div class="assign-info">
-          Di default i primi <strong>12</strong> giocatori vanno in Fascia A, i successivi <strong>12</strong> in Fascia B, gli ultimi <strong>6</strong> sono esclusi.
-          Tocca un giocatore per spostarlo — puoi spostarlo in qualsiasi fascia. Fascia A e B devono avere esattamente <strong>12 giocatori</strong> ciascuna.
+        <div class="card-title"><div class="icon-b">↕️</div>ASSEGNA I GIOCATORI</div>
+        <div class="assign-info">Di default i primi 12 vanno in <strong>Fascia A</strong>, i successivi 12 in <strong>Fascia B</strong>, gli ultimi 6 sono <strong>Esclusi</strong>. Tocca un giocatore per spostarlo (ciclo A → B → Esclusi → A). Fascia A e B devono avere esattamente 12 giocatori.</div>
+        <div class="assign-warn" id="assign-warn"></div>
+        <div class="assign-cols">
+          <div class="assign-col a"><div class="assign-col-hd a">🔵 FASCIA A <span class="cnt" id="cnt-a">12/12</span></div><div id="al-a"></div></div>
+          <div class="assign-col b"><div class="assign-col-hd b">🟣 FASCIA B <span class="cnt" id="cnt-b">12/12</span></div><div id="al-b"></div></div>
+          <div class="assign-col ex"><div class="assign-col-hd ex">⚫ ESCLUSI <span class="cnt ok" id="cnt-ex">6</span></div><div id="al-ex"></div></div>
         </div>
-        <div class="assign-warning" id="assign-warning"></div>
-        <div class="assign-grid" style="grid-template-columns:1fr 1fr 1fr">
-          <div class="assign-col a">
-            <div class="assign-col-title a">
-              🔵 FASCIA A
-              <span class="assign-count" id="count-a">12/12</span>
-            </div>
-            <div id="assign-list-a"></div>
-          </div>
-          <div class="assign-col b">
-            <div class="assign-col-title b">
-              🟣 FASCIA B
-              <span class="assign-count" id="count-b">12/12</span>
-            </div>
-            <div id="assign-list-b"></div>
-          </div>
-          <div class="assign-col ex">
-            <div class="assign-col-title ex">
-              ⚫ ESCLUSI
-              <span class="assign-count ok" id="count-ex">6</span>
-            </div>
-            <div id="assign-list-ex"></div>
-          </div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-secondary btn-sm" onclick="resetAssignment()">↺ RIPRISTINA DEFAULT</button>
-        </div>
+        <div class="actions"><button class="btn btn-secondary btn-sm" onclick="resetAssign()">↺ RIPRISTINA</button></div>
       </div>
-      <div class="actions">
-        <button class="btn btn-primary" onclick="confirmAssignment()">⚡ GENERA PARTITE</button>
-      </div>
+      <div class="actions"><button class="btn btn-primary" onclick="confirmAssign()">⚡ GENERA PARTITE</button></div>
     </div>
-
-    <!-- STEP 2: Partite generate -->
+    <!-- Step 2: partite -->
     <div id="step-matches" style="display:none">
-      <!-- Fascia selector -->
-      <div class="fascia-selector">
-        <div class="fs-btn a sel" id="fs-a" onclick="selectFascia('a')">🔵 FASCIA A<br><small style="font-size:12px;letter-spacing:0;font-family:'DM Sans',sans-serif">12 giocatori</small></div>
-        <div class="fs-btn b" id="fs-b" onclick="selectFascia('b')">🟣 FASCIA B<br><small style="font-size:12px;letter-spacing:0;font-family:'DM Sans',sans-serif">12 giocatori</small></div>
+      <div class="fascia-sel">
+        <div class="fs-btn a sel" id="fs-a" onclick="selFascia('a')">🔵 FASCIA A<br><small style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0">12 giocatori</small></div>
+        <div class="fs-btn b" id="fs-b" onclick="selFascia('b')">🟣 FASCIA B<br><small style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0">12 giocatori</small></div>
       </div>
-
-      <!-- Fascia A output -->
-      <div id="output-a">
+      <div id="out-a">
         <div class="card">
-          <div class="card-title"><div class="icon-b" style="background:var(--fascia-a)">🎾</div>FASCIA A — 12 PARTITE · 4 ROUND</div>
-          <div class="stats-strip" id="stats-a"></div>
-          <div class="legend">
-            <div class="ld"><div class="dot" style="background:var(--green)"></div>Equilibrata (&lt;100 pt)</div>
-            <div class="ld"><div class="dot" style="background:var(--yellow)"></div>Quasi bilanciata (100–250)</div>
-            <div class="ld"><div class="dot" style="background:var(--red)"></div>Sbilanciata (&gt;250)</div>
-          </div>
+          <div class="card-title"><div class="icon-b" style="background:#1A6B8A">🎾</div>FASCIA A — 12 PARTITE · 4 ROUND</div>
+          <div class="stats-row" id="stats-a"></div>
+          <div class="legend"><div class="ld"><div class="dot" style="background:#27AE60"></div>Equilibrata (&lt;100)</div><div class="ld"><div class="dot" style="background:#D68910"></div>Quasi bilanciata</div><div class="ld"><div class="dot" style="background:#C0392B"></div>Sbilanciata</div></div>
           <div class="match-tabs" id="tabs-a"></div>
-          <div class="matches-list" id="mlist-a"></div>
+          <div class="matches-list" id="ml-a"></div>
         </div>
         <div class="actions">
-          <button class="btn btn-primary btn-sm" onclick="regenerate('a')">🔄 RIGENERA FASCIA A</button>
-          <button class="btn btn-secondary btn-sm" onclick="printFascia('a')">🖨 STAMPA</button>
+          <button class="btn btn-primary btn-sm" onclick="regen('a')">🔄 RIGENERA A</button>
+          <button class="btn btn-secondary btn-sm" onclick="printF('a')">🖨 STAMPA</button>
         </div>
       </div>
-
-      <!-- Fascia B output -->
-      <div id="output-b" style="display:none">
+      <div id="out-b" style="display:none">
         <div class="card">
           <div class="card-title"><div class="icon-b" style="background:#7B2D8B">🎾</div>FASCIA B — 12 PARTITE · 4 ROUND</div>
-          <div class="stats-strip purple" id="stats-b"></div>
-          <div class="legend">
-            <div class="ld"><div class="dot" style="background:var(--green)"></div>Equilibrata (&lt;100 pt)</div>
-            <div class="ld"><div class="dot" style="background:var(--yellow)"></div>Quasi bilanciata (100–250)</div>
-            <div class="ld"><div class="dot" style="background:var(--red)"></div>Sbilanciata (&gt;250)</div>
-          </div>
+          <div class="stats-row purple" id="stats-b"></div>
+          <div class="legend"><div class="ld"><div class="dot" style="background:#27AE60"></div>Equilibrata (&lt;100)</div><div class="ld"><div class="dot" style="background:#D68910"></div>Quasi bilanciata</div><div class="ld"><div class="dot" style="background:#C0392B"></div>Sbilanciata</div></div>
           <div class="match-tabs" id="tabs-b"></div>
-          <div class="matches-list" id="mlist-b"></div>
+          <div class="matches-list" id="ml-b"></div>
         </div>
         <div class="actions">
-          <button class="btn btn-purple btn-sm" onclick="regenerate('b')">🔄 RIGENERA FASCIA B</button>
-          <button class="btn btn-secondary btn-sm" onclick="printFascia('b')">🖨 STAMPA</button>
+          <button class="btn btn-purple btn-sm" onclick="regen('b')">🔄 RIGENERA B</button>
+          <button class="btn btn-secondary btn-sm" onclick="printF('b')">🖨 STAMPA</button>
         </div>
       </div>
-
       <div class="actions" style="margin-top:8px">
         <button class="btn btn-secondary btn-sm" onclick="backToAssign()">✏️ MODIFICA ASSEGNAZIONE</button>
       </div>
     </div>
-
   </div>
 </div>
 
 <!-- PAGE: ADMIN -->
 <div id="page-admin" style="display:none">
-
-  <!-- LOGIN -->
   <div id="admin-login">
     <div class="card">
       <div class="card-title"><div class="icon-b">🔐</div>ACCESSO ADMIN</div>
       <div style="max-width:340px">
-        <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Inserisci la password per accedere all'area di gestione.</div>
-        <div class="url-box">
+        <div style="font-size:13px;color:#5A6A7A;margin-bottom:14px">Inserisci la password per accedere all'area di gestione.</div>
+        <div class="url-row">
           <input type="password" id="admin-psw" placeholder="Password…" onkeydown="if(event.key==='Enter')adminLogin()">
           <button class="btn btn-primary btn-sm" onclick="adminLogin()">ENTRA</button>
         </div>
-        <div class="err" id="admin-err"></div>
+        <div class="msg-err" id="admin-err"></div>
       </div>
     </div>
   </div>
-
-  <!-- ADMIN PANEL -->
   <div id="admin-panel" style="display:none">
-
-    <!-- No data -->
-    <div class="card" id="admin-no-data" style="display:none">
-      <div style="text-align:center;padding:30px 20px;color:var(--muted)">
-        <div style="font-size:48px;margin-bottom:16px">📋</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--ocean-deep);margin-bottom:8px">Nessuna giornata generata</div>
-        <div style="font-size:14px">Vai nella sezione Giornata, assegna i giocatori e genera le partite</div>
-      </div>
+    <div class="card" id="admin-nodata" style="display:none">
+      <div class="no-data"><div class="icon">📋</div><div class="title">Nessuna giornata generata</div><div>Vai in Giornata, assegna i giocatori e genera le partite</div></div>
     </div>
-
-    <!-- Jolly -->
-    <div class="card" id="admin-jolly-card">
+    <div class="card" id="admin-jolly">
       <div class="card-title"><div class="icon-b" style="background:#D68910">🃏</div>GESTIONE JOLLY</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px">I giocatori nella sezione Jolly riceveranno 7 punti e un jolly usato verrà scalato.</div>
-      <div id="jolly-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px"></div>
+      <div style="font-size:13px;color:#5A6A7A;margin-bottom:14px">Seleziona i giocatori che hanno usato il jolly oggi: riceveranno 7 punti.</div>
+      <div class="jolly-grid" id="jolly-list"></div>
     </div>
-
-    <!-- Risultati Fascia A -->
-    <div class="card" id="admin-matches-a">
-      <div class="card-title"><div class="icon-b" style="background:var(--fascia-a)">🎾</div>RISULTATI FASCIA A</div>
-      <div id="results-list-a"></div>
+    <div class="card" id="admin-ra">
+      <div class="card-title"><div class="icon-b" style="background:#1A6B8A">🎾</div>RISULTATI FASCIA A</div>
+      <div id="rl-a"></div>
     </div>
-
-    <!-- Risultati Fascia B -->
-    <div class="card" id="admin-matches-b">
+    <div class="card" id="admin-rb">
       <div class="card-title"><div class="icon-b" style="background:#7B2D8B">🎾</div>RISULTATI FASCIA B</div>
-      <div id="results-list-b"></div>
+      <div id="rl-b"></div>
     </div>
-
-    <!-- Save -->
-    <div class="card" id="admin-save-card">
-      <div class="card-title"><div class="icon-b" style="background:var(--green)">💾</div>SALVA E AGGIORNA CLASSIFICA</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px">
-        Inserisci tutti i risultati e poi clicca Salva. I punti verranno calcolati e il foglio Google Sheets verrà aggiornato automaticamente.
-      </div>
-      <div class="err" id="save-err"></div>
-      <div class="ok-msg" id="save-ok"></div>
+    <div class="card" id="admin-save">
+      <div class="card-title"><div class="icon-b" style="background:#27AE60">💾</div>SALVA E AGGIORNA</div>
+      <div style="font-size:13px;color:#5A6A7A;margin-bottom:14px">Inserisci tutti i risultati poi clicca Salva. I punti vengono calcolati e il foglio Google Sheets viene aggiornato.</div>
+      <div class="msg-err" id="save-err"></div>
+      <div class="msg-ok" id="save-ok"></div>
       <div class="actions">
         <button class="btn btn-primary" onclick="saveResults()" id="save-btn">💾 SALVA SUL FOGLIO</button>
         <button class="btn btn-secondary btn-sm" onclick="adminLogout()">🔒 ESCI</button>
       </div>
     </div>
-
   </div>
 </div>
 
 <!-- PAGE: SETTINGS -->
 <div id="page-settings" style="display:none">
   <div class="card">
-    <div class="card-title"><div class="icon-b">⚙️</div>COLLEGA GOOGLE SHEETS</div>
-    <div class="url-box">
-      <input type="text" id="sheets-url" placeholder="Incolla qui l'URL CSV del tuo Google Sheets…">
+    <div class="card-title"><div class="icon-b">⚙️</div>CONFIGURAZIONE</div>
+    <div class="url-row">
+      <input type="text" id="sheets-url" placeholder="URL CSV Google Sheets…">
       <button class="btn btn-secondary btn-sm" onclick="loadFromSheets()">📥 CARICA</button>
     </div>
     <div class="url-hint">
-      Come ottenere l'URL: nel foglio vai su <strong>File → Condividi → Pubblica sul Web</strong>,
-      scegli <strong>Foglio1</strong> e formato <strong>CSV</strong>, poi copia l'URL.<br><br>
-      Il foglio deve avere esattamente <strong>30 righe</strong> di dati (più la riga di intestazione) con queste colonne nell'ordine:<br>
-      <strong>Nome · Punti · Partite Giocate · Partite Vinte · Partite Perse · Tiebreak Vinti · Tiebreak Persi · Jolly · Foto (URL, opzionale)</strong>
+      Nel foglio: <strong>File → Condividi → Pubblica sul Web → Foglio1 → CSV → Pubblica</strong>.<br>
+      Il foglio deve avere 30 righe con colonne:<br>
+      <strong>Nome · Punti · PG · PV · PP · TV · TP · Jolly · Foto(opz)</strong>
     </div>
-    <div class="err" id="url-err"></div>
-    <div class="ok-msg" id="url-ok"></div>
+    <div class="msg-err" id="url-err"></div>
+    <div class="msg-ok" id="url-ok"></div>
   </div>
 </div>
 
+</div><!-- /page-wrap -->
+
 <script>
-// ── CONSTANTS ──
-const N = 12, ROUNDS = 4, MPR = 3;
-const STORAGE_KEY = 'beachtennis_sheets_url_v3';
-const TOTAL_JOLLY = 4;
-
-// Global error handler
-window.addEventListener('unhandledrejection', e => { e.preventDefault(); });
-window.onerror = () => true;
-
-// ── STATE ──
-let allPlayers = [];
-let scheduleA = null, scheduleB = null;
-let currentFascia = 'a';
-
-// ── NAVIGATION ──
 const PAGES = ['classifica','giornata','admin','settings'];
+const STORAGE_KEY = 'bt_url_v4';
+const ADMIN_KEY = 'bt_admin';
+const TOTAL_JOLLY = 4;
+const N = 12, ROUNDS = 4, MPR = 3;
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyI2BUhILX-4IIJtVYYvLCd5dMw7Gjf81WabofVMtryJyNs_WDNN64IXV5bbbntzuU/exec';
+
+const COLORS = ['#E85D3A','#1A6B8A','#7B2D8B','#27AE60','#D68910','#2980B9','#8E44AD','#16A085','#C0392B','#2C3E50','#E67E22','#1ABC9C','#6C3483','#1F618D','#B7950B','#196F3D','#7D3C98','#117A65','#CB4335','#1A5276','#D4AC0D','#145A32','#6E2F8C','#0E6655','#A93226','#154360','#B7770D','#0B5345','#633974','#0A3D62'];
+
+let allPlayers = [];
+let schedA = null, schedB = null;
+let jollySelected = new Set();
+let matchResults = {};
+
+// ── NAV ──
 function showPage(page) {
   PAGES.forEach(p => {
-    document.getElementById(`page-${p}`).style.display = p===page ? 'block' : 'none';
+    const el = document.getElementById('page-' + p);
+    if (el) el.style.display = p === page ? 'block' : 'none';
   });
-  document.querySelectorAll('.nav-tab').forEach((t,i) => {
+  document.querySelectorAll('.nav-tab').forEach((t, i) => {
     t.classList.toggle('active', PAGES[i] === page);
   });
   if (page === 'giornata') initGiornata();
   if (page === 'admin') initAdmin();
 }
 
-// ── GOOGLE SHEETS ──
-function getSavedUrl() { return localStorage.getItem(STORAGE_KEY) || ''; }
-function saveUrl(url)  { localStorage.setItem(STORAGE_KEY, url); }
+// ── SHEETS ──
+function getSavedUrl() { try { return localStorage.getItem(STORAGE_KEY) || ''; } catch(e) { return ''; } }
+function saveUrl(url) { try { localStorage.setItem(STORAGE_KEY, url); } catch(e) {} }
 
 function init() {
   const saved = getSavedUrl();
   if (saved) {
     document.getElementById('sheets-url').value = saved;
-    loadFromSheets(true).catch(() => {
-      document.getElementById('loading-card-cl').style.display = 'none';
-    });
+    loadFromSheets(true);
   } else {
-    document.getElementById('loading-card-cl').style.display = 'none';
+    document.getElementById('cl-loading').style.display = 'none';
   }
 }
 
-async function loadFromSheets(silent = false) {
-  const input = document.getElementById('sheets-url');
-  const url = input.value.trim();
-  if (!url) { showUrlErr('Incolla prima l\'URL del tuo Google Sheets.'); return; }
-
-  document.getElementById('loading-card-cl').style.display = 'block';
-  document.getElementById('classifica-content').style.display = 'none';
-  hideUrlMessages();
-
+async function loadFromSheets(silent) {
+  const url = document.getElementById('sheets-url').value.trim();
+  if (!url) { showMsg('url-err', 'Inserisci l\'URL del foglio.'); return; }
+  hideMsg('url-err'); hideMsg('url-ok');
+  document.getElementById('cl-loading').style.display = 'block';
+  document.getElementById('cl-content').style.display = 'none';
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const text = await res.text();
-    const parsed = parseCSV(text);
-
-    if (parsed.length !== 30) {
-      throw new Error(`Trovati ${parsed.length} giocatori. Il foglio deve averne esattamente 30.`);
-    }
-
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const txt = await r.text();
+    const parsed = parseCSV(txt);
+    if (parsed.length !== 30) throw new Error('Trovati ' + parsed.length + ' giocatori, servono esattamente 30.');
     allPlayers = parsed;
     saveUrl(url);
-
-    // Assign fascia
-    allPlayers.forEach((p, i) => {
-      p.fascia = i < 12 ? 'A' : i < 24 ? 'B' : 'EX';
-      p.globalRank = i + 1;
-    });
-
+    allPlayers.forEach((p, i) => { p.fascia = i < 12 ? 'A' : i < 24 ? 'B' : 'EX'; p.globalRank = i + 1; });
     renderClassifica();
-    generateBothFasce();
-
-    document.getElementById('loading-card-cl').style.display = 'none';
-    document.getElementById('classifica-content').style.display = 'block';
-
-    if (!silent) {
-      document.getElementById('url-ok').textContent = `✓ Classifica caricata — 30 giocatori trovati.`;
-      document.getElementById('url-ok').style.display = 'block';
-    }
+    document.getElementById('cl-loading').style.display = 'none';
+    document.getElementById('cl-content').style.display = 'block';
+    if (!silent) showMsg('url-ok', '✓ Caricati ' + parsed.length + ' giocatori.');
   } catch(e) {
-    document.getElementById('loading-card-cl').style.display = 'none';
-    showUrlErr('Errore: ' + e.message);
+    document.getElementById('cl-loading').style.display = 'none';
+    showMsg('url-err', 'Errore: ' + e.message);
   }
 }
 
-function parseCSV(text) {
-  const lines = text.trim().split('\n').map(l => l.trim()).filter(l => l);
-  const start = isNaN(parseInt(lines[0].split(',')[1])) ? 1 : 0;
-  const result = [];
+function parseCSV(txt) {
+  const lines = txt.trim().split('\n').map(l => l.trim()).filter(Boolean);
+  const start = isNaN(parseInt((lines[0].split(',')[1] || '').trim())) ? 1 : 0;
+  const res = [];
   for (let i = start; i < lines.length; i++) {
-    // Handle quoted fields
     const parts = lines[i].match(/(".*?"|[^,]+)(?=,|$)/g) || lines[i].split(',');
-    const clean = parts.map(p => p.replace(/^"|"$/g,'').trim());
-    if (clean.length < 2) continue;
-    result.push({
-      id: i,
-      name:   clean[0] || `Giocatore ${i}`,
-      pts:    parseInt(clean[1]) || 0,
-      pg:     parseInt(clean[2]) || 0,
-      pv:     parseInt(clean[3]) || 0,
-      pp:     parseInt(clean[4]) || 0,
-      tv:     parseInt(clean[5]) || 0,
-      tp:     parseInt(clean[6]) || 0,
-      jolly:  parseInt(clean[7]) || 0,
-      photo:  clean[8] || '',
-    });
+    const c = parts.map(p => p.replace(/^"|"$/g, '').trim());
+    if (!c[0]) continue;
+    res.push({ id: i, name: c[0], pts: +c[1]||0, pg: +c[2]||0, pv: +c[3]||0, pp: +c[4]||0, tv: +c[5]||0, tp: +c[6]||0, jolly: +c[7]||0, photo: c[8]||'' });
   }
-  // Sort by pts desc
-  result.sort((a,b) => b.pts - a.pts);
-  return result;
+  res.sort((a, b) => b.pts - a.pts);
+  return res;
 }
 
 function reloadSheets() { loadFromSheets(false); }
-function showUrlErr(msg) { const e=document.getElementById('url-err'); e.textContent=msg; e.style.display='block'; }
-function hideUrlMessages() { document.getElementById('url-err').style.display='none'; document.getElementById('url-ok').style.display='none'; }
 
-// ── CLASSIFICA RENDER ──
-function renderClassifica() {
-  const fasciaA  = allPlayers.filter(p => p.fascia==='A');
-  const fasciaB  = allPlayers.filter(p => p.fascia==='B');
-  const fasciaEx = allPlayers.filter(p => p.fascia==='EX');
-  renderTbody('tbody-a',  fasciaA,  'a');
-  renderTbody('tbody-b',  fasciaB,  'b');
-  renderTbody('tbody-ex', fasciaEx, 'ex');
-}
-
-// Avatar colors — one per player, consistent across reloads
-const AVATAR_COLORS = [
-  '#E85D3A','#1A6B8A','#7B2D8B','#27AE60','#D68910','#2980B9',
-  '#8E44AD','#16A085','#C0392B','#2C3E50','#E67E22','#1ABC9C',
-  '#6C3483','#1F618D','#B7950B','#196F3D','#7D3C98','#117A65',
-  '#CB4335','#1A5276','#D4AC0D','#145A32','#6E2F8C','#0E6655',
-  '#A93226','#154360','#B7770D','#0B5345','#633974','#0A3D62'
-];
-
+// ── CLASSIFICA ──
 function getInitials(name) {
-  const parts = name.trim().split(' ').filter(Boolean);
-  if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
-  return name.slice(0,2).toUpperCase();
+  const p = name.trim().split(' ').filter(Boolean);
+  return p.length >= 2 ? (p[0][0] + p[p.length-1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
 }
 
-function avatarHtml(player) {
-  const color = AVATAR_COLORS[player.globalRank - 1] || '#1A6B8A';
-  if (player.photo) {
-    return `<img class="avatar" src="${player.photo}" alt="${player.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">
-            <div class="avatar-placeholder" style="background:${color};display:none">${getInitials(player.name)}</div>`;
-  }
-  return `<div class="avatar-placeholder" style="background:${color}">${getInitials(player.name)}</div>`;
+function avHtml(p, size) {
+  size = size || 32;
+  const color = COLORS[p.globalRank-1] || '#1A6B8A';
+  const ini = getInitials(p.name);
+  if (p.photo) return '<img src="' + p.photo + '" style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;object-fit:cover" onerror="this.outerHTML=\'<div style=\\"width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:' + Math.round(size*0.38) + 'px;font-weight:700;color:white\\">' + ini + '</div>\'">';
+  return '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:' + Math.round(size*0.38) + 'px;font-weight:700;color:white">' + ini + '</div>';
+}
+
+function renderClassifica() {
+  renderTbody('tb-a',  allPlayers.filter(p => p.fascia==='A'),  'a');
+  renderTbody('tb-b',  allPlayers.filter(p => p.fascia==='B'),  'b');
+  renderTbody('tb-ex', allPlayers.filter(p => p.fascia==='EX'), 'ex');
 }
 
 function renderTbody(id, players, type) {
-  const tbody = document.getElementById(id);
-  tbody.innerHTML = players.map((p, i) => {
-    const rank = p.globalRank;
-    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
-    const pct = p.pg > 0 ? Math.round(p.pv/p.pg*100) : 0;
-    const pctColor = pct>=60?'var(--green)':pct>=40?'var(--yellow)':'var(--red)';
-    const jollyUsed = Math.min(p.jolly, TOTAL_JOLLY);
-    const jollyPips = Array.from({length:TOTAL_JOLLY}, (_,j) =>
-      `<span class="jolly-pip ${j < jollyUsed ? 'jolly-used':'jolly-free'}"></span>`
-    ).join('');
-    const posClass = type==='ex' ? 'pos-cell ex' : 'pos-cell';
-
-    return `<tr class="player-row-tr">
-      <td><span class="${posClass}">${medal || rank}</span></td>
-      <td><div class="avatar-wrap">${avatarHtml(p)}<span class="name-cell">${p.name}</span></div></td>
-      <td><span class="pts-cell">${p.pts}</span></td>
-      <td class="stat-cell"><span>${p.pg}</span></td>
-      <td class="stat-cell" style="color:var(--green);font-weight:700"><span>${p.pv}</span></td>
-      <td class="stat-cell" style="color:var(--red);font-weight:700"><span>${p.pp}</span></td>
-      <td class="stat-cell"><span>${p.tv}</span></td>
-      <td class="stat-cell"><span>${p.tp}</span></td>
-      <td class="jolly-cell">${jollyPips}<br><span style="font-size:10px;color:var(--muted)">${TOTAL_JOLLY-jollyUsed} rim.</span></td>
-    </tr>`;
+  document.getElementById(id).innerHTML = players.map(p => {
+    const medal = p.globalRank===1?'🥇':p.globalRank===2?'🥈':p.globalRank===3?'🥉':'';
+    const jPips = Array.from({length:TOTAL_JOLLY}, (_,j) => '<span class="jp ' + (j<p.jolly?'ju':'jf') + '"></span>').join('');
+    return '<tr class="ptr"><td><span class="pos' + (type==='ex'?' ex':'') + '">' + (medal||p.globalRank) + '</span></td>' +
+      '<td><div class="av-wrap">' + avHtml(p) + '<span class="nm">' + p.name + '</span></div></td>' +
+      '<td><span class="pts-big">' + p.pts + '</span></td>' +
+      '<td class="sc">' + p.pg + '</td>' +
+      '<td class="sc" style="color:#27AE60;font-weight:700">' + p.pv + '</td>' +
+      '<td class="sc" style="color:#C0392B;font-weight:700">' + p.pp + '</td>' +
+      '<td class="sc">' + p.tv + '</td>' +
+      '<td class="sc">' + p.tp + '</td>' +
+      '<td class="jc">' + jPips + '<br><span style="font-size:10px;color:#5A6A7A">' + (TOTAL_JOLLY-p.jolly) + ' rim.</span></td></tr>';
   }).join('');
 }
 
 // ── ALGORITHM ──
-function pairKey(a,b){ return a<b?`${a}-${b}`:`${b}-${a}`; }
-
-function findBestRound(usedPairs, pts) {
-  const quads=[];
-  for(let a=0;a<9;a++) for(let b=a+1;b<10;b++) for(let c=b+1;c<11;c++) for(let d=c+1;d<12;d++){
-    const p1=pairKey(a,d),p2=pairKey(b,c);
-    if(!usedPairs.has(p1)&&!usedPairs.has(p2)){
-      const diff=Math.abs((pts[a]+pts[d])-(pts[b]+pts[c]));
-      quads.push({pl:[a,b,c,d],p1,p2,diff});
-    }
+function pKey(a,b) { return a<b ? a+'-'+b : b+'-'+a; }
+function findRound(used, pts) {
+  const quads = [];
+  for(let a=0;a<9;a++) for(let b=a+1;b<10;b++) for(let c=b+1;c<11;c++) for(let d=c+1;d<12;d++) {
+    const p1=pKey(a,d), p2=pKey(b,c);
+    if(!used.has(p1)&&!used.has(p2)) quads.push({pl:[a,b,c,d],p1,p2,diff:Math.abs((pts[a]+pts[d])-(pts[b]+pts[c]))});
   }
   quads.sort((a,b)=>a.diff-b.diff);
-  const limit=Math.min(quads.length,300);
+  const lim=Math.min(quads.length,300);
   let best=null;
-  for(let i=0;i<limit;i++){
-    const qi=quads[i]; const setI=new Set(qi.pl);
-    for(let j=i+1;j<limit;j++){
+  for(let i=0;i<lim;i++){
+    const qi=quads[i]; const si=new Set(qi.pl);
+    for(let j=i+1;j<lim;j++){
       const qj=quads[j];
-      if(qj.pl.some(p=>setI.has(p))) continue;
+      if(qj.pl.some(p=>si.has(p))) continue;
       if(qi.p1===qj.p1||qi.p1===qj.p2||qi.p2===qj.p1||qi.p2===qj.p2) continue;
-      const setIJ=new Set([...qi.pl,...qj.pl]);
-      const rem=[0,1,2,3,4,5,6,7,8,9,10,11].filter(x=>!setIJ.has(x)).sort((a,b)=>a-b);
+      const sij=new Set([...qi.pl,...qj.pl]);
+      const rem=[0,1,2,3,4,5,6,7,8,9,10,11].filter(x=>!sij.has(x)).sort((a,b)=>a-b);
       const [ra,rb,rc,rd]=rem;
-      const rp1=pairKey(ra,rd),rp2=pairKey(rb,rc);
-      if(usedPairs.has(rp1)||usedPairs.has(rp2)) continue;
+      const rp1=pKey(ra,rd),rp2=pKey(rb,rc);
+      if(used.has(rp1)||used.has(rp2)) continue;
       if([rp1,rp2].some(p=>[qi.p1,qi.p2,qj.p1,qj.p2].includes(p))) continue;
       const rdiff=Math.abs((pts[ra]+pts[rd])-(pts[rb]+pts[rc]));
-      const total=qi.diff+qj.diff+rdiff;
-      if(!best||total<best.total){
-        best={quads:[qi,qj,{pl:rem,p1:rp1,p2:rp2,diff:rdiff}],total};
-        if(total===0) return best;
-      }
+      const tot=qi.diff+qj.diff+rdiff;
+      if(!best||tot<best.tot) { best={quads:[qi,qj,{pl:rem,p1:rp1,p2:rp2,diff:rdiff}],tot}; if(tot===0) return best; }
     }
   }
   return best;
 }
 
-function generateSchedule(players) {
+function genSchedule(players) {
   const sorted=[...players].sort((a,b)=>b.pts-a.pts);
   const pts=sorted.map(p=>p.pts);
   const used=new Set(); const rounds=[];
   for(let r=0;r<ROUNDS;r++){
-    const round=findBestRound(used,pts);
-    if(!round) break;
-    rounds.push(round.quads.map(q=>{
-      const[a,b,c,d]=q.pl;
-      return{teamA:[sorted[a],sorted[d]],teamB:[sorted[b],sorted[c]],
-             strA:pts[a]+pts[d],strB:pts[b]+pts[c],diff:q.diff};
-    }));
+    const round=findRound(used,pts); if(!round) break;
+    rounds.push(round.quads.map(q=>{const[a,b,c,d]=q.pl;return{teamA:[sorted[a],sorted[d]],teamB:[sorted[b],sorted[c]],strA:pts[a]+pts[d],strB:pts[b]+pts[c],diff:q.diff};}));
     round.quads.forEach(q=>{used.add(q.p1);used.add(q.p2);});
   }
   return rounds;
 }
 
-function generateBothFasce() {
-  const fasciaA = allPlayers.filter(p=>p.fascia==='A');
-  const fasciaB = allPlayers.filter(p=>p.fascia==='B');
-  scheduleA = generateSchedule(fasciaA);
-  scheduleB = generateSchedule(fasciaB);
-}
-
-// ── ASSEGNAZIONE MANUALE ──
+// ── GIORNATA ──
 function initGiornata() {
   if (!allPlayers.length) {
-    document.getElementById('no-data-card').style.display = 'block';
-    document.getElementById('giornata-content').style.display = 'none';
+    document.getElementById('gior-nodata').style.display = 'block';
+    document.getElementById('gior-content').style.display = 'none';
     return;
   }
-  document.getElementById('no-data-card').style.display = 'none';
-  document.getElementById('giornata-content').style.display = 'block';
+  document.getElementById('gior-nodata').style.display = 'none';
+  document.getElementById('gior-content').style.display = 'block';
   document.getElementById('step-assign').style.display = 'block';
   document.getElementById('step-matches').style.display = 'none';
-  renderAssignment();
+  renderAssign();
 }
 
-function resetAssignment() {
-  allPlayers.forEach((p, i) => {
-    p.fascia = i < 12 ? 'A' : i < 24 ? 'B' : 'EX';
-  });
-  renderAssignment();
+function resetAssign() {
+  allPlayers.forEach((p,i) => { p.fascia = i<12?'A':i<24?'B':'EX'; });
+  renderAssign();
 }
 
-function renderAssignment() {
-  const listA  = document.getElementById('assign-list-a');
-  const listB  = document.getElementById('assign-list-b');
-  const listEx = document.getElementById('assign-list-ex');
-  const fasciaA  = allPlayers.filter(p => p.fascia === 'A').sort((a,b) => a.globalRank - b.globalRank);
-  const fasciaB  = allPlayers.filter(p => p.fascia === 'B').sort((a,b) => a.globalRank - b.globalRank);
-  const fasciaEx = allPlayers.filter(p => p.fascia === 'EX').sort((a,b) => a.globalRank - b.globalRank);
-
-  listA.innerHTML  = fasciaA.map(p  => playerAssignChip(p, 'A')).join('');
-  listB.innerHTML  = fasciaB.map(p  => playerAssignChip(p, 'B')).join('');
-  listEx.innerHTML = fasciaEx.map(p => playerAssignChip(p, 'EX')).join('');
-
-  const cntA = document.getElementById('count-a');
-  const cntB = document.getElementById('count-b');
-  const cntEx = document.getElementById('count-ex');
-  cntA.textContent  = `${fasciaA.length}/12`;
-  cntA.className    = `assign-count ${fasciaA.length === 12 ? 'ok' : 'warn'}`;
-  cntB.textContent  = `${fasciaB.length}/12`;
-  cntB.className    = `assign-count ${fasciaB.length === 12 ? 'ok' : 'warn'}`;
-  cntEx.textContent = `${fasciaEx.length}`;
-  cntEx.className   = 'assign-count ok';
-
-  document.getElementById('assign-warning').style.display = 'none';
+function renderAssign() {
+  const fa = allPlayers.filter(p=>p.fascia==='A').sort((a,b)=>a.globalRank-b.globalRank);
+  const fb = allPlayers.filter(p=>p.fascia==='B').sort((a,b)=>a.globalRank-b.globalRank);
+  const fx = allPlayers.filter(p=>p.fascia==='EX').sort((a,b)=>a.globalRank-b.globalRank);
+  document.getElementById('al-a').innerHTML = fa.map(p=>apChip(p,'A')).join('');
+  document.getElementById('al-b').innerHTML = fb.map(p=>apChip(p,'B')).join('');
+  document.getElementById('al-ex').innerHTML = fx.map(p=>apChip(p,'EX')).join('');
+  const ca=document.getElementById('cnt-a'); ca.textContent=fa.length+'/12'; ca.className='cnt '+(fa.length===12?'ok':'warn');
+  const cb=document.getElementById('cnt-b'); cb.textContent=fb.length+'/12'; cb.className='cnt '+(fb.length===12?'ok':'warn');
+  document.getElementById('cnt-ex').textContent=fx.length;
+  document.getElementById('assign-warn').style.display='none';
 }
 
-function playerAssignChip(p, fascia) {
-  const color = AVATAR_COLORS[p.globalRank - 1] || '#1A6B8A';
-  const initials = getInitials(p.name);
-  const avatarHtmlStr = p.photo
-    ? `<img class="assign-avatar" src="${p.photo}" style="object-fit:cover" onerror="this.style.display='none'">`
-    : `<div class="assign-avatar" style="background:${color}">${initials}</div>`;
-
-  // Arrow label: cycle A→B→EX→A
-  const arrows = { A: '→ B', B: '→ Ex', EX: '→ A' };
-  const chipClass = fascia === 'EX' ? 'assign-player ex-chip' : `assign-player ${fascia.toLowerCase()}`;
-
-  return `<div class="${chipClass}" onclick="movePlayer(${p.id})">
-    <span class="assign-rank">${p.globalRank}</span>
-    ${avatarHtmlStr}
-    <span class="assign-name">${p.name}</span>
-    <span class="assign-pts">${p.pts} pt</span>
-    <span class="assign-arrow">${arrows[fascia]}</span>
-  </div>`;
+function apChip(p, fascia) {
+  const color = COLORS[p.globalRank-1]||'#1A6B8A';
+  const arr = fascia==='A'?'→B':fascia==='B'?'→Ex':'→A';
+  return '<div class="ap" onclick="movePlayer(' + p.id + ')">' +
+    '<span class="ap-rank">' + p.globalRank + '</span>' +
+    '<div class="ap-av" style="background:' + color + '">' + getInitials(p.name) + '</div>' +
+    '<span class="ap-name">' + p.name + '</span>' +
+    '<span class="ap-pts">' + p.pts + '</span>' +
+    '<span class="ap-arr">' + arr + '</span></div>';
 }
 
-function movePlayer(playerId) {
-  const p = allPlayers.find(p => p.id === playerId);
-  if (!p) return;
-  // Cycle: A → B → EX → A
-  p.fascia = p.fascia === 'A' ? 'B' : p.fascia === 'B' ? 'EX' : 'A';
-  renderAssignment();
+function movePlayer(id) {
+  const p = allPlayers.find(p=>p.id===id); if(!p) return;
+  p.fascia = p.fascia==='A'?'B':p.fascia==='B'?'EX':'A';
+  renderAssign();
 }
 
-function confirmAssignment() {
-  const fasciaA = allPlayers.filter(p => p.fascia === 'A');
-  const fasciaB = allPlayers.filter(p => p.fascia === 'B');
-  const warn = document.getElementById('assign-warning');
-
-  if (fasciaA.length !== 12 || fasciaB.length !== 12) {
-    warn.textContent = `⚠️ Fascia A: ${fasciaA.length} giocatori, Fascia B: ${fasciaB.length} giocatori. Entrambe devono avere esattamente 12.`;
-    warn.style.display = 'block';
-    return;
-  }
-
-  warn.style.display = 'none';
-  scheduleA = generateSchedule(fasciaA);
-  scheduleB = generateSchedule(fasciaB);
-
-  document.getElementById('step-assign').style.display = 'none';
-  document.getElementById('step-matches').style.display = 'block';
-
-  renderSchedule(scheduleA, 'a');
-  renderSchedule(scheduleB, 'b');
-  selectFascia('a');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+function confirmAssign() {
+  const fa=allPlayers.filter(p=>p.fascia==='A');
+  const fb=allPlayers.filter(p=>p.fascia==='B');
+  const w=document.getElementById('assign-warn');
+  if(fa.length!==12||fb.length!==12){w.textContent='⚠️ Fascia A: '+fa.length+', Fascia B: '+fb.length+'. Servono 12 per fascia.';w.style.display='block';return;}
+  w.style.display='none';
+  schedA=genSchedule(fa); schedB=genSchedule(fb);
+  document.getElementById('step-assign').style.display='none';
+  document.getElementById('step-matches').style.display='block';
+  renderSched(schedA,'a'); renderSched(schedB,'b'); selFascia('a');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function backToAssign() {
-  document.getElementById('step-assign').style.display = 'block';
-  document.getElementById('step-matches').style.display = 'none';
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  document.getElementById('step-assign').style.display='block';
+  document.getElementById('step-matches').style.display='none';
 }
 
-function selectFascia(f) {
-  currentFascia = f;
-  document.getElementById('fs-a').classList.toggle('sel', f==='a');
-  document.getElementById('fs-b').classList.toggle('sel', f==='b');
-  document.getElementById('output-a').style.display = f==='a' ? 'block' : 'none';
-  document.getElementById('output-b').style.display = f==='b' ? 'block' : 'none';
+function selFascia(f) {
+  document.getElementById('fs-a').className='fs-btn a'+(f==='a'?' sel':'');
+  document.getElementById('fs-b').className='fs-btn b'+(f==='b'?' sel':'');
+  document.getElementById('out-a').style.display=f==='a'?'block':'none';
+  document.getElementById('out-b').style.display=f==='b'?'block':'none';
 }
 
-function regenerate(f) {
-  const players = allPlayers.filter(p=>p.fascia===(f==='a'?'A':'B'));
-  if(f==='a'){ scheduleA=generateSchedule(players); renderSchedule(scheduleA,'a'); }
-  else        { scheduleB=generateSchedule(players); renderSchedule(scheduleB,'b'); }
+function regen(f) {
+  const players=allPlayers.filter(p=>p.fascia===(f==='a'?'A':'B'));
+  if(f==='a'){schedA=genSchedule(players);renderSched(schedA,'a');}
+  else{schedB=genSchedule(players);renderSched(schedB,'b');}
 }
 
-function renderSchedule(rounds, f) {
-  const isB = f==='b';
-  const allDiffs=rounds.flatMap(r=>r.map(m=>m.diff));
-  const avg=Math.round(allDiffs.reduce((a,b)=>a+b,0)/allDiffs.length);
-  const good=allDiffs.filter(d=>d<100).length;
-  const perf=allDiffs.filter(d=>d===0).length;
-  const stEl=document.getElementById(`stats-${f}`);
-  const vClass=isB?'st-v purple':'st-v';
-  stEl.innerHTML=`
-    <div class="st"><div class="${vClass}">${rounds.length*MPR}</div><div class="st-l">PARTITE</div></div>
-    <div class="st"><div class="${vClass}">${ROUNDS}</div><div class="st-l">ROUND</div></div>
-    <div class="st"><div class="${vClass}">${avg}</div><div class="st-l">DIFF. MEDIA</div></div>
-    <div class="st"><div class="${vClass}">${good}/${rounds.length*MPR}</div><div class="st-l">EQUILIBRATE</div></div>
-    <div class="st"><div class="${vClass}">${perf}</div><div class="st-l">PERFETTE</div></div>`;
-
-  const tabsEl=document.getElementById(`tabs-${f}`);
-  tabsEl.innerHTML=rounds.map((_,i)=>`<div class="tab" onclick="showRound('${f}',${i})">ROUND ${i+1}</div>`).join('')
-    +`<div class="tab" onclick="showRound('${f}',-1)">TUTTI ▾</div>`;
-
-  showRound(f, 0);
+function renderSched(rounds, f) {
+  const isB=f==='b';
+  const diffs=rounds.flatMap(r=>r.map(m=>m.diff));
+  const avg=Math.round(diffs.reduce((a,b)=>a+b,0)/diffs.length);
+  const good=diffs.filter(d=>d<100).length, perf=diffs.filter(d=>d===0).length;
+  const vc=isB?'st-v purple':'st-v';
+  document.getElementById('stats-'+f).innerHTML=
+    '<div class="st"><div class="'+vc+'">'+(rounds.length*MPR)+'</div><div class="st-l">PARTITE</div></div>'+
+    '<div class="st"><div class="'+vc+'">'+ROUNDS+'</div><div class="st-l">ROUND</div></div>'+
+    '<div class="st"><div class="'+vc+'">'+avg+'</div><div class="st-l">DIFF. MEDIA</div></div>'+
+    '<div class="st"><div class="'+vc+'">'+good+'/'+(rounds.length*MPR)+'</div><div class="st-l">EQUILIBRATE</div></div>'+
+    '<div class="st"><div class="'+vc+'">'+perf+'</div><div class="st-l">PERFETTE</div></div>';
+  const tabs=document.getElementById('tabs-'+f);
+  tabs.innerHTML=rounds.map((_,i)=>'<div class="tab" onclick="showRound(\''+f+'\','+i+')">ROUND '+(i+1)+'</div>').join('')+'<div class="tab" onclick="showRound(\''+f+'\',-1)">TUTTI ▾</div>';
+  showRound(f,0);
 }
 
-function showRound(f, r) {
-  const rounds = f==='a' ? scheduleA : scheduleB;
-  const isB = f==='b';
-  const tabsEl = document.getElementById(`tabs-${f}`);
-  tabsEl.querySelectorAll('.tab').forEach((t,i)=>{
-    t.classList.toggle('active', r===-1 ? i===ROUNDS : i===r);
-    if(isB) t.classList.toggle('purple', t.classList.contains('active'));
+function showRound(f,r) {
+  const rounds=f==='a'?schedA:schedB; const isB=f==='b';
+  document.getElementById('tabs-'+f).querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',r===-1?i===ROUNDS:i===r);
+    if(isB) t.classList.toggle('purple',t.classList.contains('active'));
   });
-
-  const list=document.getElementById(`mlist-${f}`);
-  list.innerHTML='';
-  const toShow=r===-1
-    ? rounds.flatMap((rnd,ri)=>rnd.map((m,mi)=>({...m,ri,mi})))
-    : rounds[r].map((m,mi)=>({...m,ri:r,mi}));
-
+  const list=document.getElementById('ml-'+f); list.innerHTML='';
+  const toShow=r===-1?rounds.flatMap((rnd,ri)=>rnd.map((m,mi)=>({...m,ri,mi}))):rounds[r].map((m,mi)=>({...m,ri:r,mi}));
   toShow.forEach((m,idx)=>{
     const pct=Math.round(m.strA/(m.strA+m.strB)*100);
     const cls=m.diff<100?'g':m.diff<=250?'y':'rr';
-    const lbl=m.diff<100?'🟢 Equilibrata':m.diff<=250?'🟡 Quasi bilanciata':'🔴 Sbilanciata';
-    const hClass=isB?'match-header b':'match-header a';
-    const cardClass=isB?'match-card purple-border':'match-card';
+    const lbl=m.diff<100?'🟢 Equilibrata':m.diff<=250?'🟡 Quasi bal.':'🔴 Sbilanciata';
     const c=document.createElement('div');
-    c.className=cardClass; c.style.animationDelay=`${idx*55}ms`;
-    c.innerHTML=`
-      <div class="${hClass}">ROUND ${m.ri+1} &nbsp;·&nbsp; CAMPO ${m.mi+1}</div>
-      <div class="match-inner">
-        <div class="team">
-          ${m.teamA.map(p=>`<div class="pchip"><span class="ppill">${p.pts}</span>${p.name}</div>`).join('')}
-          <div class="tstr">Coppia: ${m.strA} pt</div>
-        </div>
-        <div class="vs-col"><div class="vs-txt">VS</div><div class="court">CAMPO ${m.mi+1}</div></div>
-        <div class="team r">
-          ${m.teamB.map(p=>`<div class="pchip">${p.name}<span class="ppill">${p.pts}</span></div>`).join('')}
-          <div class="tstr">Coppia: ${m.strB} pt</div>
-        </div>
-      </div>
-      <div class="bal-row">
-        <span class="bal-n">${m.strA}</span>
-        <div class="bal-track"><div class="bal-fill" style="width:${pct}%"></div></div>
-        <span class="bal-n r">${m.strB}</span>
-        <span class="bal-tag ${cls}">${lbl}</span>
-      </div>`;
+    c.className='match-card'+(isB?' pb':''); c.style.animationDelay=(idx*50)+'ms';
+    c.innerHTML='<div class="mhd '+(isB?'b':'a')+'">ROUND '+(m.ri+1)+' · CAMPO '+(m.mi+1)+'</div>'+
+      '<div class="mi">'+
+        '<div class="team">'+m.teamA.map(p=>'<div class="pchip"><span class="ppill">'+p.pts+'</span>'+p.name+'</div>').join('')+'<div class="tstr">Coppia: '+m.strA+' pt</div></div>'+
+        '<div class="vs-col"><div class="vs-txt">VS</div><div class="ct">CAMPO '+(m.mi+1)+'</div></div>'+
+        '<div class="team r">'+m.teamB.map(p=>'<div class="pchip">'+p.name+'<span class="ppill">'+p.pts+'</span></div>').join('')+'<div class="tstr">Coppia: '+m.strB+' pt</div></div>'+
+      '</div>'+
+      '<div class="bal-row"><span class="bal-n">'+m.strA+'</span><div class="bal-track"><div class="bal-fill" style="width:'+pct+'%"></div></div><span class="bal-n r">'+m.strB+'</span><span class="btag '+cls+'">'+lbl+'</span></div>';
     list.appendChild(c);
   });
 }
 
-function printFascia(f) { showRound(f,-1); setTimeout(()=>window.print(),150); }
+function printF(f) { showRound(f,-1); setTimeout(()=>window.print(),150); }
 
 // ── ADMIN ──
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyI2BUhILX-4IIJtVYYvLCd5dMw7Gjf81WabofVMtryJyNs_WDNN64IXV5bbbntzuU/exec';
-const ADMIN_KEY = 'beachtennis_admin_auth';
-let adminAuth = false;
-let jollySelected = new Set(); // player ids selected for jolly
-let matchResults = {}; // matchId -> {scoreA, scoreB}
-
 function adminLogin() {
-  const psw = document.getElementById('admin-psw').value.trim();
-  if (!psw) return;
-  // Store temporarily in session
-  sessionStorage.setItem(ADMIN_KEY, psw);
-  adminAuth = true;
-  document.getElementById('admin-err').style.display = 'none';
-  document.getElementById('admin-login').style.display = 'none';
-  document.getElementById('admin-panel').style.display = 'block';
-  renderAdminPanel();
+  const psw=document.getElementById('admin-psw').value.trim();
+  if(!psw){showMsg('admin-err','Inserisci la password.');return;}
+  try{sessionStorage.setItem(ADMIN_KEY,psw);}catch(e){}
+  document.getElementById('admin-err').style.display='none';
+  document.getElementById('admin-login').style.display='none';
+  document.getElementById('admin-panel').style.display='block';
+  renderAdmin();
 }
 
 function adminLogout() {
-  sessionStorage.removeItem(ADMIN_KEY);
-  adminAuth = false;
-  document.getElementById('admin-login').style.display = 'block';
-  document.getElementById('admin-panel').style.display = 'none';
-  document.getElementById('admin-psw').value = '';
+  try{sessionStorage.removeItem(ADMIN_KEY);}catch(e){}
+  document.getElementById('admin-login').style.display='block';
+  document.getElementById('admin-panel').style.display='none';
+  document.getElementById('admin-psw').value='';
 }
 
 function initAdmin() {
-  const saved = sessionStorage.getItem(ADMIN_KEY);
-  if (saved) {
-    adminAuth = true;
-    document.getElementById('admin-login').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    renderAdminPanel();
+  let saved=''; try{saved=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
+  if(saved){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    renderAdmin();
   } else {
-    document.getElementById('admin-login').style.display = 'block';
-    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('admin-login').style.display='block';
+    document.getElementById('admin-panel').style.display='none';
   }
 }
 
-function renderAdminPanel() {
-  const hasData = scheduleA && scheduleB;
-  document.getElementById('admin-no-data').style.display = hasData ? 'none' : 'block';
-  document.getElementById('admin-jolly-card').style.display = hasData ? 'block' : 'none';
-  document.getElementById('admin-matches-a').style.display = hasData ? 'block' : 'none';
-  document.getElementById('admin-matches-b').style.display = hasData ? 'block' : 'none';
-  document.getElementById('admin-save-card').style.display = hasData ? 'block' : 'none';
-  if (!hasData) return;
-
-  renderJollySection();
-  renderResultsSection('a');
-  renderResultsSection('b');
+function renderAdmin() {
+  const has=schedA&&schedB;
+  document.getElementById('admin-nodata').style.display=has?'none':'block';
+  document.getElementById('admin-jolly').style.display=has?'block':'none';
+  document.getElementById('admin-ra').style.display=has?'block':'none';
+  document.getElementById('admin-rb').style.display=has?'block':'none';
+  document.getElementById('admin-save').style.display=has?'block':'none';
+  if(!has) return;
+  renderJolly(); renderResults('a'); renderResults('b');
 }
 
-function renderJollySection() {
-  // Show all players NOT in EX (playing players) + EX players too - anyone can use jolly
-  const playingPlayers = allPlayers
-    .filter(p => p.fascia !== 'EX' || true) // show all 30
-    .sort((a,b) => a.globalRank - b.globalRank);
-
-  const list = document.getElementById('jolly-list');
-  list.innerHTML = playingPlayers.map(p => {
-    const color = AVATAR_COLORS[p.globalRank-1] || '#1A6B8A';
-    const initials = getInitials(p.name);
-    const rem = TOTAL_JOLLY - p.jolly;
-    const sel = jollySelected.has(p.id);
-    const disabled = rem <= 0 && !sel;
-    const onclick = disabled ? '' : `onclick="toggleJolly(${p.id})"`;
-    const style = disabled ? 'opacity:.4;cursor:not-allowed' : '';
-    return `<div class="jolly-chip${sel?' selected':''}" ${onclick} style="${style}">
-      <div class="jolly-chip-avatar" style="background:${color}">${initials}</div>
-      <div>
-        <div class="jolly-chip-name">${p.name}</div>
-        <div class="jolly-chip-rem">${rem} jolly rimanenti</div>
-      </div>
-      <span class="jolly-check">🃏</span>
-    </div>`;
+function renderJolly() {
+  document.getElementById('jolly-list').innerHTML=allPlayers.sort((a,b)=>a.globalRank-b.globalRank).map(p=>{
+    const color=COLORS[p.globalRank-1]||'#1A6B8A';
+    const rem=TOTAL_JOLLY-p.jolly;
+    const sel=jollySelected.has(p.id);
+    const dis=rem<=0&&!sel;
+    return '<div class="jchip'+(sel?' sel':'')+'" '+(dis?'style="opacity:.4"':('onclick="toggleJolly('+p.id+')"'))+'>' +
+      '<div class="jav" style="background:'+color+'">'+getInitials(p.name)+'</div>'+
+      '<div><div class="jname">'+p.name+'</div><div class="jrem">'+rem+' jolly rim.</div></div>'+
+      '<span class="jcheck">🃏</span></div>';
   }).join('');
 }
 
-function toggleJolly(playerId) {
-  if (jollySelected.has(playerId)) jollySelected.delete(playerId);
-  else jollySelected.add(playerId);
-  renderJollySection();
+function toggleJolly(id) {
+  if(jollySelected.has(id)) jollySelected.delete(id); else jollySelected.add(id);
+  renderJolly();
 }
 
-function renderResultsSection(f) {
-  const rounds = f === 'a' ? scheduleA : scheduleB;
-  const listEl = document.getElementById(`results-list-${f}`);
-  const isB = f === 'b';
-  let html = '';
-
-  rounds.forEach((round, ri) => {
-    round.forEach((match, mi) => {
-      const matchId = `${f}-${ri}-${mi}`;
-      const res = matchResults[matchId] || {scoreA:'', scoreB:''};
-      const isDone = res.scoreA !== '' && res.scoreB !== '';
-      const nameA = match.teamA.map(p=>p.name).join(' & ');
-      const nameB = match.teamB.map(p=>p.name).join(' & ');
-
-      // Determine winner label if score entered
-      let winnerHtml = '';
-      if (isDone) {
-        const sa = parseInt(res.scoreA), sb = parseInt(res.scoreB);
-        const isTB = (sa===6 && sb===5) || (sa===5 && sb===6);
-        if (sa > sb) winnerHtml = `<span class="winner-badge winner-a">✓ ${nameA.split(' & ')[0]}…</span>`;
-        else if (sb > sa) winnerHtml = `<span class="winner-badge winner-b">✓ ${nameB.split(' & ')[0]}…</span>`;
-        if (isTB) winnerHtml += `<span style="font-size:11px;color:var(--yellow);font-weight:700;margin-left:6px">TIEBREAK</span>`;
+function renderResults(f) {
+  const rounds=f==='a'?schedA:schedB;
+  const isB=f==='b';
+  let html='';
+  rounds.forEach((round,ri)=>{
+    round.forEach((match,mi)=>{
+      const id=f+'-'+ri+'-'+mi;
+      const res=matchResults[id]||{sA:'',sB:''};
+      const done=res.sA!==''&&res.sB!=='';
+      const nA=match.teamA.map(p=>p.name).join(' & ');
+      const nB=match.teamB.map(p=>p.name).join(' & ');
+      let extra='';
+      if(done){
+        const sa=+res.sA,sb=+res.sB;
+        const isTB=(sa===6&&sb===5)||(sa===5&&sb===6);
+        if(sa>sb) extra='<span class="wbadge">✓ '+nA.split(' ')[0]+'…</span>';
+        else if(sb>sa) extra='<span class="wbadge">✓ '+nB.split(' ')[0]+'…</span>';
+        if(isTB) extra+='<span class="tbbadge">TIEBREAK</span>';
       }
-
-      html += `<div class="result-row${isDone?' done':''}">
-        <div class="result-match-header${isB?' b':''}">ROUND ${ri+1} · CAMPO ${mi+1}</div>
-        <div class="result-teams">
-          <div class="result-team-name">${match.teamA.map(p=>`<div>${p.name}</div>`).join('')}</div>
-          <div class="result-vs">VS</div>
-          <div class="result-team-name r">${match.teamB.map(p=>`<div>${p.name}</div>`).join('')}</div>
-        </div>
-        <div class="score-row">
-          <span class="score-label">PUNTEGGIO:</span>
-          <input class="score-input" type="number" min="0" max="6" value="${res.scoreA}"
-            placeholder="–" onchange="setScore('${matchId}','a',this.value)" oninput="setScore('${matchId}','a',this.value)">
-          <span class="score-sep">–</span>
-          <input class="score-input" type="number" min="0" max="6" value="${res.scoreB}"
-            placeholder="–" onchange="setScore('${matchId}','b',this.value)" oninput="setScore('${matchId}','b',this.value)">
-          <span class="tiebreak-note">(in caso di 5-5 il risultato diventa 6-5)</span>
-        </div>
-        ${winnerHtml ? `<div class="result-pts">${winnerHtml}</div>` : ''}
-      </div>`;
+      html+='<div class="result-row'+(done?' done':'')+'">'+
+        '<div class="rmhd '+(isB?'b':'a')+'">ROUND '+(ri+1)+' · CAMPO '+(mi+1)+'</div>'+
+        '<div class="rteams">'+
+          '<div class="rtn">'+match.teamA.map(p=>'<div>'+p.name+'</div>').join('')+'</div>'+
+          '<div class="rvs">VS</div>'+
+          '<div class="rtn r">'+match.teamB.map(p=>'<div>'+p.name+'</div>').join('')+'</div>'+
+        '</div>'+
+        '<div class="score-row">'+
+          '<span class="score-lbl">PUNTEGGIO:</span>'+
+          '<input class="si" type="number" min="0" max="7" value="'+res.sA+'" placeholder="–" oninput="setScore(\''+id+'\',\'a\',this.value)">'+
+          '<span class="ssep">–</span>'+
+          '<input class="si" type="number" min="0" max="7" value="'+res.sB+'" placeholder="–" oninput="setScore(\''+id+'\',\'b\',this.value)">'+
+          '<span class="sn">(5-5 → 6-5)</span>'+
+        '</div>'+
+        (extra?'<div style="margin-top:6px">'+extra+'</div>':'')+
+      '</div>';
     });
   });
-
-  listEl.innerHTML = html;
+  document.getElementById('rl-'+f).innerHTML=html;
 }
 
-function setScore(matchId, side, value) {
-  if (!matchResults[matchId]) matchResults[matchId] = {scoreA:'', scoreB:''};
-  matchResults[matchId][side==='a'?'scoreA':'scoreB'] = value;
-  // Re-render just the winner labels without resetting inputs
-  const [f, ri, mi] = matchId.split('-');
-  const rounds = f==='a' ? scheduleA : scheduleB;
-  const match = rounds[parseInt(ri)][parseInt(mi)];
-  const res = matchResults[matchId];
-  const isDone = res.scoreA !== '' && res.scoreB !== '';
-  const row = document.querySelector(`[data-match-id="${matchId}"]`);
-  // Simple approach: full re-render of the section (inputs retain values via matchResults)
-  renderResultsSection(f);
+function setScore(id,side,val) {
+  if(!matchResults[id]) matchResults[id]={sA:'',sB:''};
+  matchResults[id][side==='a'?'sA':'sB']=val;
+  const f=id.split('-')[0];
+  renderResults(f);
 }
 
-// Calculate points from results and save to Sheets
 async function saveResults() {
-  const btn = document.getElementById('save-btn');
-  const errEl = document.getElementById('save-err');
-  const okEl = document.getElementById('save-ok');
-  errEl.style.display = 'none';
-  okEl.style.display = 'none';
-
-  // Validate: all matches must have results
-  const allMatches = [
-    ...scheduleA.flatMap((r,ri)=>r.map((m,mi)=>({f:'a',ri,mi,match:m}))),
-    ...scheduleB.flatMap((r,ri)=>r.map((m,mi)=>({f:'b',ri,mi,match:m})))
-  ];
-
-  const missing = allMatches.filter(({f,ri,mi}) => {
-    const id=`${f}-${ri}-${mi}`;
-    const res=matchResults[id];
-    return !res || res.scoreA==='' || res.scoreB==='';
+  const btn=document.getElementById('save-btn');
+  hideMsg('save-err'); hideMsg('save-ok');
+  const allM=[...schedA.flatMap((r,ri)=>r.map((m,mi)=>({f:'a',ri,mi,match:m}))),...schedB.flatMap((r,ri)=>r.map((m,mi)=>({f:'b',ri,mi,match:m})))];
+  const miss=allM.filter(({f,ri,mi})=>{const res=matchResults[f+'-'+ri+'-'+mi];return !res||res.sA===''||res.sB==='';});
+  if(miss.length>0){showMsg('save-err','⚠️ Mancano '+miss.length+' risultati.');return;}
+  const updated=allPlayers.map(p=>({...p}));
+  const byName={};updated.forEach(p=>{byName[p.name]=p;});
+  jollySelected.forEach(id=>{const p=updated.find(p=>p.id===id);if(!p)return;p.pts+=7;p.jolly=Math.min(p.jolly+1,TOTAL_JOLLY);});
+  allM.forEach(({f,ri,mi,match})=>{
+    const res=matchResults[f+'-'+ri+'-'+mi];
+    let sa=+res.sA,sb=+res.sB;
+    if(sa===5&&sb===5){sa=6;sb=5;}
+    const isTB=(sa===6&&sb===5)||(sa===5&&sb===6);
+    const tA=match.teamA.map(p=>byName[p.name]).filter(Boolean);
+    const tB=match.teamB.map(p=>byName[p.name]).filter(Boolean);
+    if(sa>sb){tA.forEach(p=>{p.pts+=3;p.pv++;p.pg++;if(isTB)p.tv++;});tB.forEach(p=>{if(isTB){p.pts+=1;p.tp++;}p.pp++;p.pg++;});}
+    else{tB.forEach(p=>{p.pts+=3;p.pv++;p.pg++;if(isTB)p.tv++;});tA.forEach(p=>{if(isTB){p.pts+=1;p.tp++;}p.pp++;p.pg++;});}
   });
-
-  if (missing.length > 0) {
-    errEl.textContent = `⚠️ Mancano ${missing.length} risultati. Inserisci tutti i punteggi prima di salvare.`;
-    errEl.style.display = 'block';
-    return;
-  }
-
-  // Clone players to compute updated stats
-  const updated = allPlayers.map(p => ({...p}));
-  const byName = {};
-  updated.forEach(p => { byName[p.name] = p; });
-
-  // Apply jolly points
-  jollySelected.forEach(id => {
-    const p = updated.find(p => p.id === id);
-    if (!p) return;
-    p.pts += 7;
-    p.jolly = Math.min(p.jolly + 1, TOTAL_JOLLY);
-  });
-
-  // Apply match results
-  allMatches.forEach(({f,ri,mi,match}) => {
-    const id = `${f}-${ri}-${mi}`;
-    const res = matchResults[id];
-    let sa = parseInt(res.scoreA), sb = parseInt(res.scoreB);
-
-    // Tiebreak: 5-5 becomes 6-5
-    if (sa === 5 && sb === 5) { sa = 6; sb = 5; }
-
-    const isTB = (sa===6&&sb===5)||(sa===5&&sb===6);
-    const teamA = match.teamA.map(p => byName[p.name]).filter(Boolean);
-    const teamB = match.teamB.map(p => byName[p.name]).filter(Boolean);
-
-    if (sa > sb) {
-      // Team A wins
-      teamA.forEach(p => { p.pts+=3; p.pv+=1; p.pg+=1; if(isTB) p.tv+=1; });
-      teamB.forEach(p => { if(isTB){p.pts+=1;p.tp+=1;} p.pp+=1; p.pg+=1; });
-    } else {
-      // Team B wins
-      teamB.forEach(p => { p.pts+=3; p.pv+=1; p.pg+=1; if(isTB) p.tv+=1; });
-      teamA.forEach(p => { if(isTB){p.pts+=1;p.tp+=1;} p.pp+=1; p.pg+=1; });
-    }
-  });
-
-  // Send to Google Sheets
-  btn.textContent = '⏳ SALVATAGGIO…';
-  btn.disabled = true;
-
+  btn.textContent='⏳ SALVATAGGIO…'; btn.disabled=true;
   try {
-    const psw = sessionStorage.getItem(ADMIN_KEY);
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        password: psw,
-        action: 'updatePlayers',
-        players: updated.map(p => ({
-          name: p.name,
-          pts:  p.pts,
-          pg:   p.pg,
-          pv:   p.pv,
-          pp:   p.pp,
-          tv:   p.tv,
-          tp:   p.tp,
-          jolly:p.jolly
-        }))
-      })
-    });
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Errore sconosciuto');
-
-    // Update local state
-    updated.forEach(u => {
-      const p = allPlayers.find(p=>p.name===u.name);
-      if(p) Object.assign(p, u);
-    });
-
-    // Reset results and jolly for next session
-    matchResults = {};
-    jollySelected = new Set();
-
-    okEl.textContent = '✓ Classifica aggiornata con successo sul foglio Google Sheets!';
-    okEl.style.display = 'block';
-    renderClassifica();
-    renderAdminPanel();
-
+    let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
+    const r=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({password:psw,action:'updatePlayers',players:updated.map(p=>({name:p.name,pts:p.pts,pg:p.pg,pv:p.pv,pp:p.pp,tv:p.tv,tp:p.tp,jolly:p.jolly}))})});
+    const data=await r.json();
+    if(!data.ok) throw new Error(data.error||'Errore sconosciuto');
+    updated.forEach(u=>{const p=allPlayers.find(p=>p.name===u.name);if(p)Object.assign(p,u);});
+    matchResults={}; jollySelected=new Set();
+    showMsg('save-ok','✓ Classifica aggiornata con successo!');
+    renderClassifica(); renderAdmin();
   } catch(e) {
-    errEl.textContent = 'Errore nel salvataggio: ' + e.message;
-    errEl.style.display = 'block';
+    showMsg('save-err','Errore: '+e.message);
   } finally {
-    btn.textContent = '💾 SALVA SUL FOGLIO';
-    btn.disabled = false;
+    btn.textContent='💾 SALVA SUL FOGLIO'; btn.disabled=false;
   }
 }
+
+// ── UTILS ──
+function showMsg(id,msg){const e=document.getElementById(id);e.textContent=msg;e.style.display='block';}
+function hideMsg(id){document.getElementById(id).style.display='none';}
 
 // ── INIT ──
 init();
