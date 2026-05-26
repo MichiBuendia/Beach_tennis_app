@@ -30,13 +30,13 @@ h1 span{color:var(--sun);}
 .subtitle{margin-top:14px;color:rgba(255,255,255,.6);font-size:14px;font-weight:300;}
 
 /* NAV TABS */
-.nav{display:flex;gap:4px;background:rgba(0,0,0,.2);border-radius:16px;padding:5px;margin-bottom:28px;}
-.nav-tab{flex:1;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;padding:10px;border-radius:12px;cursor:pointer;color:rgba(255,255,255,.6);transition:all .2s;user-select:none;}
+.nav{display:flex;gap:4px;background:#0a3347;border-radius:16px;padding:5px;margin-bottom:28px;}
+.nav-tab{flex:1;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;padding:10px;border-radius:12px;cursor:pointer;color:rgba(255,255,255,.7);transition:all .2s;user-select:none;}
 .nav-tab.active{background:white;color:var(--ocean-deep);box-shadow:0 2px 12px rgba(0,0,0,.15);}
 .nav-tab:hover:not(.active){color:white;}
 
 /* CARD */
-.card{background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-radius:22px;padding:28px 30px;margin-bottom:18px;border:1px solid rgba(255,255,255,.65);box-shadow:0 10px 40px rgba(13,74,99,.18);}
+.card{background:#ffffff;border-radius:22px;padding:28px 30px;margin-bottom:18px;border:1px solid #e0e8ed;box-shadow:0 10px 40px rgba(13,74,99,.18);}
 .card-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--ocean-deep);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
 .icon-b{width:32px;height:32px;background:var(--ocean);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:15px;flex-shrink:0;}
 
@@ -524,25 +524,9 @@ const N = 12, ROUNDS = 4, MPR = 3;
 const STORAGE_KEY = 'beachtennis_sheets_url_v3';
 const TOTAL_JOLLY = 4;
 
-// Global error handler - catches uncaught promise rejections on iOS Safari
-window.addEventListener('unhandledrejection', e => {
-  showDebug('UnhandledRejection: ' + (e.reason?.message || e.reason));
-  e.preventDefault();
-});
-window.onerror = (msg, src, line, col, err) => {
-  showDebug('Error: ' + msg + ' (line ' + line + ')');
-  return true;
-};
-function showDebug(msg) {
-  let el = document.getElementById('debug-panel');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'debug-panel';
-    el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);color:#ff6b6b;font-size:12px;font-family:monospace;padding:10px;z-index:9999;max-height:40vh;overflow-y:auto;';
-    document.body.appendChild(el);
-  }
-  el.innerHTML += '<div>' + new Date().toLocaleTimeString() + ' — ' + msg + '</div>';
-}
+// Global error handler
+window.addEventListener('unhandledrejection', e => { e.preventDefault(); });
+window.onerror = () => true;
 
 // ── STATE ──
 let allPlayers = [];
@@ -567,17 +551,13 @@ function getSavedUrl() { return localStorage.getItem(STORAGE_KEY) || ''; }
 function saveUrl(url)  { localStorage.setItem(STORAGE_KEY, url); }
 
 function init() {
-  showDebug('init() started');
   const saved = getSavedUrl();
-  showDebug('saved URL: ' + (saved ? saved.slice(0,40)+'…' : 'none'));
   if (saved) {
     document.getElementById('sheets-url').value = saved;
-    loadFromSheets(true).catch(e => {
-      showDebug('Auto-load failed: ' + e.message);
+    loadFromSheets(true).catch(() => {
       document.getElementById('loading-card-cl').style.display = 'none';
     });
   } else {
-    showDebug('No saved URL, showing empty state');
     document.getElementById('loading-card-cl').style.display = 'none';
   }
 }
