@@ -109,7 +109,9 @@ h1 span{color:var(--sun);}
 
 /* ASSEGNAZIONE MANUALE */
 .assign-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
-@media(max-width:640px){.assign-grid{grid-template-columns:1fr;}}
+.assign-col.ex{background:rgba(158,158,158,.07);border:2px solid rgba(158,158,158,.2);}
+.assign-col-title.ex{color:var(--fascia-ex);}
+@media(max-width:640px){.assign-grid{grid-template-columns:1fr!important;}}
 .assign-col{border-radius:16px;padding:16px;min-height:200px;}
 .assign-col.a{background:rgba(26,107,138,.07);border:2px solid rgba(26,107,138,.2);}
 .assign-col.b{background:rgba(123,45,139,.07);border:2px solid rgba(123,45,139,.2);}
@@ -122,7 +124,7 @@ h1 span{color:var(--sun);}
 .assign-player{display:flex;align-items:center;gap:9px;background:white;border-radius:10px;padding:8px 12px;margin-bottom:7px;box-shadow:0 1px 6px rgba(13,74,99,.07);cursor:pointer;transition:all .15s;border:1.5px solid transparent;user-select:none;}
 .assign-player:hover{transform:translateX(2px);box-shadow:0 3px 12px rgba(13,74,99,.12);}
 .assign-player.a:hover{border-color:rgba(123,45,139,.3);}
-.assign-player.b:hover{border-color:rgba(26,107,138,.3);}
+.assign-player.ex-chip:hover{border-color:rgba(26,107,138,.3);}
 .assign-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
 .assign-name{flex:1;font-size:13px;font-weight:600;color:var(--text);}
 .assign-pts{font-size:11px;font-weight:700;color:var(--muted);}
@@ -191,8 +193,36 @@ h1 span{color:var(--sun);}
   .vs-txt{font-size:20px;}
   .player-table th:nth-child(n+5),.player-row-tr td:nth-child(n+5){display:none;}
 }
-@media print{
-  body{background:white;}
+/* ADMIN */
+.result-row{background:white;border-radius:14px;padding:14px 16px;margin-bottom:10px;border:1.5px solid rgba(26,107,138,.1);box-shadow:0 2px 8px rgba(13,74,99,.06);}
+.result-row.done{border-color:rgba(39,174,96,.3);background:rgba(39,174,96,.03);}
+.result-match-header{font-size:11px;font-weight:700;color:var(--ocean);letter-spacing:.8px;margin-bottom:10px;}
+.result-match-header.b{color:#7B2D8B;}
+.result-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-bottom:12px;}
+.result-team-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;}
+.result-team-name.r{text-align:right;}
+.result-vs{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--coral);text-align:center;}
+.score-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.score-label{font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;}
+.score-input{width:52px;border:1.5px solid rgba(26,107,138,.25);border-radius:8px;background:white;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--ocean-deep);text-align:center;padding:6px 4px;outline:none;transition:border-color .2s;}
+.score-input:focus{border-color:var(--ocean);}
+.score-sep{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--muted);}
+.tiebreak-note{font-size:11px;color:var(--muted);margin-left:4px;}
+.winner-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:6px;}
+.winner-a{background:rgba(39,174,96,.15);color:var(--green);}
+.winner-b{background:rgba(39,174,96,.15);color:var(--green);}
+.result-pts{font-size:12px;color:var(--muted);margin-top:6px;}
+
+.jolly-chip{display:flex;align-items:center;gap:8px;background:white;border:1.5px solid rgba(214,136,16,.2);border-radius:10px;padding:8px 12px;cursor:pointer;transition:all .15s;user-select:none;}
+.jolly-chip.selected{background:rgba(214,136,16,.1);border-color:var(--yellow);}
+.jolly-chip:hover{border-color:var(--yellow);}
+.jolly-chip-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
+.jolly-chip-name{flex:1;font-size:13px;font-weight:600;color:var(--text);}
+.jolly-chip-rem{font-size:11px;color:var(--muted);}
+.jolly-check{font-size:16px;opacity:0;transition:opacity .15s;}
+.jolly-chip.selected .jolly-check{opacity:1;}
+
+@media print{#page-admin{display:none!important;}}
   .bg,.wave,.actions,header .subtitle,.nav,#settings-section{display:none;}
   .card{box-shadow:none;border:1.5px solid #ddd;backdrop-filter:none;}
   .match-tabs{display:none;}
@@ -214,6 +244,7 @@ h1 span{color:var(--sun);}
 <div class="nav">
   <div class="nav-tab active" onclick="showPage('classifica')">🏅 CLASSIFICA</div>
   <div class="nav-tab" onclick="showPage('giornata')">🎾 GIORNATA</div>
+  <div class="nav-tab" onclick="showPage('admin')">🔐 ADMIN</div>
   <div class="nav-tab" onclick="showPage('settings')">⚙️ IMPOSTAZIONI</div>
 </div>
 
@@ -312,11 +343,11 @@ h1 span{color:var(--sun);}
       <div class="card">
         <div class="card-title"><div class="icon-b">↕️</div>ASSEGNA I GIOCATORI ALLE FASCE</div>
         <div class="assign-info">
-          Di default i primi <strong>12</strong> giocatori per punti vanno in Fascia A, i successivi <strong>12</strong> in Fascia B.
-          Tocca un giocatore per spostarlo nell'altra fascia. Ogni fascia deve avere esattamente <strong>12 giocatori</strong> per generare le partite.
+          Di default i primi <strong>12</strong> giocatori vanno in Fascia A, i successivi <strong>12</strong> in Fascia B, gli ultimi <strong>6</strong> sono esclusi.
+          Tocca un giocatore per spostarlo — puoi spostarlo in qualsiasi fascia. Fascia A e B devono avere esattamente <strong>12 giocatori</strong> ciascuna.
         </div>
         <div class="assign-warning" id="assign-warning"></div>
-        <div class="assign-grid">
+        <div class="assign-grid" style="grid-template-columns:1fr 1fr 1fr">
           <div class="assign-col a">
             <div class="assign-col-title a">
               🔵 FASCIA A
@@ -330,6 +361,13 @@ h1 span{color:var(--sun);}
               <span class="assign-count" id="count-b">12/12</span>
             </div>
             <div id="assign-list-b"></div>
+          </div>
+          <div class="assign-col ex">
+            <div class="assign-col-title ex">
+              ⚫ ESCLUSI
+              <span class="assign-count ok" id="count-ex">6</span>
+            </div>
+            <div id="assign-list-ex"></div>
           </div>
         </div>
         <div class="actions">
@@ -395,6 +433,72 @@ h1 span{color:var(--sun);}
   </div>
 </div>
 
+<!-- PAGE: ADMIN -->
+<div id="page-admin" style="display:none">
+
+  <!-- LOGIN -->
+  <div id="admin-login">
+    <div class="card">
+      <div class="card-title"><div class="icon-b">🔐</div>ACCESSO ADMIN</div>
+      <div style="max-width:340px">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Inserisci la password per accedere all'area di gestione.</div>
+        <div class="url-box">
+          <input type="password" id="admin-psw" placeholder="Password…" onkeydown="if(event.key==='Enter')adminLogin()">
+          <button class="btn btn-primary btn-sm" onclick="adminLogin()">ENTRA</button>
+        </div>
+        <div class="err" id="admin-err"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-panel" style="display:none">
+
+    <!-- No data -->
+    <div class="card" id="admin-no-data" style="display:none">
+      <div style="text-align:center;padding:30px 20px;color:var(--muted)">
+        <div style="font-size:48px;margin-bottom:16px">📋</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--ocean-deep);margin-bottom:8px">Nessuna giornata generata</div>
+        <div style="font-size:14px">Vai nella sezione Giornata, assegna i giocatori e genera le partite</div>
+      </div>
+    </div>
+
+    <!-- Jolly -->
+    <div class="card" id="admin-jolly-card">
+      <div class="card-title"><div class="icon-b" style="background:#D68910">🃏</div>GESTIONE JOLLY</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px">I giocatori nella sezione Jolly riceveranno 7 punti e un jolly usato verrà scalato.</div>
+      <div id="jolly-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px"></div>
+    </div>
+
+    <!-- Risultati Fascia A -->
+    <div class="card" id="admin-matches-a">
+      <div class="card-title"><div class="icon-b" style="background:var(--fascia-a)">🎾</div>RISULTATI FASCIA A</div>
+      <div id="results-list-a"></div>
+    </div>
+
+    <!-- Risultati Fascia B -->
+    <div class="card" id="admin-matches-b">
+      <div class="card-title"><div class="icon-b" style="background:#7B2D8B">🎾</div>RISULTATI FASCIA B</div>
+      <div id="results-list-b"></div>
+    </div>
+
+    <!-- Save -->
+    <div class="card" id="admin-save-card">
+      <div class="card-title"><div class="icon-b" style="background:var(--green)">💾</div>SALVA E AGGIORNA CLASSIFICA</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px">
+        Inserisci tutti i risultati e poi clicca Salva. I punti verranno calcolati e il foglio Google Sheets verrà aggiornato automaticamente.
+      </div>
+      <div class="err" id="save-err"></div>
+      <div class="ok-msg" id="save-ok"></div>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="saveResults()" id="save-btn">💾 SALVA SUL FOGLIO</button>
+        <button class="btn btn-secondary btn-sm" onclick="adminLogout()">🔒 ESCI</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- PAGE: SETTINGS -->
 <div id="page-settings" style="display:none">
   <div class="card">
@@ -417,8 +521,18 @@ h1 span{color:var(--sun);}
 <script>
 // ── CONSTANTS ──
 const N = 12, ROUNDS = 4, MPR = 3;
-const STORAGE_KEY = 'beachtennis_sheets_url_v2';
+const STORAGE_KEY = 'beachtennis_sheets_url_v3';
 const TOTAL_JOLLY = 4;
+
+// Global error handler - catches uncaught promise rejections on iOS Safari
+window.addEventListener('unhandledrejection', e => {
+  console.error('Unhandled rejection:', e.reason);
+  e.preventDefault();
+});
+window.onerror = (msg, src, line, col, err) => {
+  console.error('Global error:', msg, 'line:', line, err);
+  return true;
+};
 
 // ── STATE ──
 let allPlayers = [];
@@ -426,14 +540,16 @@ let scheduleA = null, scheduleB = null;
 let currentFascia = 'a';
 
 // ── NAVIGATION ──
+const PAGES = ['classifica','giornata','admin','settings'];
 function showPage(page) {
-  ['classifica','giornata','settings'].forEach(p => {
+  PAGES.forEach(p => {
     document.getElementById(`page-${p}`).style.display = p===page ? 'block' : 'none';
   });
   document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    t.classList.toggle('active', ['classifica','giornata','settings'][i] === page);
+    t.classList.toggle('active', PAGES[i] === page);
   });
   if (page === 'giornata') initGiornata();
+  if (page === 'admin') initAdmin();
 }
 
 // ── GOOGLE SHEETS ──
@@ -444,7 +560,10 @@ function init() {
   const saved = getSavedUrl();
   if (saved) {
     document.getElementById('sheets-url').value = saved;
-    loadFromSheets(true);
+    loadFromSheets(true).catch(e => {
+      console.warn('Auto-load failed:', e);
+      document.getElementById('loading-card-cl').style.display = 'none';
+    });
   } else {
     document.getElementById('loading-card-cl').style.display = 'none';
   }
@@ -670,44 +789,55 @@ function resetAssignment() {
 }
 
 function renderAssignment() {
-  const listA = document.getElementById('assign-list-a');
-  const listB = document.getElementById('assign-list-b');
-  const fasciaA = allPlayers.filter(p => p.fascia === 'A').sort((a,b) => a.globalRank - b.globalRank);
-  const fasciaB = allPlayers.filter(p => p.fascia === 'B').sort((a,b) => a.globalRank - b.globalRank);
+  const listA  = document.getElementById('assign-list-a');
+  const listB  = document.getElementById('assign-list-b');
+  const listEx = document.getElementById('assign-list-ex');
+  const fasciaA  = allPlayers.filter(p => p.fascia === 'A').sort((a,b) => a.globalRank - b.globalRank);
+  const fasciaB  = allPlayers.filter(p => p.fascia === 'B').sort((a,b) => a.globalRank - b.globalRank);
+  const fasciaEx = allPlayers.filter(p => p.fascia === 'EX').sort((a,b) => a.globalRank - b.globalRank);
 
-  listA.innerHTML = fasciaA.map(p => playerAssignChip(p, 'a')).join('');
-  listB.innerHTML = fasciaB.map(p => playerAssignChip(p, 'b')).join('');
+  listA.innerHTML  = fasciaA.map(p  => playerAssignChip(p, 'A')).join('');
+  listB.innerHTML  = fasciaB.map(p  => playerAssignChip(p, 'B')).join('');
+  listEx.innerHTML = fasciaEx.map(p => playerAssignChip(p, 'EX')).join('');
 
   const cntA = document.getElementById('count-a');
   const cntB = document.getElementById('count-b');
-  cntA.textContent = `${fasciaA.length}/12`;
-  cntA.className = `assign-count ${fasciaA.length === 12 ? 'ok' : 'warn'}`;
-  cntB.textContent = `${fasciaB.length}/12`;
-  cntB.className = `assign-count ${fasciaB.length === 12 ? 'ok' : 'warn'}`;
+  const cntEx = document.getElementById('count-ex');
+  cntA.textContent  = `${fasciaA.length}/12`;
+  cntA.className    = `assign-count ${fasciaA.length === 12 ? 'ok' : 'warn'}`;
+  cntB.textContent  = `${fasciaB.length}/12`;
+  cntB.className    = `assign-count ${fasciaB.length === 12 ? 'ok' : 'warn'}`;
+  cntEx.textContent = `${fasciaEx.length}`;
+  cntEx.className   = 'assign-count ok';
 
   document.getElementById('assign-warning').style.display = 'none';
 }
 
-function playerAssignChip(p, currentFascia) {
+function playerAssignChip(p, fascia) {
   const color = AVATAR_COLORS[p.globalRank - 1] || '#1A6B8A';
   const initials = getInitials(p.name);
-  const arrow = currentFascia === 'a' ? '→ B' : '← A';
   const avatarHtmlStr = p.photo
     ? `<img class="assign-avatar" src="${p.photo}" style="object-fit:cover" onerror="this.style.display='none'">`
     : `<div class="assign-avatar" style="background:${color}">${initials}</div>`;
-  return `<div class="assign-player ${currentFascia}" onclick="movePlayer(${p.id})">
+
+  // Arrow label: cycle A→B→EX→A
+  const arrows = { A: '→ B', B: '→ Ex', EX: '→ A' };
+  const chipClass = fascia === 'EX' ? 'assign-player ex-chip' : `assign-player ${fascia.toLowerCase()}`;
+
+  return `<div class="${chipClass}" onclick="movePlayer(${p.id})">
     <span class="assign-rank">${p.globalRank}</span>
     ${avatarHtmlStr}
     <span class="assign-name">${p.name}</span>
     <span class="assign-pts">${p.pts} pt</span>
-    <span class="assign-arrow">${arrow}</span>
+    <span class="assign-arrow">${arrows[fascia]}</span>
   </div>`;
 }
 
 function movePlayer(playerId) {
   const p = allPlayers.find(p => p.id === playerId);
-  if (!p || p.fascia === 'EX') return;
-  p.fascia = p.fascia === 'A' ? 'B' : 'A';
+  if (!p) return;
+  // Cycle: A → B → EX → A
+  p.fascia = p.fascia === 'A' ? 'B' : p.fascia === 'B' ? 'EX' : 'A';
   renderAssignment();
 }
 
@@ -824,6 +954,267 @@ function showRound(f, r) {
 }
 
 function printFascia(f) { showRound(f,-1); setTimeout(()=>window.print(),150); }
+
+// ── ADMIN ──
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyI2BUhILX-4IIJtVYYvLCd5dMw7Gjf81WabofVMtryJyNs_WDNN64IXV5bbbntzuU/exec';
+const ADMIN_KEY = 'beachtennis_admin_auth';
+let adminAuth = false;
+let jollySelected = new Set(); // player ids selected for jolly
+let matchResults = {}; // matchId -> {scoreA, scoreB}
+
+function adminLogin() {
+  const psw = document.getElementById('admin-psw').value.trim();
+  if (!psw) return;
+  // Store temporarily in session
+  sessionStorage.setItem(ADMIN_KEY, psw);
+  adminAuth = true;
+  document.getElementById('admin-err').style.display = 'none';
+  document.getElementById('admin-login').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'block';
+  renderAdminPanel();
+}
+
+function adminLogout() {
+  sessionStorage.removeItem(ADMIN_KEY);
+  adminAuth = false;
+  document.getElementById('admin-login').style.display = 'block';
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-psw').value = '';
+}
+
+function initAdmin() {
+  const saved = sessionStorage.getItem(ADMIN_KEY);
+  if (saved) {
+    adminAuth = true;
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    renderAdminPanel();
+  } else {
+    document.getElementById('admin-login').style.display = 'block';
+    document.getElementById('admin-panel').style.display = 'none';
+  }
+}
+
+function renderAdminPanel() {
+  const hasData = scheduleA && scheduleB;
+  document.getElementById('admin-no-data').style.display = hasData ? 'none' : 'block';
+  document.getElementById('admin-jolly-card').style.display = hasData ? 'block' : 'none';
+  document.getElementById('admin-matches-a').style.display = hasData ? 'block' : 'none';
+  document.getElementById('admin-matches-b').style.display = hasData ? 'block' : 'none';
+  document.getElementById('admin-save-card').style.display = hasData ? 'block' : 'none';
+  if (!hasData) return;
+
+  renderJollySection();
+  renderResultsSection('a');
+  renderResultsSection('b');
+}
+
+function renderJollySection() {
+  // Show all players NOT in EX (playing players) + EX players too - anyone can use jolly
+  const playingPlayers = allPlayers
+    .filter(p => p.fascia !== 'EX' || true) // show all 30
+    .sort((a,b) => a.globalRank - b.globalRank);
+
+  const list = document.getElementById('jolly-list');
+  list.innerHTML = playingPlayers.map(p => {
+    const color = AVATAR_COLORS[p.globalRank-1] || '#1A6B8A';
+    const initials = getInitials(p.name);
+    const rem = TOTAL_JOLLY - p.jolly;
+    const sel = jollySelected.has(p.id);
+    const disabled = rem <= 0 && !sel;
+    const onclick = disabled ? '' : `onclick="toggleJolly(${p.id})"`;
+    const style = disabled ? 'opacity:.4;cursor:not-allowed' : '';
+    return `<div class="jolly-chip${sel?' selected':''}" ${onclick} style="${style}">
+      <div class="jolly-chip-avatar" style="background:${color}">${initials}</div>
+      <div>
+        <div class="jolly-chip-name">${p.name}</div>
+        <div class="jolly-chip-rem">${rem} jolly rimanenti</div>
+      </div>
+      <span class="jolly-check">🃏</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleJolly(playerId) {
+  if (jollySelected.has(playerId)) jollySelected.delete(playerId);
+  else jollySelected.add(playerId);
+  renderJollySection();
+}
+
+function renderResultsSection(f) {
+  const rounds = f === 'a' ? scheduleA : scheduleB;
+  const listEl = document.getElementById(`results-list-${f}`);
+  const isB = f === 'b';
+  let html = '';
+
+  rounds.forEach((round, ri) => {
+    round.forEach((match, mi) => {
+      const matchId = `${f}-${ri}-${mi}`;
+      const res = matchResults[matchId] || {scoreA:'', scoreB:''};
+      const isDone = res.scoreA !== '' && res.scoreB !== '';
+      const nameA = match.teamA.map(p=>p.name).join(' & ');
+      const nameB = match.teamB.map(p=>p.name).join(' & ');
+
+      // Determine winner label if score entered
+      let winnerHtml = '';
+      if (isDone) {
+        const sa = parseInt(res.scoreA), sb = parseInt(res.scoreB);
+        const isTB = (sa===6 && sb===5) || (sa===5 && sb===6);
+        if (sa > sb) winnerHtml = `<span class="winner-badge winner-a">✓ ${nameA.split(' & ')[0]}…</span>`;
+        else if (sb > sa) winnerHtml = `<span class="winner-badge winner-b">✓ ${nameB.split(' & ')[0]}…</span>`;
+        if (isTB) winnerHtml += `<span style="font-size:11px;color:var(--yellow);font-weight:700;margin-left:6px">TIEBREAK</span>`;
+      }
+
+      html += `<div class="result-row${isDone?' done':''}">
+        <div class="result-match-header${isB?' b':''}">ROUND ${ri+1} · CAMPO ${mi+1}</div>
+        <div class="result-teams">
+          <div class="result-team-name">${match.teamA.map(p=>`<div>${p.name}</div>`).join('')}</div>
+          <div class="result-vs">VS</div>
+          <div class="result-team-name r">${match.teamB.map(p=>`<div>${p.name}</div>`).join('')}</div>
+        </div>
+        <div class="score-row">
+          <span class="score-label">PUNTEGGIO:</span>
+          <input class="score-input" type="number" min="0" max="6" value="${res.scoreA}"
+            placeholder="–" onchange="setScore('${matchId}','a',this.value)" oninput="setScore('${matchId}','a',this.value)">
+          <span class="score-sep">–</span>
+          <input class="score-input" type="number" min="0" max="6" value="${res.scoreB}"
+            placeholder="–" onchange="setScore('${matchId}','b',this.value)" oninput="setScore('${matchId}','b',this.value)">
+          <span class="tiebreak-note">(in caso di 5-5 il risultato diventa 6-5)</span>
+        </div>
+        ${winnerHtml ? `<div class="result-pts">${winnerHtml}</div>` : ''}
+      </div>`;
+    });
+  });
+
+  listEl.innerHTML = html;
+}
+
+function setScore(matchId, side, value) {
+  if (!matchResults[matchId]) matchResults[matchId] = {scoreA:'', scoreB:''};
+  matchResults[matchId][side==='a'?'scoreA':'scoreB'] = value;
+  // Re-render just the winner labels without resetting inputs
+  const [f, ri, mi] = matchId.split('-');
+  const rounds = f==='a' ? scheduleA : scheduleB;
+  const match = rounds[parseInt(ri)][parseInt(mi)];
+  const res = matchResults[matchId];
+  const isDone = res.scoreA !== '' && res.scoreB !== '';
+  const row = document.querySelector(`[data-match-id="${matchId}"]`);
+  // Simple approach: full re-render of the section (inputs retain values via matchResults)
+  renderResultsSection(f);
+}
+
+// Calculate points from results and save to Sheets
+async function saveResults() {
+  const btn = document.getElementById('save-btn');
+  const errEl = document.getElementById('save-err');
+  const okEl = document.getElementById('save-ok');
+  errEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  // Validate: all matches must have results
+  const allMatches = [
+    ...scheduleA.flatMap((r,ri)=>r.map((m,mi)=>({f:'a',ri,mi,match:m}))),
+    ...scheduleB.flatMap((r,ri)=>r.map((m,mi)=>({f:'b',ri,mi,match:m})))
+  ];
+
+  const missing = allMatches.filter(({f,ri,mi}) => {
+    const id=`${f}-${ri}-${mi}`;
+    const res=matchResults[id];
+    return !res || res.scoreA==='' || res.scoreB==='';
+  });
+
+  if (missing.length > 0) {
+    errEl.textContent = `⚠️ Mancano ${missing.length} risultati. Inserisci tutti i punteggi prima di salvare.`;
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Clone players to compute updated stats
+  const updated = allPlayers.map(p => ({...p}));
+  const byName = {};
+  updated.forEach(p => { byName[p.name] = p; });
+
+  // Apply jolly points
+  jollySelected.forEach(id => {
+    const p = updated.find(p => p.id === id);
+    if (!p) return;
+    p.pts += 7;
+    p.jolly = Math.min(p.jolly + 1, TOTAL_JOLLY);
+  });
+
+  // Apply match results
+  allMatches.forEach(({f,ri,mi,match}) => {
+    const id = `${f}-${ri}-${mi}`;
+    const res = matchResults[id];
+    let sa = parseInt(res.scoreA), sb = parseInt(res.scoreB);
+
+    // Tiebreak: 5-5 becomes 6-5
+    if (sa === 5 && sb === 5) { sa = 6; sb = 5; }
+
+    const isTB = (sa===6&&sb===5)||(sa===5&&sb===6);
+    const teamA = match.teamA.map(p => byName[p.name]).filter(Boolean);
+    const teamB = match.teamB.map(p => byName[p.name]).filter(Boolean);
+
+    if (sa > sb) {
+      // Team A wins
+      teamA.forEach(p => { p.pts+=3; p.pv+=1; p.pg+=1; if(isTB) p.tv+=1; });
+      teamB.forEach(p => { if(isTB){p.pts+=1;p.tp+=1;} p.pp+=1; p.pg+=1; });
+    } else {
+      // Team B wins
+      teamB.forEach(p => { p.pts+=3; p.pv+=1; p.pg+=1; if(isTB) p.tv+=1; });
+      teamA.forEach(p => { if(isTB){p.pts+=1;p.tp+=1;} p.pp+=1; p.pg+=1; });
+    }
+  });
+
+  // Send to Google Sheets
+  btn.textContent = '⏳ SALVATAGGIO…';
+  btn.disabled = true;
+
+  try {
+    const psw = sessionStorage.getItem(ADMIN_KEY);
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        password: psw,
+        action: 'updatePlayers',
+        players: updated.map(p => ({
+          name: p.name,
+          pts:  p.pts,
+          pg:   p.pg,
+          pv:   p.pv,
+          pp:   p.pp,
+          tv:   p.tv,
+          tp:   p.tp,
+          jolly:p.jolly
+        }))
+      })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Errore sconosciuto');
+
+    // Update local state
+    updated.forEach(u => {
+      const p = allPlayers.find(p=>p.name===u.name);
+      if(p) Object.assign(p, u);
+    });
+
+    // Reset results and jolly for next session
+    matchResults = {};
+    jollySelected = new Set();
+
+    okEl.textContent = '✓ Classifica aggiornata con successo sul foglio Google Sheets!';
+    okEl.style.display = 'block';
+    renderClassifica();
+    renderAdminPanel();
+
+  } catch(e) {
+    errEl.textContent = 'Errore nel salvataggio: ' + e.message;
+    errEl.style.display = 'block';
+  } finally {
+    btn.textContent = '💾 SALVA SUL FOGLIO';
+    btn.disabled = false;
+  }
+}
 
 // ── INIT ──
 init();
