@@ -341,21 +341,6 @@ h1 span { color: #F5C842; }
 .wbadge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #d5f5e3; color: #27AE60; margin-top: 6px; }
 .tbbadge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #fef9e7; color: #D68910; margin-top: 6px; margin-left: 4px; }
 
-.jolly-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
-.jchip {
-  display: flex; align-items: center; gap: 8px;
-  background: white; border: 1.5px solid #e0d5c0;
-  border-radius: 10px; padding: 8px 12px; cursor: pointer;
-  transition: all 0.15s; user-select: none;
-}
-.jchip.sel { background: #fef9e7; border-color: #D68910; }
-.jchip:hover { border-color: #D68910; }
-.jav { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; flex-shrink: 0; }
-.jname { flex: 1; font-size: 13px; font-weight: 600; }
-.jrem { font-size: 11px; color: #5A6A7A; }
-.jcheck { font-size: 15px; opacity: 0; transition: opacity 0.15s; }
-.jchip.sel .jcheck { opacity: 1; }
-
 /* NO DATA */
 .no-data { text-align: center; padding: 32px 20px; color: #5A6A7A; }
 .no-data .icon { font-size: 44px; margin-bottom: 12px; }
@@ -387,9 +372,35 @@ h1 span { color: #F5C842; }
 <!-- NAV -->
 <div class="nav">
   <div class="nav-tab active" onclick="showPage('classifica')">🏅 CLASSIFICA</div>
-  <div class="nav-tab" id="nav-giornata" style="display:none" onclick="showPage('giornata')">🎾 GIORNATA</div>
+  <div class="nav-tab" id="nav-pubblica" style="display:none" onclick="showPage('pubblica')">🎾 GIORNATA</div>
+  <div class="nav-tab" id="nav-giornata" style="display:none" onclick="showPage('giornata')">⚙️ GESTISCI</div>
   <div class="nav-tab" id="nav-admin" onclick="showPage('admin')">🔐 ADMIN</div>
-  <div class="nav-tab" id="nav-settings" style="display:none" onclick="showPage('settings')">⚙️ CONFIG</div>
+  <div class="nav-tab" id="nav-settings" style="display:none" onclick="showPage('settings')">📋 CONFIG</div>
+</div>
+
+<!-- PAGE: GIORNATA PUBBLICA -->
+<div id="page-pubblica" style="display:none">
+  <div class="card" id="pub-loading" style="display:none">
+    <div class="loading"><div class="spinner"></div><p>Caricamento giornata…</p></div>
+  </div>
+  <div class="card" id="pub-nodata" style="display:none">
+    <div class="no-data"><div class="icon">📅</div><div class="title">Nessuna giornata pubblicata</div><div>L'admin non ha ancora pubblicato la giornata di oggi</div></div>
+  </div>
+  <div id="pub-content" style="display:none">
+    <div class="card">
+      <div class="card-title"><div class="icon-b">🎾</div><span id="pub-title">GIORNATA</span></div>
+      <div class="fascia-sel" id="pub-fascia-sel">
+        <div class="fs-btn a sel" id="pub-fs-a" onclick="pubSelFascia('a')">🔵 FASCIA A</div>
+        <div class="fs-btn b" id="pub-fs-b" onclick="pubSelFascia('b')">🟣 FASCIA B</div>
+      </div>
+      <div id="pub-matches-a"></div>
+      <div id="pub-matches-b" style="display:none"></div>
+    </div>
+    <div class="actions" id="pub-admin-actions" style="display:none">
+      <button class="btn btn-secondary btn-sm" onclick="showPage('giornata')">✏️ MODIFICA PARTITE</button>
+      <button class="btn btn-primary btn-sm" onclick="unpublish()">🔒 RIMUOVI PUBBLICAZIONE</button>
+    </div>
+  </div>
 </div>
 
 <!-- PAGE: CLASSIFICA -->
@@ -481,7 +492,10 @@ h1 span { color: #F5C842; }
       </div>
       <div class="actions" style="margin-top:8px">
         <button class="btn btn-secondary btn-sm" onclick="backToAssign()">✏️ MODIFICA ASSEGNAZIONE</button>
+        <button class="btn btn-primary" onclick="publishGiornata()" id="btn-publish">📢 PUBBLICA GIORNATA</button>
       </div>
+      <div class="msg-ok" id="publish-ok" style="margin-top:12px"></div>
+      <div class="msg-err" id="publish-err" style="margin-top:12px"></div>
     </div>
   </div>
 </div>
@@ -504,11 +518,6 @@ h1 span { color: #F5C842; }
   <div id="admin-panel" style="display:none">
     <div class="card" id="admin-nodata" style="display:none">
       <div class="no-data"><div class="icon">📋</div><div class="title">Nessuna giornata generata</div><div>Vai in Giornata, assegna i giocatori e genera le partite</div></div>
-    </div>
-    <div class="card" id="admin-jolly">
-      <div class="card-title"><div class="icon-b" style="background:#D68910">🃏</div>GESTIONE JOLLY</div>
-      <div style="font-size:13px;color:#5A6A7A;margin-bottom:14px">Seleziona i giocatori che hanno usato il jolly oggi: riceveranno 7 punti.</div>
-      <div class="jolly-grid" id="jolly-list"></div>
     </div>
     <div class="card" id="admin-ra">
       <div class="card-title"><div class="icon-b" style="background:#1A6B8A">🎾</div>RISULTATI FASCIA A</div>
@@ -552,7 +561,7 @@ h1 span { color: #F5C842; }
 </div><!-- /page-wrap -->
 
 <script>
-const PAGES = ['classifica','giornata','admin','settings'];
+const PAGES = ['classifica','pubblica','giornata','admin','settings'];
 const STORAGE_KEY = 'bt_url_v4';
 const ADMIN_KEY = 'bt_admin';
 const TOTAL_JOLLY = 4;
@@ -566,6 +575,7 @@ let allPlayers = [];
 let schedA = null, schedB = null;
 let jollySelected = new Set();
 let matchResults = {};
+let isAdmin = false;
 
 // ── NAV ──
 function showPage(page) {
@@ -573,22 +583,25 @@ function showPage(page) {
     const el = document.getElementById('page-' + p);
     if (el) el.style.display = p === page ? 'block' : 'none';
   });
-  document.querySelectorAll('.nav-tab').forEach((t, i) => {
-    t.classList.toggle('active', PAGES[i] === page);
-  });
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  // Map page to tab index
+  const navIds = ['nav-cl','nav-pubblica','nav-giornata','nav-admin','nav-settings'];
+  const idx = PAGES.indexOf(page);
+  const tabs = document.querySelectorAll('.nav-tab');
+  if (tabs[idx]) tabs[idx].classList.add('active');
   if (page === 'giornata') initGiornata();
   if (page === 'admin') initAdmin();
+  if (page === 'pubblica') initPubblica();
 }
 
-// ── SHEETS ──
+function setAdminUI(logged) {
+  isAdmin = logged;
+  document.getElementById('nav-giornata').style.display = logged ? '' : 'none';
+  document.getElementById('nav-settings').style.display = logged ? '' : 'none';
+}
+
 function getSavedUrl() { try { return localStorage.getItem(STORAGE_KEY) || ''; } catch(e) { return ''; } }
 function saveUrl(url) { try { localStorage.setItem(STORAGE_KEY, url); } catch(e) {} }
-
-function init() {
-  const saved = getSavedUrl() || SHEETS_DEFAULT_URL;
-  document.getElementById('sheets-url').value = saved;
-  loadFromSheets(true);
-}
 
 async function loadFromSheets(silent) {
   const url = document.getElementById('sheets-url').value.trim();
@@ -858,8 +871,7 @@ function adminLogin() {
   document.getElementById('admin-err').style.display='none';
   document.getElementById('admin-login').style.display='none';
   document.getElementById('admin-panel').style.display='block';
-  document.getElementById('nav-giornata').style.display='';
-  document.getElementById('nav-settings').style.display='';
+  setAdminUI(true);
   renderAdmin();
 }
 
@@ -868,8 +880,7 @@ function adminLogout() {
   document.getElementById('admin-login').style.display='block';
   document.getElementById('admin-panel').style.display='none';
   document.getElementById('admin-psw').value='';
-  document.getElementById('nav-giornata').style.display='none';
-  document.getElementById('nav-settings').style.display='none';
+  setAdminUI(false);
   showPage('classifica');
 }
 
@@ -878,8 +889,7 @@ function initAdmin() {
   if(saved){
     document.getElementById('admin-login').style.display='none';
     document.getElementById('admin-panel').style.display='block';
-    document.getElementById('nav-giornata').style.display='';
-    document.getElementById('nav-settings').style.display='';
+    setAdminUI(true);
     renderAdmin();
   } else {
     document.getElementById('admin-login').style.display='block';
@@ -890,30 +900,11 @@ function initAdmin() {
 function renderAdmin() {
   const has=schedA&&schedB;
   document.getElementById('admin-nodata').style.display=has?'none':'block';
-  document.getElementById('admin-jolly').style.display=has?'block':'none';
   document.getElementById('admin-ra').style.display=has?'block':'none';
   document.getElementById('admin-rb').style.display=has?'block':'none';
   document.getElementById('admin-save').style.display=has?'block':'none';
   if(!has) return;
-  renderJolly(); renderResults('a'); renderResults('b');
-}
-
-function renderJolly() {
-  document.getElementById('jolly-list').innerHTML=allPlayers.sort((a,b)=>a.globalRank-b.globalRank).map(p=>{
-    const color=COLORS[p.globalRank-1]||'#1A6B8A';
-    const rem=TOTAL_JOLLY-p.jolly;
-    const sel=jollySelected.has(p.id);
-    const dis=rem<=0&&!sel;
-    return '<div class="jchip'+(sel?' sel':'')+'" '+(dis?'style="opacity:.4"':('onclick="toggleJolly('+p.id+')"'))+'>' +
-      '<div class="jav" style="background:'+color+'">'+getInitials(p.name)+'</div>'+
-      '<div><div class="jname">'+p.name+'</div><div class="jrem">'+rem+' jolly rim.</div></div>'+
-      '<span class="jcheck">🃏</span></div>';
-  }).join('');
-}
-
-function toggleJolly(id) {
-  if(jollySelected.has(id)) jollySelected.delete(id); else jollySelected.add(id);
-  renderJolly();
+  renderResults('a'); renderResults('b');
 }
 
 function renderResults(f) {
@@ -999,11 +990,133 @@ async function saveResults() {
   }
 }
 
+// ── PUBBLICA ──
+async function publishGiornata() {
+  const btn = document.getElementById('btn-publish');
+  hideMsg('publish-ok'); hideMsg('publish-err');
+  if (!schedA || !schedB) { showMsg('publish-err','Genera prima le partite.'); return; }
+
+  btn.textContent = '⏳ PUBBLICAZIONE…'; btn.disabled = true;
+
+  // Build rows for Sheets
+  const today = new Date().toLocaleDateString('it-IT');
+  const matches = [];
+  schedA.forEach((round, ri) => round.forEach((m, mi) => {
+    matches.push({ fascia:'A', round:ri+1, campo:mi+1, g1a:m.teamA[0].name, g2a:m.teamA[1].name, g1b:m.teamB[0].name, g2b:m.teamB[1].name, pubblicata:today });
+  }));
+  schedB.forEach((round, ri) => round.forEach((m, mi) => {
+    matches.push({ fascia:'B', round:ri+1, campo:mi+1, g1a:m.teamA[0].name, g2a:m.teamA[1].name, g1b:m.teamB[0].name, g2b:m.teamB[1].name, pubblicata:today });
+  }));
+
+  try {
+    let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
+    const r = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({ password:psw, action:'publishGiornata', matches }) });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error||'Errore');
+    showMsg('publish-ok', '✓ Giornata pubblicata! Visibile a tutti nella tab 🎾 GIORNATA.');
+    // Show public tab for everyone
+    document.getElementById('nav-pubblica').style.display = '';
+  } catch(e) {
+    showMsg('publish-err', 'Errore: ' + e.message);
+  } finally {
+    btn.textContent = '📢 PUBBLICA GIORNATA'; btn.disabled = false;
+  }
+}
+
+async function unpublish() {
+  if (!confirm('Vuoi rimuovere la pubblicazione della giornata?')) return;
+  try {
+    let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
+    await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({ password:psw, action:'publishGiornata', matches:[] }) });
+    document.getElementById('nav-pubblica').style.display = 'none';
+    showPage('classifica');
+  } catch(e) { alert('Errore: ' + e.message); }
+}
+
+async function initPubblica() {
+  document.getElementById('pub-loading').style.display = 'block';
+  document.getElementById('pub-nodata').style.display = 'none';
+  document.getElementById('pub-content').style.display = 'none';
+  try {
+    const r = await fetch(SCRIPT_URL + '?action=getGiornata');
+    const data = await r.json();
+    document.getElementById('pub-loading').style.display = 'none';
+    if (!data.ok || !data.rows || data.rows.length === 0) {
+      document.getElementById('pub-nodata').style.display = 'block';
+      return;
+    }
+    // Parse rows: fascia, round, campo, g1a, g2a, g1b, g2b, data
+    const rowsA = data.rows.filter(r => r[0]==='A');
+    const rowsB = data.rows.filter(r => r[0]==='B');
+    const pubDate = data.rows[0][7] || '';
+    document.getElementById('pub-title').textContent = 'GIORNATA DEL ' + pubDate;
+    renderPubMatches('pub-matches-a', rowsA, 'a');
+    renderPubMatches('pub-matches-b', rowsB, 'b');
+    document.getElementById('pub-content').style.display = 'block';
+    // Show admin actions if logged in
+    document.getElementById('pub-admin-actions').style.display = isAdmin ? 'flex' : 'none';
+    pubSelFascia('a');
+  } catch(e) {
+    document.getElementById('pub-loading').style.display = 'none';
+    document.getElementById('pub-nodata').style.display = 'block';
+  }
+}
+
+function renderPubMatches(containerId, rows, f) {
+  const isB = f === 'b';
+  const container = document.getElementById(containerId);
+  if (!rows.length) { container.innerHTML = '<div style="color:#5A6A7A;font-size:13px;padding:10px">Nessuna partita per questa fascia.</div>'; return; }
+
+  // Group by round
+  const byRound = {};
+  rows.forEach(r => {
+    const round = r[1];
+    if (!byRound[round]) byRound[round] = [];
+    byRound[round].push(r);
+  });
+
+  let html = '';
+  Object.keys(byRound).sort().forEach(round => {
+    byRound[round].forEach(r => {
+      const [fascia, rn, campo, g1a, g2a, g1b, g2b] = r;
+      html += '<div class="match-card' + (isB?' pb':'') + '" style="margin-bottom:12px">' +
+        '<div class="mhd ' + f + '">ROUND ' + rn + ' · CAMPO ' + campo + '</div>' +
+        '<div class="mi">' +
+          '<div class="team"><div class="pchip">' + g1a + '</div><div class="pchip">' + g2a + '</div></div>' +
+          '<div class="vs-col"><div class="vs-txt">VS</div></div>' +
+          '<div class="team r"><div class="pchip">' + g1b + '</div><div class="pchip">' + g2b + '</div></div>' +
+        '</div></div>';
+    });
+  });
+  container.innerHTML = html;
+}
+
+function pubSelFascia(f) {
+  document.getElementById('pub-fs-a').className = 'fs-btn a' + (f==='a'?' sel':'');
+  document.getElementById('pub-fs-b').className = 'fs-btn b' + (f==='b'?' sel':'');
+  document.getElementById('pub-matches-a').style.display = f==='a' ? 'block' : 'none';
+  document.getElementById('pub-matches-b').style.display = f==='b' ? 'block' : 'none';
+}
+
 // ── UTILS ──
 function showMsg(id,msg){const e=document.getElementById(id);e.textContent=msg;e.style.display='block';}
 function hideMsg(id){document.getElementById(id).style.display='none';}
 
 // ── INIT ──
+async function init() {
+  const saved = getSavedUrl() || SHEETS_DEFAULT_URL;
+  document.getElementById('sheets-url').value = saved;
+  loadFromSheets(true);
+  // Check if giornata is published
+  try {
+    const r = await fetch(SCRIPT_URL + '?action=getGiornata');
+    const data = await r.json();
+    if (data.ok && data.rows && data.rows.length > 0) {
+      document.getElementById('nav-pubblica').style.display = '';
+    }
+  } catch(e) {}
+}
+
 init();
 </script>
 </body>
