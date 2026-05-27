@@ -387,9 +387,9 @@ h1 span { color: #F5C842; }
 <!-- NAV -->
 <div class="nav">
   <div class="nav-tab active" onclick="showPage('classifica')">🏅 CLASSIFICA</div>
-  <div class="nav-tab" onclick="showPage('giornata')">🎾 GIORNATA</div>
-  <div class="nav-tab" onclick="showPage('admin')">🔐 ADMIN</div>
-  <div class="nav-tab" onclick="showPage('settings')">⚙️ CONFIG</div>
+  <div class="nav-tab" id="nav-giornata" style="display:none" onclick="showPage('giornata')">🎾 GIORNATA</div>
+  <div class="nav-tab" id="nav-admin" onclick="showPage('admin')">🔐 ADMIN</div>
+  <div class="nav-tab" id="nav-settings" style="display:none" onclick="showPage('settings')">⚙️ CONFIG</div>
 </div>
 
 <!-- PAGE: CLASSIFICA -->
@@ -858,6 +858,8 @@ function adminLogin() {
   document.getElementById('admin-err').style.display='none';
   document.getElementById('admin-login').style.display='none';
   document.getElementById('admin-panel').style.display='block';
+  document.getElementById('nav-giornata').style.display='';
+  document.getElementById('nav-settings').style.display='';
   renderAdmin();
 }
 
@@ -866,6 +868,9 @@ function adminLogout() {
   document.getElementById('admin-login').style.display='block';
   document.getElementById('admin-panel').style.display='none';
   document.getElementById('admin-psw').value='';
+  document.getElementById('nav-giornata').style.display='none';
+  document.getElementById('nav-settings').style.display='none';
+  showPage('classifica');
 }
 
 function initAdmin() {
@@ -873,6 +878,8 @@ function initAdmin() {
   if(saved){
     document.getElementById('admin-login').style.display='none';
     document.getElementById('admin-panel').style.display='block';
+    document.getElementById('nav-giornata').style.display='';
+    document.getElementById('nav-settings').style.display='';
     renderAdmin();
   } else {
     document.getElementById('admin-login').style.display='block';
