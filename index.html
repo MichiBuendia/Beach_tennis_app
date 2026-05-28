@@ -519,6 +519,29 @@ h1 span { color: #F5C842; }
     <div class="card" id="admin-nodata" style="display:none">
       <div class="no-data"><div class="icon">📋</div><div class="title">Nessuna giornata generata</div><div>Vai in Giornata, assegna i giocatori e genera le partite</div></div>
     </div>
+    <!-- FOTO -->
+    <div class="card" id="admin-foto">
+      <div class="card-title"><div class="icon-b" style="background:#E67E22">📸</div>GESTIONE FOTO GIOCATORI</div>
+      <div style="font-size:13px;color:#5A6A7A;margin-bottom:16px">Tocca un giocatore per caricare o aggiornare la sua foto.</div>
+      <div id="foto-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px"></div>
+      <!-- Upload modal -->
+      <div id="foto-modal" style="display:none;margin-top:16px;background:#f8f9fa;border-radius:14px;padding:16px;border:1.5px solid #e0eaf0">
+        <div style="font-weight:600;font-size:14px;color:#0D4A63;margin-bottom:10px" id="foto-modal-name"></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <label style="display:inline-flex;align-items:center;gap:8px;background:#1A6B8A;color:white;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;padding:10px 20px;border-radius:10px;cursor:pointer">
+            📷 SCEGLI FOTO
+            <input type="file" id="foto-input" accept="image/*" style="display:none" onchange="previewFoto(this)">
+          </label>
+          <button class="btn btn-primary btn-sm" id="foto-upload-btn" onclick="uploadFoto()" style="display:none">⬆️ CARICA</button>
+          <button class="btn btn-secondary btn-sm" onclick="closeFotoModal()">ANNULLA</button>
+        </div>
+        <div id="foto-preview-wrap" style="margin-top:12px;display:none">
+          <img id="foto-preview" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #1A6B8A">
+        </div>
+        <div class="msg-err" id="foto-err"></div>
+        <div class="msg-ok" id="foto-ok"></div>
+      </div>
+    </div>
     <div class="card" id="admin-ra">
       <div class="card-title"><div class="icon-b" style="background:#1A6B8A">🎾</div>RISULTATI FASCIA A</div>
       <div id="rl-a"></div>
@@ -903,6 +926,7 @@ function renderAdmin() {
   document.getElementById('admin-ra').style.display=has?'block':'none';
   document.getElementById('admin-rb').style.display=has?'block':'none';
   document.getElementById('admin-save').style.display=has?'block':'none';
+  renderFotoGrid();
   if(!has) return;
   renderResults('a'); renderResults('b');
 }
@@ -987,6 +1011,107 @@ async function saveResults() {
     showMsg('save-err','Errore: '+e.message);
   } finally {
     btn.textContent='💾 SALVA SUL FOGLIO'; btn.disabled=false;
+  }
+}
+
+// ── FOTO ──
+let currentFotoPlayer = null;
+
+function renderFotoGrid() {
+  if (!allPlayers.length) return;
+  const grid = document.getElementById('foto-grid');
+  grid.innerHTML = allPlayers
+    .sort((a,b) => a.globalRank - b.globalRank)
+    .map(p => {
+      const color = COLORS[p.globalRank-1] || '#1A6B8A';
+      const ini = getInitials(p.name);
+      const avatarHtml = p.photo
+        ? '<img src="' + p.photo + '" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #1A6B8A">'
+        : '<div style="width:56px;height:56px;border-radius:50%;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white">' + ini + '</div>';
+      return '<div onclick="openFotoModal(' + p.id + ')" style="text-align:center;cursor:pointer;padding:10px;border-radius:12px;border:1.5px solid #e0eaf0;background:white;transition:all .15s" onmouseover="this.style.borderColor=\'#1A6B8A\'" onmouseout="this.style.borderColor=\'#e0eaf0\'">' +
+        avatarHtml +
+        '<div style="font-size:11px;font-weight:600;color:#1A1A2E;margin-top:6px;line-height:1.2">' + p.name + '</div>' +
+        '<div style="font-size:10px;color:#5A6A7A">' + (p.photo ? '✓ foto' : '+ aggiungi') + '</div>' +
+        '</div>';
+    }).join('');
+}
+
+function openFotoModal(playerId) {
+  currentFotoPlayer = allPlayers.find(p => p.id === playerId);
+  if (!currentFotoPlayer) return;
+  document.getElementById('foto-modal-name').textContent = '📸 ' + currentFotoPlayer.name;
+  document.getElementById('foto-modal').style.display = 'block';
+  document.getElementById('foto-preview-wrap').style.display = 'none';
+  document.getElementById('foto-upload-btn').style.display = 'none';
+  document.getElementById('foto-input').value = '';
+  document.getElementById('foto-err').style.display = 'none';
+  document.getElementById('foto-ok').style.display = 'none';
+  document.getElementById('foto-modal').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function closeFotoModal() {
+  document.getElementById('foto-modal').style.display = 'none';
+  currentFotoPlayer = null;
+}
+
+function previewFoto(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (file.size > 2 * 1024 * 1024) {
+    showMsg('foto-err', '⚠️ Foto troppo grande. Max 2MB.');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('foto-preview').src = e.target.result;
+    document.getElementById('foto-preview-wrap').style.display = 'block';
+    document.getElementById('foto-upload-btn').style.display = 'inline-flex';
+    document.getElementById('foto-err').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadFoto() {
+  if (!currentFotoPlayer) return;
+  const input = document.getElementById('foto-input');
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const btn = document.getElementById('foto-upload-btn');
+  btn.textContent = '⏳ CARICAMENTO…'; btn.disabled = true;
+  hideMsg('foto-err'); hideMsg('foto-ok');
+
+  try {
+    // Convert to base64
+    const base64 = await new Promise((res, rej) => {
+      const reader = new FileReader();
+      reader.onload = e => res(e.target.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+
+    let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
+    const r = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        password: psw,
+        action: 'uploadPhoto',
+        playerName: currentFotoPlayer.name,
+        imageBase64: base64,
+        mimeType: file.type
+      })
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'Errore');
+
+    // Update local player
+    currentFotoPlayer.photo = data.url;
+    showMsg('foto-ok', '✓ Foto caricata! Ricarica il foglio per vederla in classifica.');
+    renderFotoGrid();
+
+  } catch(e) {
+    showMsg('foto-err', 'Errore: ' + e.message);
+  } finally {
+    btn.textContent = '⬆️ CARICA'; btn.disabled = false;
   }
 }
 
