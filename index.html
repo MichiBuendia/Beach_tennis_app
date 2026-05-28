@@ -1000,7 +1000,7 @@ async function saveResults() {
   btn.textContent='⏳ SALVATAGGIO…'; btn.disabled=true;
   try {
     let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
-    const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({password:psw,action:'updatePlayers',players:updated.map(p=>({name:p.name,pts:p.pts,pg:p.pg,pv:p.pv,pp:p.pp,tv:p.tv,tp:p.tp,jolly:p.jolly}))})});
+    const r=await fetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({action:'updatePlayers',players:updated.map(p=>({name:p.name,pts:p.pts,pg:p.pg,pv:p.pv,pp:p.pp,tv:p.tv,tp:p.tp,jolly:p.jolly}))})));
     const data=await r.json();
     if(!data.ok) throw new Error(data.error||'Errore sconosciuto');
     updated.forEach(u=>{const p=allPlayers.find(p=>p.name===u.name);if(p)Object.assign(p,u);});
@@ -1090,30 +1090,19 @@ async function uploadFoto() {
     });
 
     let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
-    
-    const payload = JSON.stringify({
-      password: psw,
+
+    const payload = {
       action: 'uploadPhoto',
       playerName: currentFotoPlayer.name,
       imageBase64: base64,
       mimeType: file.type
-    });
+    };
 
-    // Use a form POST to avoid redirect issues with Google Apps Script
-    const form = new FormData();
-    form.append('payload', payload);
-
-    const r = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: payload,
-      headers: { 'Content-Type': 'text/plain' }
-    });
-    
+    const r = await fetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify(payload)));
     const text = await r.text();
     let data;
     try { data = JSON.parse(text); }
-    catch(e) { throw new Error('Risposta non valida dallo script: ' + text.slice(0,100)); }
-    
+    catch(e) { throw new Error('Risposta non valida: ' + text.slice(0,100)); }
     if (!data.ok) throw new Error(data.error || 'Errore');
 
     // Update local player
@@ -1148,7 +1137,7 @@ async function publishGiornata() {
 
   try {
     let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
-    const r = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ password:psw, action:'publishGiornata', matches }) });
+    const r = await fetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({ action:'publishGiornata', matches })));
     const data = await r.json();
     if (!data.ok) throw new Error(data.error||'Errore');
     showMsg('publish-ok', '✓ Giornata pubblicata! Visibile a tutti nella tab 🎾 GIORNATA.');
@@ -1165,7 +1154,7 @@ async function unpublish() {
   if (!confirm('Vuoi rimuovere la pubblicazione della giornata?')) return;
   try {
     let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
-    await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ password:psw, action:'publishGiornata', matches:[] }) });
+    await fetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({ action:'publishGiornata', matches:[] })));
     document.getElementById('nav-pubblica').style.display = 'none';
     showPage('classifica');
   } catch(e) { alert('Errore: ' + e.message); }
