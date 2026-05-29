@@ -623,6 +623,24 @@ function setAdminUI(logged) {
   document.getElementById('nav-settings').style.display = logged ? '' : 'none';
 }
 
+// ── JSONP helper ──
+function jsonpFetch(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = 'jsonp_' + Date.now() + '_' + Math.floor(Math.random()*10000);
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 15000);
+    function cleanup() {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    window[cbName] = function(data) { cleanup(); resolve(data); };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    script.onerror = () => { cleanup(); reject(new Error('Errore caricamento script')); };
+    document.head.appendChild(script);
+  });
+}
+
 function getSavedUrl() { try { return localStorage.getItem(STORAGE_KEY) || ''; } catch(e) { return ''; } }
 function saveUrl(url) { try { localStorage.setItem(STORAGE_KEY, url); } catch(e) {} }
 
@@ -1000,8 +1018,7 @@ async function saveResults() {
   btn.textContent='⏳ SALVATAGGIO…'; btn.disabled=true;
   try {
     let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
-    const r=await fetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({action:'updatePlayers',players:updated.map(p=>({name:p.name,pts:p.pts,pg:p.pg,pv:p.pv,pp:p.pp,tv:p.tv,tp:p.tp,jolly:p.jolly}))})));
-    const data=await r.json();
+    const data=await jsonpFetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({action:'updatePlayers',players:updated.map(p=>({name:p.name,pts:p.pts,pg:p.pg,pv:p.pv,pp:p.pp,tv:p.tv,tp:p.tp,jolly:p.jolly}))})));
     if(!data.ok) throw new Error(data.error||'Errore sconosciuto');
     updated.forEach(u=>{const p=allPlayers.find(p=>p.name===u.name);if(p)Object.assign(p,u);});
     matchResults={}; jollySelected=new Set();
@@ -1137,8 +1154,7 @@ async function publishGiornata() {
 
   try {
     let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
-    const r = await fetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({ action:'publishGiornata', matches })));
-    const data = await r.json();
+    const data = await jsonpFetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({ action:'publishGiornata', matches })));
     if (!data.ok) throw new Error(data.error||'Errore');
     showMsg('publish-ok', '✓ Giornata pubblicata! Visibile a tutti nella tab 🎾 GIORNATA.');
     // Show public tab for everyone
@@ -1154,7 +1170,7 @@ async function unpublish() {
   if (!confirm('Vuoi rimuovere la pubblicazione della giornata?')) return;
   try {
     let psw=''; try{psw=sessionStorage.getItem(ADMIN_KEY)||'';}catch(e){}
-    await fetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({ action:'publishGiornata', matches:[] })));
+    await jsonpFetch(SCRIPT_URL+'?action=write&psw='+encodeURIComponent(psw)+'&data='+encodeURIComponent(JSON.stringify({ action:'publishGiornata', matches:[] })));
     document.getElementById('nav-pubblica').style.display = 'none';
     showPage('classifica');
   } catch(e) { alert('Errore: ' + e.message); }
@@ -1165,8 +1181,8 @@ async function initPubblica() {
   document.getElementById('pub-nodata').style.display = 'none';
   document.getElementById('pub-content').style.display = 'none';
   try {
-    const r = await fetch(SCRIPT_URL + '?action=getGiornata');
-    const data = await r.json();
+    const data = await jsonpFetch(SCRIPT_URL + '?action=getGiornata');
+
     document.getElementById('pub-loading').style.display = 'none';
     if (!data.ok || !data.rows || data.rows.length === 0) {
       document.getElementById('pub-nodata').style.display = 'block';
@@ -1236,8 +1252,8 @@ async function init() {
   loadFromSheets(true);
   // Check if giornata is published
   try {
-    const r = await fetch(SCRIPT_URL + '?action=getGiornata');
-    const data = await r.json();
+    const data = await jsonpFetch(SCRIPT_URL + '?action=getGiornata');
+
     if (data.ok && data.rows && data.rows.length > 0) {
       document.getElementById('nav-pubblica').style.display = '';
     }
