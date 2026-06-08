@@ -467,22 +467,26 @@ function renderAssign() {
 }
 function apChip(p,fascia) {
   const color=COLORS[p.globalRank-1]||'#1A6B8A';
-  const arrows={A:'→B',B:'→Ex',EX:'→🃏',JO:'→A'};
   const rem=TOTAL_JOLLY-p.jolly;
   const warn=fascia!=='JO'&&rem<=0?' <span style="font-size:10px;color:#C0392B">no jolly</span>':'';
-  return '<div class="ap" onclick="movePlayer('+p.id+')">'+
+  return '<div class="ap">'+
     '<span class="ap-rank">'+p.globalRank+'</span>'+
     '<div class="ap-av" style="background:'+color+'">'+getInitials(p.name)+'</div>'+
     '<span class="ap-name">'+p.name+warn+'</span>'+
     '<span class="ap-pts">'+p.pts+'</span>'+
-    '<span class="ap-arr">'+arrows[fascia]+'</span></div>';
+    '<span onclick="movePlayer('+p.id+',-1)" style="cursor:pointer;padding:2px 6px;border-radius:6px;background:#e8f0f4;font-size:12px;color:#0D4A63;user-select:none">◀</span>'+
+    '<span onclick="movePlayer('+p.id+',1)" style="cursor:pointer;padding:2px 6px;border-radius:6px;background:#e8f0f4;font-size:12px;color:#0D4A63;user-select:none">▶</span>'+
+    '</div>';
 }
-function movePlayer(id) {
+
+const FASCIA_ORDER = ['A','B','EX','JO'];
+function movePlayer(id, dir) {
   const p=allPlayers.find(p=>p.id===id); if(!p) return;
-  if(p.fascia==='A') p.fascia='B';
-  else if(p.fascia==='B') p.fascia='EX';
-  else if(p.fascia==='EX') p.fascia=(TOTAL_JOLLY-p.jolly>0)?'JO':'A';
-  else p.fascia='A';
+  let idx=FASCIA_ORDER.indexOf(p.fascia);
+  idx=(idx+dir+FASCIA_ORDER.length)%FASCIA_ORDER.length;
+  // Skip JO if no jolly left
+  if(FASCIA_ORDER[idx]==='JO'&&TOTAL_JOLLY-p.jolly<=0) idx=(idx+dir+FASCIA_ORDER.length)%FASCIA_ORDER.length;
+  p.fascia=FASCIA_ORDER[idx];
   renderAssign();
 }
 function confirmAssign() {
